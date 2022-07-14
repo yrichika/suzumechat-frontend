@@ -13,7 +13,7 @@ const customJestConfig = {
   moduleDirectories: ['node_modules', '<rootDir>/'],
   testEnvironment: 'jest-environment-jsdom',
   moduleNameMapper: {
-    '@testhelpers/(.+)': '<rootDir>/_testhelper/$1',
+    '@testhelpers/(.+)': '<rootDir>/_testhelpers/$1',
     '@components/(.+)': '<rootDir>/components/$1',
     '@hooks/(.+)': '<rootDir>/hooks/$1',
     '@lang/(.+)': '<rootDir>/lang/$1',
