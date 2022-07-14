@@ -1,6 +1,5 @@
 import type { NextPage } from 'next'
-import { useEffect, useRef } from 'react'
-import Public from '@components/layouts/Public'
+import Public from '@components/templates/Public'
 import { langMap } from '@lang/index/langMap'
 
 const Home: NextPage = () => {
