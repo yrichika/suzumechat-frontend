@@ -14,7 +14,7 @@ function PublicHead({ title }: Props) {
       />
       <meta property="og:type" content="website" />
       <meta property="og:site_name" content="SuzumeChat" />
-      <meta property="og:title" content="{title}" />
+      <meta property="og:title" content={title} />
       <meta
         property="og:description"
         content="Totally Anonymous and Private Web Chat App"

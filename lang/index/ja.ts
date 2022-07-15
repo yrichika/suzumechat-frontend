@@ -6,6 +6,7 @@ export const ja = new Map<string, string>([
     'description',
     'ユーザーアカウント不要。個人情報収集なし。メッセージ履歴なし。ブラウザ上で暗号化。',
   ],
+  ['feature-h', '特徴'],
   [
     'feature-item-1',
     'ユーザーアカウントを作らずに、任意の相手とチャットができます。',

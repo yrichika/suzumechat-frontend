@@ -6,6 +6,7 @@ export const en = new Map<string, string>([
     'description',
     'No user account. No personal information. No stored messages. No history. In-browser message encryption!',
   ],
+  ['feature-h', 'Features'],
   [
     'feature-item-1',
     'Without creating an account, you can start a chat room with anyone you want!',

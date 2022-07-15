@@ -1,8 +1,10 @@
 import { Html, Head, Main, NextScript } from 'next/document'
 
 function AppDocument() {
+  // TODO: Open Graph: head prefix="og: ..."
   return (
-    <Html>
+    // TODO: is there any way to auto detect lang?
+    <Html lang="ja">
       <Head />
       <body>
         <Main />
