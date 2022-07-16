@@ -4,8 +4,27 @@ import { langMap } from '@lang/index/langMap'
 import Image from 'next/image'
 import AppFeatureList from '@components/organisms/AppFeatureList'
 import TermOfService from '@components/organisms/TermOfService'
+import { FormEvent, useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
+import createChannelService from '@services/createChannelService'
+import { getCookie } from '@utils/Cookie'
+import csrfService from '@services/csrfService'
 
-const Home: NextPage = () => {
+// TODO: it can get CSRF token, but sending the token is always rejected.
+// FIXME: get CSRF token the right way. Or is this necessary?
+// export async function getServerSideProps(context: any) {
+//   return csrfService(context)
+// }
+
+function Home() {
+  const [channelName, setChannelName] = useState('')
+  const router = useRouter()
+
+  function postData(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    createChannelService(channelName, router)
+  }
+
   return (
     <Public langMap={langMap}>
       <main className="container mx-auto px-5">
@@ -21,7 +40,7 @@ const Home: NextPage = () => {
         <section className="mb-10">
           <h2 className="hidden">Application</h2>
           <div className="flex justify-center mt-5">
-            <form action="#" method="POST">
+            <form onSubmit={postData}>
               <ul>
                 <li>
                   <div className="w-full text-center">
@@ -36,6 +55,8 @@ const Home: NextPage = () => {
                       name="channelName"
                       className="wp-text-input h-8 w-auto sm:w-80 px-2"
                       placeholder="Feel Safe To Chat"
+                      value={channelName}
+                      onChange={(event) => setChannelName(event.target.value)}
                     ></input>
                   </div>
                 </li>
