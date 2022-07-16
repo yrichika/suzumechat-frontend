@@ -1,9 +1,5 @@
 export function getCookie(key: string): string | null {
-  const match = document.cookie.match(new RegExp('(^|)' + key + '=([^;]+)'))
-  if (match) {
-    return match[2]
-  }
-  return null
+  return extractValueFromCookieStringByKey(key, document.cookie)
 }
 
 export function setCookie(
@@ -12,4 +8,16 @@ export function setCookie(
   path: string = '/'
 ): void {
   document.cookie = key + '=' + value + ';path=' + path
+}
+
+export function extractValueFromCookieStringByKey(
+  key: string,
+  cookieString: string
+): string | null {
+  const r = new RegExp('(^| )' + key + '=([^;]+)')
+  const matched = cookieString.match(r)
+  if (matched) {
+    return matched[2]
+  }
+  return null
 }

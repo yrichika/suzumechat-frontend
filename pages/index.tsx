@@ -4,17 +4,9 @@ import { langMap } from '@lang/index/langMap'
 import Image from 'next/image'
 import AppFeatureList from '@components/organisms/AppFeatureList'
 import TermOfService from '@components/organisms/TermOfService'
-import { FormEvent, useEffect, useState } from 'react'
+import { FormEvent, useState } from 'react'
 import { useRouter } from 'next/router'
 import createChannelService from '@services/createChannelService'
-import { getCookie } from '@utils/Cookie'
-import csrfService from '@services/csrfService'
-
-// TODO: it can get CSRF token, but sending the token is always rejected.
-// FIXME: get CSRF token the right way. Or is this necessary?
-// export async function getServerSideProps(context: any) {
-//   return csrfService(context)
-// }
 
 function Home() {
   const [channelName, setChannelName] = useState('')
@@ -56,7 +48,7 @@ function Home() {
                       className="wp-text-input h-8 w-auto sm:w-80 px-2"
                       placeholder="Feel Safe To Chat"
                       value={channelName}
-                      onChange={(event) => setChannelName(event.target.value)}
+                      onChange={event => setChannelName(event.target.value)}
                     ></input>
                   </div>
                 </li>
