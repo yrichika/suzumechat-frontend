@@ -4,13 +4,22 @@ import { langMap } from '@lang/index/langMap'
 import Image from 'next/image'
 import AppFeatureList from '@components/organisms/AppFeatureList'
 import TermOfService from '@components/organisms/TermOfService'
-import { FormEvent, useState } from 'react'
+import { FormEvent, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import createChannelService from '@services/createChannelService'
+import csrfTokenService from '@services/csrfTokenService'
+
+// export function getServerSideProps(context: any) {
+//   return csrfTokenService(context)
+// }
 
 function Home() {
   const [channelName, setChannelName] = useState('')
   const router = useRouter()
+
+  useEffect(() => {
+    csrfTokenService()
+  }, [])
 
   function postData(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()

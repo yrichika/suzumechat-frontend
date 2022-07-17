@@ -1,3 +1,6 @@
+export const csrfTokenSaveKey = 'XSRF-TOKEN'
+export const csrfTokenSendKey = 'X-XSRF-TOKEN'
+
 export function getCookie(key: string): string | null {
   return extractValueFromCookieStringByKey(key, document.cookie)
 }
