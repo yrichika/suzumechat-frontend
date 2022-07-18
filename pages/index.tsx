@@ -8,22 +8,34 @@ import { FormEvent, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import createChannelService from '@services/createChannelService'
 import csrfTokenService from '@services/csrfTokenService'
-
-// export function getServerSideProps(context: any) {
-//   return csrfTokenService(context)
-// }
+import useHostStore from '@stores/useHostStore'
 
 function Home() {
-  const [channelName, setChannelName] = useState('')
+  const [channelNameInput, setChannelNameInput] = useState('')
   const router = useRouter()
+
+  const setChannelName = useHostStore(state => state.setChannelName)
+  const setSecretKey = useHostStore(state => state.setSecretKey)
+  const setLoginChannelToken = useHostStore(state => state.setLoginChannelToken)
 
   useEffect(() => {
     csrfTokenService()
   }, [])
 
-  function postData(event: FormEvent<HTMLFormElement>) {
+  function postChannelName(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    createChannelService(channelName, router)
+    createChannelService(channelNameInput).then(createdChannel => {
+      if (!createdChannel) {
+        // just ignoring is fine for now. Usually it's validation error from backend
+        return
+      }
+      setChannelName(channelNameInput)
+      setLoginChannelToken(createdChannel.hostChannelToken)
+      setSecretKey(createdChannel.secretKey)
+
+      const redirectTo = '/host/view'
+      router.push(`${redirectTo}/${createdChannel.hostChannelToken}`)
+    })
   }
 
   return (
@@ -41,7 +53,7 @@ function Home() {
         <section className="mb-10">
           <h2 className="hidden">Application</h2>
           <div className="flex justify-center mt-5">
-            <form onSubmit={postData}>
+            <form onSubmit={postChannelName}>
               <ul>
                 <li>
                   <div className="w-full text-center">
@@ -56,8 +68,11 @@ function Home() {
                       name="channelName"
                       className="wp-text-input h-8 w-auto sm:w-80 px-2"
                       placeholder="Feel Safe To Chat"
-                      value={channelName}
-                      onChange={event => setChannelName(event.target.value)}
+                      value={channelNameInput}
+                      onChange={event =>
+                        setChannelNameInput(event.target.value)
+                      }
+                      required
                     ></input>
                   </div>
                 </li>
