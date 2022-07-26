@@ -7,7 +7,7 @@ import {
   isEmpty,
   toggleVisibilityBySelector,
 } from '@utils/Util'
-import { randomString } from '../../_testhelpers/Random'
+import { randomString } from '@utils/UnsafeRandom'
 
 describe('Utils', () => {
   let docBaseElement: HTMLDivElement
@@ -172,7 +172,7 @@ describe('Utils', () => {
     const p2 = document.createElement('p') as HTMLParagraphElement
     p2.setAttribute('class', className)
     const paragraphElements = [p1, p2]
-    paragraphElements.forEach((paragraph) =>
+    paragraphElements.forEach(paragraph =>
       docBaseElement.appendChild(paragraph)
     )
 
@@ -182,13 +182,13 @@ describe('Utils', () => {
 
     toggleVisibilityBySelector(eventStub, selector)
 
-    paragraphElements.forEach((paragraph) => {
+    paragraphElements.forEach(paragraph => {
       expect(paragraph.style.display).toBe('none')
     })
 
     toggleVisibilityBySelector(eventStub, selector)
 
-    paragraphElements.forEach((paragraph) => {
+    paragraphElements.forEach(paragraph => {
       expect(paragraph.style.display).toBe('')
     })
   })

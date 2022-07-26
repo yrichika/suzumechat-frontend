@@ -1,4 +1,4 @@
-import { randomString } from '@testhelpers/Random'
+import { randomString } from '@utils/UnsafeRandom'
 import { setCookie, getCookie } from '@utils/Cookie'
 
 /**
