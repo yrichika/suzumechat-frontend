@@ -1,3 +1,5 @@
+import { MouseEvent } from 'react'
+
 export function isEmpty(value: any): boolean {
   return value === null || value === undefined || value === ''
 }
@@ -24,7 +26,7 @@ export function breakLines(message: string): string {
   return message.replace(/(?:\r\n|\r|\n)/g, '<br>')
 }
 
-export function htmlspecialcharsJs(text: string): string {
+export function htmlspecialchars(text: string): string {
   return text
     .replace(/&/g, '&amp;')
     .replace(/"/g, '&quot;')
@@ -34,7 +36,7 @@ export function htmlspecialcharsJs(text: string): string {
 }
 
 export function disableButtons(index: number, prefixes: Array<string>): void {
-  prefixes.forEach((prefix) => {
+  prefixes.forEach(prefix => {
     const buttonElement = document.getElementById(
       prefix + index
     )! as HTMLButtonElement
@@ -44,18 +46,18 @@ export function disableButtons(index: number, prefixes: Array<string>): void {
 
 export function hideTips(selector: string): void {
   const elements: NodeListOf<HTMLElement> = document.querySelectorAll(selector)
-  elements.forEach((element) => {
+  elements.forEach(element => {
     element.style.display = 'none'
   })
 }
 
 export function toggleVisibilityBySelector(
-  event: Event,
+  event: MouseEvent,
   selector: string
 ): void {
   event.preventDefault()
   const elements: NodeListOf<HTMLElement> = document.querySelectorAll(selector)
-  elements.forEach((element) => {
+  elements.forEach(element => {
     if (element.style.display == 'none') {
       element.style.display = ''
     } else {

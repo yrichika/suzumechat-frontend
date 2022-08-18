@@ -9,6 +9,7 @@ import { useRouter } from 'next/router'
 import createChannelService from '@services/createChannelService'
 import csrfTokenService from '@services/csrfTokenService'
 import useHostStore from '@stores/useHostStore'
+import HostChannel from 'types/HostChannel'
 
 function Home() {
   const [channelNameInput, setChannelNameInput] = useState('')
@@ -24,18 +25,20 @@ function Home() {
 
   function postChannelName(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    createChannelService(channelNameInput).then(createdChannel => {
-      if (!createdChannel) {
-        // just ignoring is fine for now. Usually it's validation error from backend
-        return
-      }
-      setChannelName(channelNameInput)
-      setLoginChannelToken(createdChannel.hostChannelToken)
-      setSecretKey(createdChannel.secretKey)
+    createChannelService(channelNameInput).then(
+      (hostChannel: HostChannel | null) => {
+        if (!hostChannel) {
+          // just ignoring is fine for now. Usually it's validation error from backend
+          return
+        }
+        setChannelName(channelNameInput)
+        setLoginChannelToken(hostChannel.loginChannelToken)
+        setSecretKey(hostChannel.secretKey)
 
-      const redirectTo = '/host/view'
-      router.push(`${redirectTo}/${createdChannel.hostChannelToken}`)
-    })
+        const redirectTo = '/host'
+        router.push(`${redirectTo}/${hostChannel.hostChannelToken}`)
+      }
+    )
   }
 
   return (

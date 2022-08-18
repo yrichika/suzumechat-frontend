@@ -3,7 +3,7 @@ import {
   copyToClipboard,
   disableButtons,
   hideTips,
-  htmlspecialcharsJs,
+  htmlspecialchars,
   isEmpty,
   toggleVisibilityBySelector,
 } from '@utils/Util'
@@ -81,45 +81,45 @@ describe('Utils', () => {
     expect(resultWin).toMatch('aaa<br>bbb')
   })
 
-  test('htmlspecialcharsJs should convert & to &amp; within text', () => {
+  test('htmlspecialchars should convert & to &amp; within text', () => {
     const input = 'abc&abc'
     const expected = 'abc&amp;abc'
-    const result = htmlspecialcharsJs(input)
+    const result = htmlspecialchars(input)
     expect(result).toBe(expected)
   })
 
-  test('htmlspecialcharsJs should convert " to &quot; within text', () => {
+  test('htmlspecialchars should convert " to &quot; within text', () => {
     const input = 'abc"abc'
     const expected = 'abc&quot;abc'
-    const result = htmlspecialcharsJs(input)
+    const result = htmlspecialchars(input)
     expect(result).toBe(expected)
   })
 
-  test("htmlspecialcharsJs should convert ' to &apos; within text", () => {
+  test("htmlspecialchars should convert ' to &apos; within text", () => {
     const input = "abc'abc"
     const expected = 'abc&apos;abc'
-    const result = htmlspecialcharsJs(input)
+    const result = htmlspecialchars(input)
     expect(result).toBe(expected)
   })
 
-  test('htmlspecialcharsJs should convert < to &lt; within text', () => {
+  test('htmlspecialchars should convert < to &lt; within text', () => {
     const input = 'abc<abc'
     const expected = 'abc&lt;abc'
-    const result = htmlspecialcharsJs(input)
+    const result = htmlspecialchars(input)
     expect(result).toBe(expected)
   })
 
-  test('htmlspecialcharsJs should convert > to &gt; within text', () => {
+  test('htmlspecialchars should convert > to &gt; within text', () => {
     const input = 'abc>abc'
     const expected = 'abc&gt;abc'
-    const result = htmlspecialcharsJs(input)
+    const result = htmlspecialchars(input)
     expect(result).toBe(expected)
   })
 
-  test('htmlspecialcharsJs should convert multiple special chars at once', () => {
+  test('htmlspecialchars should convert multiple special chars at once', () => {
     const input = 'abc<>abc'
     const expected = 'abc&lt;&gt;abc'
-    const result = htmlspecialcharsJs(input)
+    const result = htmlspecialchars(input)
     expect(result).toBe(expected)
   })
 

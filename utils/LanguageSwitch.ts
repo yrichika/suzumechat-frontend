@@ -20,7 +20,7 @@ export function setLanguage(
   setCookie(cookieKey, toThisLang)
   document.documentElement.lang = toThisLang
   const langSockets = document.querySelectorAll(langSelector)
-  langSockets.forEach((lang) => {
+  langSockets.forEach(lang => {
     const key = lang.getAttribute(langAttribute)
     if (key) {
       const message = currentLanguage.get(key)
@@ -47,4 +47,17 @@ export function getLangMessage(
     return currentLanguage.get(messageKey) ?? ''
   }
   return ''
+}
+
+// TEST:
+export function pickLangMessage(
+  key: string,
+  langMap: Map<string, Map<string, string>>
+): string {
+  const docLang = document.documentElement.lang
+  const messages = langMap.get(docLang)
+  if (!messages) {
+    return ''
+  }
+  return messages.get(key) ?? ''
 }

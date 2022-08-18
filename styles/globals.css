@@ -39,4 +39,25 @@ body {
   background-color: #F2CEB8;
 }
 
+/* For transitions */
+
+.fade-chat-message-enter {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.fade-chat-message-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: all .5s cubic-bezier(0.07,0.7,0.38,0.99);
+}
+
+.fade-chat-message-exit {
+  opacity: 1;
+}
+
+.fade-chat-message-exit-active {
+  transition: all .5s cubic-bezier(0.07,0.7,0.38,0.99);
+  opacity: 0;
+}
 

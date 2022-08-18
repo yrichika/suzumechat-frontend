@@ -1,7 +1,7 @@
-type CreatedChannel = {
+type HostChannel = {
   hostChannelToken: string
   loginChannelToken: string
   secretKey: string
 }
 
-export default CreatedChannel
+export default HostChannel

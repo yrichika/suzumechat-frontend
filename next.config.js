@@ -5,8 +5,8 @@ const nextConfig = {
   rewrites: async () => {
     return [
       {
-        source: '/back/:path*',
-        destination: 'http://localhost:8080/:path*',
+        source: `${process.env.NEXT_PUBLIC_BACK_PREFIX}/:path*`,
+        destination: `${process.env.NEXT_PUBLIC_BACK_URL}/:path*`,
       },
     ]
   },
