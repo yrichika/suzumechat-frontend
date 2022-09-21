@@ -1,5 +1,5 @@
-import closeVisitorsRequests from '@services/closeVisitorsRequests'
-import manageVisitorsRequest from '@services/manageVisitorsRqeust'
+import closeVisitorsRequestsService from '@services/closeVisitorsRequestsService'
+import manageVisitorsRequestService from '@services/manageVisitorsRequestService'
 import useVisitorsRequestsSseStatus from '@stores/useVisitorsRequestsSseStatus'
 import React, { useState, useEffect } from 'react'
 import VisitorsAuthStatus from 'types/VisitorsAuthStatus'
@@ -18,13 +18,17 @@ function VisitorsRequestsManager({ hostChannelToken }: Props) {
     state => state.setIsClosed
   )
 
+  // TODO: EventSourceはhookにまとめること
   const [listening, setListening] = useState(false)
   const [eventSource, setEventSource] = useState<EventSource>()
 
   useEffect(() => {
     if (!listening) {
       const eventSourceInit = new EventSource(
-        `${process.env.NEXT_PUBLIC_BACK_URL}/host/requestStatus/${hostChannelToken}`
+        `${process.env.NEXT_PUBLIC_BACK_URL}/host/requestStatus/${hostChannelToken}`,
+        // TODO: セッションからchannelIdを取得すること
+        // まだここに単に creadential: trueを入れただけ
+        { withCredentials: true }
       )
 
       eventSourceInit.onopen = () => {
@@ -55,7 +59,7 @@ function VisitorsRequestsManager({ hostChannelToken }: Props) {
 
   function closeRequest() {
     if (listening) {
-      closeVisitorsRequests(hostChannelToken)
+      closeVisitorsRequestsService(hostChannelToken)
         .then(data => {
           eventSource?.close()
           setListening(false)
@@ -73,7 +77,7 @@ function VisitorsRequestsManager({ hostChannelToken }: Props) {
       visitorId: request.visitorId,
       isAuthenticated: true,
     }
-    manageVisitorsRequest(hostChannelToken, auth).catch(error => {
+    manageVisitorsRequestService(hostChannelToken, auth).catch(error => {
       alert(request.codename + 'TODO: メッセージをちゃんとする(マルチリンガル)')
     })
   }
@@ -84,7 +88,7 @@ function VisitorsRequestsManager({ hostChannelToken }: Props) {
       visitorId: request.visitorId,
       isAuthenticated: false,
     }
-    manageVisitorsRequest(hostChannelToken, auth).catch(error => {
+    manageVisitorsRequestService(hostChannelToken, auth).catch(error => {
       alert(request.codename + 'TODO: メッセージをちゃんとする(マルチリンガル)')
     })
   }

@@ -1,6 +1,6 @@
 type HostChannel = {
   hostChannelToken: string
-  loginChannelToken: string
+  joinChannelToken: string
   secretKey: string
 }
 

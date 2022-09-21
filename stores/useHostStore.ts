@@ -4,7 +4,7 @@ import { persist } from 'zustand/middleware'
 type Host = {
   channelName: string
   secretKey: string
-  loginChannelToken: string
+  joinChannelToken: string
 }
 
 const hostStore = (set: any, get: any) => ({
@@ -17,9 +17,9 @@ const hostStore = (set: any, get: any) => ({
   setSecretKey: (secretKey: string) =>
     set((state: Host) => ({ secretKey: secretKey })),
 
-  loginChannelToken: '',
-  setLoginChannelToken: (loginChannelToken: string) =>
-    set((state: Host) => ({ loginChannelToken: loginChannelToken })),
+  joinChannelToken: '',
+  setJoinChannelToken: (joinChannelToken: string) =>
+    set((state: Host) => ({ joinChannelToken: joinChannelToken })),
 })
 
 const store = persist(hostStore, {

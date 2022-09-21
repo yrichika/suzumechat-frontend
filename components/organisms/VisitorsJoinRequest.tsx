@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from 'react'
 import { pickLangMessage } from '@utils/LanguageSwitch'
 import { langMap } from '@lang/index/langMap'
-import { isEmpty } from '@utils/Util'
+import { isEmpty, isNotEmpty } from '@utils/Util'
 import AuthenticationStatus from '@components/molecules/AuthenticationStatus'
+import joinRequestService from '@services/joinRequestService'
+import useReceiveAuthenticationStatus from '@hooks/useReceiveAuthenticationStatus'
+import ReceptionStatus from 'types/ReceptionStatus'
 
 interface Props {
+  joinChannelToken: string
   langMap: Map<string, Map<string, string>>
 }
 
-function VisitorsLoginRequest({ langMap }: Props) {
-  const sseUrl = ''
-  const requestUrl = ''
+function VisitorsJoinRequest({ joinChannelToken, langMap }: Props) {
+  const { eventSource, receiveStatus, guestChannelToken } =
+    useReceiveAuthenticationStatus(joinChannelToken)
 
   const [isClosed, setIsClosed] = useState(false)
   const [codename, setCodename] = useState('')
@@ -26,7 +30,24 @@ function VisitorsLoginRequest({ langMap }: Props) {
   }, [])
 
   function send() {
-    // TODO:
+    const joinRequest = { codename: codename, passphrase: passphrase }
+    joinRequestService(joinChannelToken, joinRequest)
+      .then(response => {
+        const receptionStatus = response.data as ReceptionStatus
+        if (receptionStatus.isOpen) {
+          receiveStatus()
+          setIsWaitingForAuthentication(true)
+        } else {
+          alert(errorChatClosedMessage)
+          setIsClosed(true)
+          setIsWaitingForAuthentication(false)
+        }
+      })
+      .catch(error => {
+        setCodename('')
+        setPassphrase('')
+        setIsWaitingForAuthentication(false)
+      })
   }
 
   return (
@@ -81,15 +102,20 @@ function VisitorsLoginRequest({ langMap }: Props) {
               <button
                 id="submit-button"
                 type="submit"
-                className="btn btn-blue"
+                className={
+                  'btn btn-blue' +
+                  (isWaitingForAuthentication ? ' btn-disabled' : '')
+                }
                 data-lang="send-request-button"
                 onClick={send}
+                disabled={isWaitingForAuthentication}
               ></button>
             </div>
           </div>
           <hr />
           <AuthenticationStatus
             isWaitingForAuthentication={isWaitingForAuthentication}
+            guestChannelToken={guestChannelToken}
             langMap={langMap}
           />
         </div>
@@ -98,4 +124,4 @@ function VisitorsLoginRequest({ langMap }: Props) {
   )
 }
 
-export default VisitorsLoginRequest
+export default VisitorsJoinRequest

@@ -1,7 +1,7 @@
 import axios from 'axios'
 import VisitorsAuthStatus from 'types/VisitorsAuthStatus'
 
-export default async function manageVisitorsRequest(
+export default async function manageVisitorsRequestService(
   hostChannelToken: string,
   visitorsAuthStatus: VisitorsAuthStatus
 ): Promise<any> {

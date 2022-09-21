@@ -1,13 +1,18 @@
 import { pickLangMessage } from '@utils/LanguageSwitch'
 import React, { useEffect, useState } from 'react'
-import { isEmpty } from '@utils/Util'
+import { isEmpty, isNotEmpty } from '@utils/Util'
 
 interface Props {
   isWaitingForAuthentication: boolean
+  guestChannelToken: string
   langMap: Map<string, Map<string, string>>
 }
 
-function AuthenticationStatus({ isWaitingForAuthentication, langMap }: Props) {
+function AuthenticationStatus({
+  isWaitingForAuthentication,
+  guestChannelToken,
+  langMap,
+}: Props) {
   const rejectedStatusMessage = '__rejected__'
   const chatUrl = '/guest/'
   // messages
@@ -16,9 +21,6 @@ function AuthenticationStatus({ isWaitingForAuthentication, langMap }: Props) {
   const [acceptedMessage, setAcceptedMessage] = useState('')
   const [waitingMessage, setWaitingMessage] = useState('')
 
-  // originally clientChannel
-  const [guestChannelToken, setGuestChannelToken] = useState(null)
-
   useEffect(() => {
     setDefaultMessage(pickLangMessage('send-auth', langMap))
     setRejectedMessage(pickLangMessage('rejected', langMap))
@@ -26,10 +28,7 @@ function AuthenticationStatus({ isWaitingForAuthentication, langMap }: Props) {
     setWaitingMessage(pickLangMessage('waiting-for-authentication', langMap))
   }, [])
 
-  function guestChatUrl(validGuestChannelToken: string | null): string {
-    if (isEmpty(validGuestChannelToken)) {
-      throw 'Guest channel token is empty.'
-    }
+  function guestChatUrl(validGuestChannelToken: string): string {
     return chatUrl + validGuestChannelToken
   }
 
@@ -42,7 +41,7 @@ function AuthenticationStatus({ isWaitingForAuthentication, langMap }: Props) {
         </span>
       ) : (
         <span className="break-all">
-          {guestChannelToken ? (
+          {isNotEmpty(guestChannelToken) ? (
             <>
               {guestChannelToken === rejectedStatusMessage ? (
                 <span data-lang="rejected">{rejectedMessage}</span>

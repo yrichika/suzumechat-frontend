@@ -17,7 +17,7 @@ function Home() {
 
   const setChannelName = useHostStore(state => state.setChannelName)
   const setSecretKey = useHostStore(state => state.setSecretKey)
-  const setLoginChannelToken = useHostStore(state => state.setLoginChannelToken)
+  const setJoinChannelToken = useHostStore(state => state.setJoinChannelToken)
 
   useEffect(() => {
     csrfTokenService()
@@ -32,7 +32,7 @@ function Home() {
           return
         }
         setChannelName(channelNameInput)
-        setLoginChannelToken(hostChannel.loginChannelToken)
+        setJoinChannelToken(hostChannel.joinChannelToken)
         setSecretKey(hostChannel.secretKey)
 
         const redirectTo = '/host'

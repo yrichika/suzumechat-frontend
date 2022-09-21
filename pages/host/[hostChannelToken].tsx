@@ -18,13 +18,13 @@ function HostChannel() {
   const webSocketUrl = `/host/${hostChannelToken}`
   // these are constant values, not reactive // DELETE: 後で??のは削除すること
   const channelName = useHostStore.getState().channelName ?? 'fake channel name'
-  const loginChannelToken =
-    useHostStore.getState().loginChannelToken ?? 'fake token'
+  const joinChannelToken =
+    useHostStore.getState().joinChannelToken ?? 'fake token'
   const secretKey = useHostStore.getState().secretKey ?? 'fake secret key'
 
-  // TODO: ドメイン名をenvから取得する。http/httpsから必要
+  // TODO: envから取得する。http/httpsから必要
   const absoluteUrl = 'http://localhost:3000'
-  const visitorsRequestUrl = '/visitor/request/view/'
+  const visitorsRequestUrl = '/visitor/'
   const colorIndex = randomInt(0, 34)
 
   // TODO: logout functionality
@@ -41,7 +41,7 @@ function HostChannel() {
     // バックエンドにアクセスして、このhostChannelTokenがDB存在するか確認
     // 存在しなければ、エラーページにリダイレクト
     // channelName
-    // loginChannelToken
+    // joinChannelToken
     // secretKey
     // がなくてもエラーページ
   }
@@ -90,7 +90,7 @@ function HostChannel() {
                   type="text"
                   id="guest-request-url"
                   className="w-full text-gray-600 bg-gray-200 rounded-r px-3"
-                  value={`${absoluteUrl}${visitorsRequestUrl}${loginChannelToken}`}
+                  value={`${absoluteUrl}${visitorsRequestUrl}${joinChannelToken}`}
                   readOnly
                 />
               </div>
