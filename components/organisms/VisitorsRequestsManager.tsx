@@ -26,8 +26,6 @@ function VisitorsRequestsManager({ hostChannelToken }: Props) {
     if (!listening) {
       const eventSourceInit = new EventSource(
         `${process.env.NEXT_PUBLIC_BACK_URL}/host/requestStatus/${hostChannelToken}`,
-        // TODO: セッションからchannelIdを取得すること
-        // まだここに単に creadential: trueを入れただけ
         { withCredentials: true }
       )
 

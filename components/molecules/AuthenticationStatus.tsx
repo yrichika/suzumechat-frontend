@@ -4,17 +4,18 @@ import { isEmpty, isNotEmpty } from '@utils/Util'
 
 interface Props {
   isWaitingForAuthentication: boolean
+  isAuthenticated: boolean | null
   guestChannelToken: string
   langMap: Map<string, Map<string, string>>
 }
 
 function AuthenticationStatus({
   isWaitingForAuthentication,
+  isAuthenticated,
   guestChannelToken,
   langMap,
 }: Props) {
-  const rejectedStatusMessage = '__rejected__'
-  const chatUrl = '/guest/'
+  const chatUrlPrefix = '/guest/'
   // messages
   const [defaultMessage, setDefaultMessage] = useState('')
   const [rejectedMessage, setRejectedMessage] = useState('')
@@ -29,7 +30,7 @@ function AuthenticationStatus({
   }, [])
 
   function guestChatUrl(validGuestChannelToken: string): string {
-    return chatUrl + validGuestChannelToken
+    return chatUrlPrefix + validGuestChannelToken
   }
 
   return (
@@ -41,27 +42,34 @@ function AuthenticationStatus({
         </span>
       ) : (
         <span className="break-all">
-          {isNotEmpty(guestChannelToken) ? (
-            <>
-              {guestChannelToken === rejectedStatusMessage ? (
-                <span data-lang="rejected">{rejectedMessage}</span>
-              ) : (
-                <span>
-                  <span className="font-bold" data-lang="accepted">
-                    {acceptedMessage}
-                  </span>
-                  <span>: </span>
-                  <a
-                    href={guestChatUrl(guestChannelToken)}
-                    className="underline text-blue-500 break-all overflow-ellipsis"
-                  >
-                    {guestChatUrl(guestChannelToken)}
-                  </a>
-                </span>
-              )}
-            </>
+          {/* ACCEPTED message */}
+          {isAuthenticated === true ? (
+            <span>
+              <span className="font-bold" data-lang="accepted">
+                {acceptedMessage}
+              </span>
+              <span>: </span>
+              <a
+                href={guestChatUrl(guestChannelToken)}
+                className="underline text-blue-500 break-all overflow-ellipsis"
+              >
+                {guestChatUrl(guestChannelToken)}
+              </a>
+            </span>
           ) : (
+            <></> // show nothing (kind of like else-if)
+          )}
+          {/* REJECTED message */}
+          {isAuthenticated === false ? (
+            <span data-lang="rejected">{rejectedMessage}</span>
+          ) : (
+            <></> // show nothing (kind of like else-if)
+          )}
+          {/* WAITING message */}
+          {isAuthenticated === null ? (
             <span data-lang="waiting-for-authentication">{waitingMessage}</span>
+          ) : (
+            <></> // show nothing (kind of like else-if)
           )}
         </span>
       )}

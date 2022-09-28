@@ -13,10 +13,15 @@ interface Props {
 }
 
 function VisitorsJoinRequest({ joinChannelToken, langMap }: Props) {
-  const { eventSource, receiveStatus, guestChannelToken } =
-    useReceiveAuthenticationStatus(joinChannelToken)
+  const {
+    eventSource,
+    receiveStatus,
+    isClosed,
+    setIsClosed,
+    isAuthenticated,
+    guestChannelToken,
+  } = useReceiveAuthenticationStatus(joinChannelToken)
 
-  const [isClosed, setIsClosed] = useState(false)
   const [codename, setCodename] = useState('')
   const [isWaitingForAuthentication, setIsWaitingForAuthentication] =
     useState(false)
@@ -115,6 +120,7 @@ function VisitorsJoinRequest({ joinChannelToken, langMap }: Props) {
           <hr />
           <AuthenticationStatus
             isWaitingForAuthentication={isWaitingForAuthentication}
+            isAuthenticated={isAuthenticated}
             guestChannelToken={guestChannelToken}
             langMap={langMap}
           />

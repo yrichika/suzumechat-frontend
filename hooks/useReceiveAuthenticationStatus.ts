@@ -8,17 +8,31 @@ export default function useReceiveAuthenticationStatus(
   const sseUrl = `${process.env.NEXT_PUBLIC_BACK_URL}/visitor/joinStatus/${joinChannelToken}`
   const [eventSource, setEventSource] = useState<EventSource>()
   // originally clientChannel
+  const [isClosed, setIsClosed] = useState(false)
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null)
   const [guestChannelToken, setGuestChannelToken] = useState('')
 
   useEffect(() => {
-    // Stop SSE if guestChannelToken is filled with non empty value
-    if (guestChannelToken !== '') {
+    // Stop SSE if channel closed or already authenticated
+
+    if (isClosed) {
       eventSource?.close()
     }
-  }, [guestChannelToken, eventSource])
+    if (isAuthenticated !== null) {
+      eventSource?.close()
+    }
+  }, [isClosed, isAuthenticated, eventSource])
 
   function receiveStatus() {
     const eventSource = new EventSource(sseUrl, { withCredentials: true })
+    eventSource.onopen = () => {
+      console.log('SSE connection established')
+    }
+    eventSource.onerror = event => {
+      console.warn('there was an error with sse: ' + event)
+      eventSource.close()
+    }
+
     eventSource.onmessage = receiveAuthentication
     setEventSource(eventSource)
   }
@@ -27,26 +41,18 @@ export default function useReceiveAuthenticationStatus(
   function receiveAuthentication(authentication: MessageEvent<any>): void {
     const authStatus: AuthenticationStatus = JSON.parse(authentication.data)
 
-    if (authStatus.isClosed) {
-      // TODO: 1. 「このチャンネルでの受付は終了しました」を表示させる
-      eventSource?.close()
-      return
-    }
-
-    if (authStatus.isAuthenticated === null) {
-      // just waiting. do nothing.
-      return
-    }
-    if (authStatus.isAuthenticated === false) {
-      // TODO: 1.「拒否されました」の表示を出す
-      // 2. SSEを停止させる
-      eventSource?.close()
-      // 3. early return
-      return
-    }
-
+    // stopping SSE at the useEffect hook
+    setIsClosed(authStatus.isClosed)
+    setIsAuthenticated(authStatus.isAuthenticated)
     setGuestChannelToken(authStatus.guestChannelToken)
   }
 
-  return { eventSource, receiveStatus, guestChannelToken }
+  return {
+    eventSource,
+    receiveStatus,
+    isClosed,
+    setIsClosed,
+    isAuthenticated,
+    guestChannelToken,
+  }
 }
