@@ -43,7 +43,7 @@ function AuthenticationStatus({
       ) : (
         <span className="break-all">
           {/* ACCEPTED message */}
-          {isAuthenticated === true ? (
+          {isAuthenticated === true && (
             <span>
               <span className="font-bold" data-lang="accepted">
                 {acceptedMessage}
@@ -56,20 +56,14 @@ function AuthenticationStatus({
                 {guestChatUrl(guestChannelToken)}
               </a>
             </span>
-          ) : (
-            <></> // show nothing (kind of like else-if)
           )}
           {/* REJECTED message */}
-          {isAuthenticated === false ? (
+          {isAuthenticated === false && (
             <span data-lang="rejected">{rejectedMessage}</span>
-          ) : (
-            <></> // show nothing (kind of like else-if)
           )}
           {/* WAITING message */}
-          {isAuthenticated === null ? (
+          {isAuthenticated === null && (
             <span data-lang="waiting-for-authentication">{waitingMessage}</span>
-          ) : (
-            <></> // show nothing (kind of like else-if)
           )}
         </span>
       )}
