@@ -10,9 +10,10 @@ interface Props {
   webSocketUrl: string
   codename: string
   secretKey: string
+  isChannelEnded: boolean
 }
 
-function Chat({ webSocketUrl, codename, secretKey }: Props) {
+function Chat({ webSocketUrl, codename, secretKey, isChannelEnded }: Props) {
   const [messageInput, setMessageInput] = useState('')
   const [color, setColor] = useState('')
   const [nameTextColor, setNameTextColor] = useState('text-black')
@@ -29,6 +30,12 @@ function Chat({ webSocketUrl, codename, secretKey }: Props) {
     setColor(colors[randomInt(0, 34)])
     setNameTextColor(textColor(color))
   }, [])
+
+  useEffect(() => {
+    if (isChannelEnded) {
+      disconnect()
+    }
+  }, [isChannelEnded])
 
   /**
    * text-white, text-black are Tailwind's classes

@@ -15,6 +15,7 @@ export default function useChat(
   const [stompClient, setStompClient] = useState<Client>()
   const [messages, setMessages] = useState<Array<ChatMessage>>([])
   const [messageIndex, setMessageIndex] = useState(1)
+  const CHANNEL_ENDED_MESSAGE = '__channel_ended__'
 
   function connect() {
     const sockJsProtocols = ['xhr-streaming', 'xhr-polling']
@@ -28,7 +29,7 @@ export default function useChat(
       logRawCommunication: false,
       webSocketFactory: () => {
         return new SockJS(
-          `${process.env.NEXT_PUBLIC_BACK_PREFIX}/${process.env.NEXT_PUBLIC_WS_ENTRY_POINT}`,
+          `${process.env.NEXT_PUBLIC_BACK_PREFIX}/${process.env.NEXT_PUBLIC_WS_CHAT_ENDPOINT}`,
           null,
           {
             transports: sockJsProtocols,
@@ -47,6 +48,14 @@ export default function useChat(
             const rawMessageEnc = messageOutput.body.toString()
             // TODO: save: sessonStorageにデータを保存すること
             const chatMessage: ChatMessage = decrypt(rawMessageEnc)
+            if (chatMessage.message === CHANNEL_ENDED_MESSAGE) {
+              console.log('channel should be closed')
+              // TODO: ここで、__channel_ended__のメッセージを受け取ったら、クライアント側のチャットを終了
+              // stompClient.deactivate()
+              // TODO: show chat ended component or redirect to such page
+              // WARNING! リロードしても、チャットができるページが表示されないようにすること
+              return // early returnしてメッセージがチャットに表示されないようにする
+            }
             setMessages(prevState => [...prevState, chatMessage])
           }
         )
@@ -78,19 +87,37 @@ export default function useChat(
       console.warn('No STOMP client. Not being able to send message.')
       return
     }
+    // users can't send channelEndedMessage
+    if (messageInput === CHANNEL_ENDED_MESSAGE) {
+      return
+    }
     console.log('sending message: [' + messageInput + ']')
     const encryptedMessage = encrypt(messageInput)
     stompClient?.publish({
-      destination: `${process.env.NEXT_PUBLIC_WS_SEND_PREFIX}${webSocketUrl}`,
+      destination: `${process.env.NEXT_PUBLIC_WS_CHAT_SEND_PREFIX}${webSocketUrl}`,
       body: encryptedMessage,
     })
   }
 
-  // TODO: まだ使ってない。というか使わないかもしれない
+  /**
+   * This function should NEVER be used by users
+   */
+  function sendChannelEndedMessage() {
+    const encryptedMessage = encrypt(CHANNEL_ENDED_MESSAGE)
+    stompClient?.publish({
+      destination: `${process.env.NEXT_PUBLIC_WS_CHAT_SEND_PREFIX}${webSocketUrl}`,
+      body: encryptedMessage,
+    })
+  }
+
   function disconnect() {
     if (!stompClient) {
       return
     }
+    if (!stompClient.active) {
+      return
+    }
+    sendChannelEndedMessage()
     stompClient.deactivate()
     console.log('WebSocket disconnected')
   }

@@ -1,3 +1,4 @@
+import useVisitorsRequestsSse from '@hooks/useVisitorsRequestsSse'
 import closeVisitorsRequestsService from '@services/closeVisitorsRequestsService'
 import manageVisitorsRequestService from '@services/manageVisitorsRequestService'
 import useVisitorsRequestsSseStatus from '@stores/useVisitorsRequestsSseStatus'
@@ -7,70 +8,36 @@ import VisitorsRequest from 'types/VisitorsRequest'
 
 interface Props {
   hostChannelToken: string
+  isChannelEnded: boolean
 }
 
 // originally ManageClientRequest
-function VisitorsRequestsManager({ hostChannelToken }: Props) {
-  const [requests, setRequests] = useState<Array<VisitorsRequest>>([])
-
+function VisitorsRequestsManager({ hostChannelToken, isChannelEnded }: Props) {
   const requestClosed = useVisitorsRequestsSseStatus.getState().isClosed
   const setRequestClosed = useVisitorsRequestsSseStatus(
     state => state.setIsClosed
   )
-
-  // TODO: EventSourceはhookにまとめること
-  const [listening, setListening] = useState(false)
-  const [eventSource, setEventSource] = useState<EventSource>()
+  const { eventSource, requests } = useVisitorsRequestsSse(hostChannelToken)
 
   useEffect(() => {
-    if (!listening) {
-      const eventSourceInit = new EventSource(
-        `${process.env.NEXT_PUBLIC_BACK_URL}/host/requestStatus/${hostChannelToken}`,
-        { withCredentials: true }
-      )
-
-      eventSourceInit.onopen = () => {
-        console.log('connection established')
-      }
-
-      eventSourceInit.onmessage = event => {
-        console.log('message: ' + event.data)
-        setRequests(JSON.parse(event.data))
-      }
-
-      eventSourceInit.onerror = event => {
-        console.warn('there was an error with sse: ' + event)
-        eventSourceInit.close()
-      }
-      setEventSource(eventSourceInit)
-      setListening(true)
-
-      // end hook
-      return () => {
-        if (eventSource) {
-          eventSource.close()
-          setListening(false)
-        }
-      }
+    if (isChannelEnded) {
+      eventSource?.close()
+      useVisitorsRequestsSseStatus.getState().clear()
     }
-  }, [])
+  }, [isChannelEnded])
 
   function closeRequest() {
-    if (listening) {
-      closeVisitorsRequestsService(hostChannelToken)
-        .then(data => {
-          eventSource?.close()
-          setListening(false)
-          setRequestClosed(true)
-        })
-        .catch(error => {
-          alert('TODO: メッセージをちゃんとする(マルチリンガル)')
-        })
-    }
+    closeVisitorsRequestsService(hostChannelToken)
+      .then(data => {
+        eventSource?.close()
+        setRequestClosed(true)
+      })
+      .catch(error => {
+        alert('TODO: メッセージをちゃんとする(マルチリンガル)')
+      })
   }
 
   function accept(request: VisitorsRequest, index: number) {
-    // TODO:
     const auth: VisitorsAuthStatus = {
       visitorId: request.visitorId,
       isAuthenticated: true,
@@ -81,7 +48,6 @@ function VisitorsRequestsManager({ hostChannelToken }: Props) {
   }
 
   function reject(request: VisitorsRequest, index: number) {
-    // TODO:
     const auth: VisitorsAuthStatus = {
       visitorId: request.visitorId,
       isAuthenticated: false,

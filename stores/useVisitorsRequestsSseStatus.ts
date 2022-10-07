@@ -13,6 +13,7 @@ const visitorsRequestsSseStatus = (set: any, get: any) => ({
   getIsClosed: () => get().isClosed,
   setIsClosed: (isClosed: boolean) =>
     set((state: Status) => ({ isClosed: isClosed })),
+  clear: () => set({ isClosed: false }),
 })
 
 const store = persist(visitorsRequestsSseStatus, {

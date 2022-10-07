@@ -4,6 +4,7 @@ import {
   disableButtons,
   hideTips,
   htmlspecialchars,
+  isAnyOfEmpty,
   isEmpty,
   toggleVisibilityBySelector,
 } from '@utils/Util'
@@ -27,10 +28,31 @@ describe('Utils', () => {
   })
 
   test('isEmpty should return true if value null', () => {
-    // TODO: make tests for other patterns
-    const result = isEmpty(null)
-    expect(result).toBe(true)
+    const values = [null, undefined, '', []]
+    values.forEach(value => {
+      const result = isEmpty(value)
+      expect(result).toBe(true)
+    })
   })
+
+  test('isAnyOfEmpty should return true if any of the values is empty values', () => {
+    // TODO: make test with random values and random empty values
+    const result = isAnyOfEmpty('a', '')
+    expect(result).toBe(true)
+
+    const result2 = isAnyOfEmpty('a', undefined, 'b')
+    expect(result2).toBe(true)
+
+    const result3 = isAnyOfEmpty('a', [], 'b')
+    expect(result3).toBe(true)
+
+    const result4 = isAnyOfEmpty('a', 'b', null)
+    expect(result4).toBe(true)
+  })
+
+  test.todo('isNotEmpty')
+
+  test.todo('isAnyOfNotEmpty')
 
   test('copyToClipboard should copy selected text to clipboard', () => {
     document.execCommand = jest.fn()

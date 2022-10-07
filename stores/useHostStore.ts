@@ -20,6 +20,7 @@ const hostStore = (set: any, get: any) => ({
   joinChannelToken: '',
   setJoinChannelToken: (joinChannelToken: string) =>
     set((state: Host) => ({ joinChannelToken: joinChannelToken })),
+  clear: () => set({ channelName: '', secretKey: '', joinChannelToken: '' }),
 })
 
 const store = persist(hostStore, {

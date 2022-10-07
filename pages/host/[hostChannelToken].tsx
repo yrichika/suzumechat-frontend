@@ -1,13 +1,18 @@
 import useHostStore from '@stores/useHostStore'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Private from '@components/templates/Private'
 import { langMap } from '@lang/host/langMap'
-import { toggleVisibilityBySelector, copyToClipboard } from '@utils/Util'
+import {
+  toggleVisibilityBySelector,
+  copyToClipboard,
+  isAnyOfEmpty,
+} from '@utils/Util'
 import Chat from '@components/organisms/Chat'
 import VisitorsRequestsManager from '@components/organisms/VisitorsRequestsManager'
 import { randomInt } from '@utils/UnsafeRandom'
 import { useRouter } from 'next/router'
 import useVisitorsRequestsSseStatus from '@stores/useVisitorsRequestsSseStatus'
+import endChannelService from '@services/endChannelService'
 
 // TODO: このページの表示は、backendからホストのセッションもしくはトークンがないと表示されないように
 // 制御させること
@@ -16,34 +21,41 @@ function HostChannel() {
 
   const hostChannelToken = router.query.hostChannelToken as string | undefined
   const webSocketUrl = `/host/${hostChannelToken}`
-  // these are constant values, not reactive // DELETE: 後で??のは削除すること
-  const channelName = useHostStore.getState().channelName ?? 'fake channel name'
-  const joinChannelToken =
-    useHostStore.getState().joinChannelToken ?? 'fake token'
-  const secretKey = useHostStore.getState().secretKey ?? 'fake secret key'
+  // these are constant values, not reactive
+  const channelName = useHostStore.getState().channelName ?? null
+  const joinChannelToken = useHostStore.getState().joinChannelToken ?? null
+  const secretKey = useHostStore.getState().secretKey ?? null
+  const [isChannelEnded, setIsChannelEnded] = useState(false)
 
-  // TODO: envから取得する。http/httpsから必要
-  const absoluteUrl = 'http://localhost:3000'
+  const absoluteUrl = process.env.NEXT_PUBLIC_FRONT_URL
   const visitorsRequestUrl = '/visitor/'
-  const colorIndex = randomInt(0, 34)
 
-  // TODO: logout functionality
-  const clearChannel = () => {}
+  const endChannel = () => {
+    setIsChannelEnded(true)
+    endChannelService(hostChannelToken!)
+      .then(response => {
+        useHostStore.getState().clear()
+        // TODO: cookie削除
+        // router.push('/channelEnded')
+      })
+      .catch(error => {
+        useHostStore.getState().clear()
+        // TODO: cookie削除
+        // router.push('/channelEnded')
+      })
+  }
 
-  if (!hostChannelToken) {
-    // TODO: ちゃんとしたエラーメッセージにする。エラー用のコンポーネント(もしくはページ)を作って、それを表示させる
-    // なので、コンポーネントを返すか、ページへのリダイレクト処理を入れる
-    return <div>Sorry, unexpected error</div>
+  if (
+    isAnyOfEmpty(hostChannelToken, channelName, joinChannelToken, secretKey)
+  ) {
+    // router.push('/') でもいいかも
+    return <div>TODO: sor</div>
   }
 
   if (false) {
     // TODO: 別のガード節
     // バックエンドにアクセスして、このhostChannelTokenがDB存在するか確認
     // 存在しなければ、エラーページにリダイレクト
-    // channelName
-    // joinChannelToken
-    // secretKey
-    // がなくてもエラーページ
   }
 
   return (
@@ -60,18 +72,18 @@ function HostChannel() {
             ></span>
           </div>
           <div className="flex justify-start">
-            <form action="#">
+            <div>
               <button
-                type="submit"
+                type="button"
                 className="rounded bg-pink-500 hover:bg-pink-700 text-white px-2"
                 data-lang="logout-button"
-                onClick={clearChannel}
+                onClick={endChannel}
               ></button>
               <span
                 className="scc-tip text-xs opacity-50"
                 data-lang="dont-forget"
               ></span>
-            </form>
+            </div>
           </div>
         </div>
         <main className="container mx-auto">
@@ -97,21 +109,19 @@ function HostChannel() {
             </div>
             <hr className="mt-5" />
             <div className="mt-5 mb-5">
-              {/* TODO: chat側のVue
-              パラメータ:
-              web-socket-url="@webSocketUrl"
-              secret-key="@secretKey"
-              codename="Host" :color-index="@Random.nextInt(34)"
-              is-host*/}
               <Chat
                 webSocketUrl={webSocketUrl}
                 codename="Host"
                 secretKey={secretKey}
+                isChannelEnded={isChannelEnded}
               />
             </div>
             <hr />
             <div className="mt-5">
-              <VisitorsRequestsManager hostChannelToken={hostChannelToken} />
+              <VisitorsRequestsManager
+                hostChannelToken={hostChannelToken!}
+                isChannelEnded={isChannelEnded}
+              />
             </div>
           </div>
         </main>

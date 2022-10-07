@@ -1,11 +1,22 @@
 import { MouseEvent } from 'react'
 
 export function isEmpty(value: any): boolean {
+  if (Array.isArray(value)) {
+    return !value.length
+  }
   return value === null || value === undefined || value === ''
 }
 
+export function isAnyOfEmpty(...values: any[]): boolean {
+  return values.map(value => isEmpty(value)).some(result => result)
+}
+// TEST:
 export function isNotEmpty(value: any): boolean {
   return !isEmpty(value)
+}
+// TEST:
+export function isAnyOfNotEmpty(...values: any[]): boolean {
+  return !isAnyOfEmpty(...values)
 }
 
 export function copyToClipboard(idName: string): void {
