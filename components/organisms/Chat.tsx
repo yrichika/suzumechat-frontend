@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import ChatMessage from 'types/ChatMessage'
 import { TransitionGroup, CSSTransition } from 'react-transition-group'
 import { breakLines } from '@utils/Util'
@@ -17,6 +17,7 @@ function Chat({ webSocketUrl, codename, secretKey, isChannelEnded }: Props) {
   const [messageInput, setMessageInput] = useState('')
   const [color, setColor] = useState('')
   const [nameTextColor, setNameTextColor] = useState('text-black')
+  const nodeRef = useRef(null) // this is for avoiding CSSTransition warning
 
   const { messages, sendMessage, disconnect } = useChat(
     webSocketUrl,
@@ -47,8 +48,16 @@ function Chat({ webSocketUrl, codename, secretKey, isChannelEnded }: Props) {
     return 'text-black'
   }
 
+  function handleMessage() {
+    if (messageInput === '') {
+      return
+    }
+    sendMessage(messageInput)
+    setMessageInput('')
+  }
+
   function sendShortcut() {
-    //
+    // TODO: send by [shift]+[enter]
   }
 
   return (
@@ -74,7 +83,7 @@ function Chat({ webSocketUrl, codename, secretKey, isChannelEnded }: Props) {
           <li className="flex justify-center">
             <button
               className="lang-send-button btn btn-blue"
-              onClick={() => sendMessage(messageInput)}
+              onClick={() => handleMessage()}
               data-lang="send-button"
             ></button>
           </li>
@@ -92,19 +101,17 @@ function Chat({ webSocketUrl, codename, secretKey, isChannelEnded }: Props) {
           <span className="text-lg" data-lang="chat-label"></span>
         </div>
         <hr className="my-2 border-2" />
-        {/* <button className="btn btn-blue fake-class" onClick={deleteMessage}>
-          DEBUG: 実験用ボタン
-        </button> */}
 
         <TransitionGroup component="div">
           {messages.map(message => (
             <CSSTransition
+              nodeRef={nodeRef}
               key={message.id}
               timeout={500}
               classNames="fade-chat-message"
             >
               {message.name === codename ? (
-                <p className="flex justify-start mb-2">
+                <p ref={nodeRef} className="flex justify-start mb-2">
                   <span
                     className={`rounded-full px-2 self-start bg-${color} ${nameTextColor}`}
                   >
@@ -119,7 +126,7 @@ function Chat({ webSocketUrl, codename, secretKey, isChannelEnded }: Props) {
                   ></span>
                 </p>
               ) : (
-                <p className="flex justify-end mb-2">
+                <p ref={nodeRef} className="flex justify-end mb-2">
                   <span
                     className={`rounded border shadow px-2 border-${message.color}`}
                     dangerouslySetInnerHTML={{

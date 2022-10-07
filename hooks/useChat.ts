@@ -1,10 +1,9 @@
-import { Client } from '@stomp/stompjs'
-import { colors } from '@utils/colors'
+import { Client, IFrame } from '@stomp/stompjs'
 import { htmlspecialchars } from '@utils/Util'
 import { useEffect, useState } from 'react'
-import SockJS from 'sockjs-client'
 import ChatMessage from 'types/ChatMessage'
 import CryptoJS from 'crypto-js'
+import { stompBasicConfig } from './stomp/config'
 
 export default function useChat(
   webSocketUrl: string,
@@ -18,68 +17,37 @@ export default function useChat(
   const CHANNEL_ENDED_MESSAGE = '__channel_ended__'
 
   function connect() {
-    const sockJsProtocols = ['xhr-streaming', 'xhr-polling']
     const stompClient = new Client()
     stompClient.configure({
-      connectHeaders: {},
-      // debug: message => console.log(message), // TODO: devのときのみ有効にするよう修正
-      reconnectDelay: 5000, // millisec
-      heartbeatIncoming: 10000,
-      heartbeatOutgoing: 10000,
-      logRawCommunication: false,
-      webSocketFactory: () => {
-        return new SockJS(
-          `${process.env.NEXT_PUBLIC_BACK_PREFIX}/${process.env.NEXT_PUBLIC_WS_CHAT_ENDPOINT}`,
-          null,
-          {
-            transports: sockJsProtocols,
-          }
-        )
-      },
-      onConnect: frame => {
-        console.log(
-          `${process.env.NEXT_PUBLIC_WS_BROADCASTED_PREFIX}${webSocketUrl}`
-        )
-        stompClient.subscribe(
-          `${process.env.NEXT_PUBLIC_WS_BROADCASTED_PREFIX}${webSocketUrl}`,
-          messageOutput => {
-            console.log('received message: ' + messageOutput.body)
-
-            const rawMessageEnc = messageOutput.body.toString()
-            // TODO: save: sessonStorageにデータを保存すること
-            const chatMessage: ChatMessage = decrypt(rawMessageEnc)
-            if (chatMessage.message === CHANNEL_ENDED_MESSAGE) {
-              console.log('channel should be closed')
-              // TODO: ここで、__channel_ended__のメッセージを受け取ったら、クライアント側のチャットを終了
-              // stompClient.deactivate()
-              // TODO: show chat ended component or redirect to such page
-              // WARNING! リロードしても、チャットができるページが表示されないようにすること
-              return // early returnしてメッセージがチャットに表示されないようにする
-            }
-            setMessages(prevState => [...prevState, chatMessage])
-          }
-        )
-      },
-      onStompError: frame => {
-        // TODO:
-        console.log('Stomp Error', frame)
-      },
-      onDisconnect: frame => {
-        // TODO:
-        console.log('Stomp Disconnected', frame)
-      },
-      onWebSocketClose: frame => {
-        // TODO:
-        console.log('Stomp WebSocket Closed', frame)
-      },
-      onWebSocketError: frame => {
-        // TODO:
-        console.log('Stomp WebSocket Error', frame)
-      },
+      ...stompBasicConfig,
+      onConnect: onConnect(stompClient),
     })
-
     stompClient.activate()
     setStompClient(stompClient)
+  }
+
+  function onConnect(stompClient: Client) {
+    return (frame: IFrame) => {
+      stompClient.subscribe(
+        `${process.env.NEXT_PUBLIC_WS_BROADCASTED_PREFIX}${webSocketUrl}`,
+        messageOutput => {
+          console.log('received message: ' + messageOutput.body)
+
+          const rawMessageEnc = messageOutput.body.toString()
+          // TODO: save: sessonStorageにデータを保存すること
+          const chatMessage: ChatMessage = decrypt(rawMessageEnc)
+          if (chatMessage.message === CHANNEL_ENDED_MESSAGE) {
+            console.log('channel should be closed')
+            // TODO: ここで、__channel_ended__のメッセージを受け取ったら、クライアント側のチャットを終了
+            // stompClient.deactivate()
+            // TODO: show chat ended component or redirect to such page
+            // WARNING! リロードしても、チャットができるページが表示されないようにすること
+            return // early returnしてメッセージがチャットに表示されないようにする
+          }
+          setMessages(prevState => [...prevState, chatMessage])
+        }
+      )
+    }
   }
 
   function sendMessage(messageInput: string) {
