@@ -59,6 +59,7 @@ function HostChat({
     if (messageInput === '') {
       return
     }
+    // TODO: validation: less than 1000 letters
     sendChatMessage(messageInput)
     setMessageInput('')
   }

@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { pickLangMessage } from '@utils/LanguageSwitch'
 import { langMap } from '@lang/index/langMap'
-import { isEmpty, isNotEmpty } from '@utils/Util'
 import AuthenticationStatus from '@components/molecules/AuthenticationStatus'
-import joinRequestService from '@services/joinRequestService'
-import useReceiveAuthenticationStatus from '@hooks/useReceiveAuthenticationStatus'
-import ReceptionStatus from 'types/ReceptionStatus'
+import useVisitorMessageHandler from '@hooks/useVisitorMessageHandler'
 
 interface Props {
   joinChannelToken: string
@@ -14,13 +11,12 @@ interface Props {
 
 function VisitorsJoinRequest({ joinChannelToken, langMap }: Props) {
   const {
-    eventSource,
-    receiveStatus,
-    isClosed,
-    setIsClosed,
-    isAuthenticated,
+    visitorId,
     guestChannelToken,
-  } = useReceiveAuthenticationStatus(joinChannelToken)
+    isClosed,
+    isAuthenticated,
+    sendJoinRequest,
+  } = useVisitorMessageHandler(joinChannelToken)
 
   const [codename, setCodename] = useState('')
   const [isWaitingForAuthentication, setIsWaitingForAuthentication] =
@@ -32,27 +28,19 @@ function VisitorsJoinRequest({ joinChannelToken, langMap }: Props) {
 
   useEffect(() => {
     setErrorChatClosedMessage(pickLangMessage('chat-closed', langMap))
+    // TODO: backendに問い合わせて、すでにchannelが閉じていないか確認
+    // 閉じていたら、すでに閉じている表示をさせる
   }, [])
 
   function send() {
-    const joinRequest = { codename: codename, passphrase: passphrase }
-    joinRequestService(joinChannelToken, joinRequest)
-      .then(response => {
-        const receptionStatus = response.data as ReceptionStatus
-        if (receptionStatus.isOpen) {
-          receiveStatus()
-          setIsWaitingForAuthentication(true)
-        } else {
-          alert(errorChatClosedMessage)
-          setIsClosed(true)
-          setIsWaitingForAuthentication(false)
-        }
-      })
-      .catch(error => {
-        setCodename('')
-        setPassphrase('')
-        setIsWaitingForAuthentication(false)
-      })
+    // TODO: add validation here
+    const joinRequest = {
+      visitorId: visitorId,
+      codename: codename,
+      passphrase: passphrase,
+    }
+    sendJoinRequest(joinRequest)
+    setIsWaitingForAuthentication(true)
   }
 
   return (
