@@ -7,11 +7,8 @@ import {
   copyToClipboard,
   isAnyOfEmpty,
 } from '@utils/Util'
-import Chat from '@components/organisms/Chat'
-import VisitorsRequestsManager from '@components/organisms/VisitorsRequestsManager'
-import { randomInt } from '@utils/UnsafeRandom'
+import HostChat from '@components/organisms/HostChat'
 import { useRouter } from 'next/router'
-import useVisitorsRequestsSseStatus from '@stores/useVisitorsRequestsSseStatus'
 import endChannelService from '@services/endChannelService'
 
 // TODO: このページの表示は、backendからホストのセッションもしくはトークンがないと表示されないように
@@ -20,11 +17,11 @@ function HostChannel() {
   const router = useRouter()
 
   const hostChannelToken = router.query.hostChannelToken as string | undefined
-  const webSocketUrl = `/host/${hostChannelToken}`
-  // these are constant values, not reactive
-  const channelName = useHostStore.getState().channelName ?? null
-  const joinChannelToken = useHostStore.getState().joinChannelToken ?? null
-  const secretKey = useHostStore.getState().secretKey ?? null
+
+  const channelName = useHostStore(state => state.channelName)
+  const joinChannelToken = useHostStore(state => state.joinChannelToken)
+  const secretKey = useHostStore(state => state.secretKey)
+  const clearHostChannel = useHostStore(state => state.clear)
   const [isChannelEnded, setIsChannelEnded] = useState(false)
 
   const absoluteUrl = process.env.NEXT_PUBLIC_FRONT_URL
@@ -34,13 +31,13 @@ function HostChannel() {
     setIsChannelEnded(true)
     endChannelService(hostChannelToken!)
       .then(response => {
-        useHostStore.getState().clear()
-        // TODO: cookie削除
-        // router.push('/channelEnded')
+        clearHostChannel()
+        // TODO: delete cookie?
+        router.push('/channelEnded')
       })
       .catch(error => {
-        useHostStore.getState().clear()
-        // TODO: cookie削除
+        clearHostChannel()
+        // TODO: delete cookie?
         // router.push('/channelEnded')
       })
   }
@@ -49,7 +46,7 @@ function HostChannel() {
     isAnyOfEmpty(hostChannelToken, channelName, joinChannelToken, secretKey)
   ) {
     // router.push('/') でもいいかも
-    return <div>TODO: sor</div>
+    return <div>TODO: sorry</div>
   }
 
   if (false) {
@@ -108,21 +105,12 @@ function HostChannel() {
               </div>
             </div>
             <hr className="mt-5" />
-            <div className="mt-5 mb-5">
-              <Chat
-                webSocketUrl={webSocketUrl}
-                codename="Host"
-                secretKey={secretKey}
-                isChannelEnded={isChannelEnded}
-              />
-            </div>
-            <hr />
-            <div className="mt-5">
-              <VisitorsRequestsManager
-                hostChannelToken={hostChannelToken!}
-                isChannelEnded={isChannelEnded}
-              />
-            </div>
+            <HostChat
+              hostChannelToken={hostChannelToken!}
+              codename="Host"
+              secretKey={secretKey}
+              isChannelEnded={isChannelEnded}
+            />
           </div>
         </main>
       </Private>

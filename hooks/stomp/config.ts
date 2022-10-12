@@ -1,5 +1,29 @@
-import { IFrame, StompConfig } from '@stomp/stompjs'
+import { Client, frameCallbackType, IFrame, StompConfig } from '@stomp/stompjs'
+import { Dispatch, SetStateAction } from 'react'
 import SockJS from 'sockjs-client'
+
+export function connect(
+  setStompClient: Dispatch<SetStateAction<Client | undefined>>,
+  onConnect: (stompClient: Client) => frameCallbackType | undefined,
+  url: string
+) {
+  const stompClient = new Client()
+  stompClient.configure({
+    ...stompBasicConfig,
+    webSocketFactory: webSocketFactory(url),
+    onConnect: onConnect(stompClient),
+  })
+  stompClient.activate()
+  setStompClient(stompClient)
+}
+
+export function isActive(stompClient: Client | undefined) {
+  return stompClient && stompClient.active
+}
+
+export function isInactive(stompClient: Client | undefined) {
+  return !isActive(stompClient)
+}
 
 export const stompBasicConfig: StompConfig = {
   connectHeaders: {},
@@ -8,7 +32,6 @@ export const stompBasicConfig: StompConfig = {
   heartbeatIncoming: 10000,
   heartbeatOutgoing: 10000,
   logRawCommunication: false,
-  webSocketFactory: webSocketFactory,
   onStompError: onStompError,
   onDisconnect: onDisconnect,
   onWebSocketClose: onWebSocketClose,
@@ -17,14 +40,11 @@ export const stompBasicConfig: StompConfig = {
 
 const sockJsProtocols = ['xhr-streaming', 'xhr-polling']
 
-function webSocketFactory() {
-  return new SockJS(
-    `${process.env.NEXT_PUBLIC_BACK_PREFIX}/${process.env.NEXT_PUBLIC_WS_CHAT_ENDPOINT}`,
-    null,
-    {
+export function webSocketFactory(url: string) {
+  return () =>
+    new SockJS(url, null, {
       transports: sockJsProtocols,
-    }
-  )
+    })
 }
 function debug(message: string) {
   // use when debugging

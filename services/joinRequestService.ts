@@ -1,6 +1,7 @@
 import axios from 'axios'
-import JoinRequest from 'types/JoinRequest'
+import JoinRequest from 'types/messages/JoinRequest'
 
+// DELETE:
 export default async function joinRequestService(
   joinChannelToken: string,
   joinRequest: JoinRequest

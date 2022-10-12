@@ -8,18 +8,17 @@ type Status = {
 // Once you closed guests' requests (meaning if you deleted secret key on the server)
 // You can't invite any more guests to the chat channel.
 // That's why this is a global state. You can't start new SSE session by reloading the page.
-const visitorsRequestsSseStatus = (set: any, get: any) => ({
+const visitorsRequestsAvailability = (set: any, get: any) => ({
   isClosed: false,
   getIsClosed: () => get().isClosed,
-  setIsClosed: (isClosed: boolean) =>
-    set((state: Status) => ({ isClosed: isClosed })),
-  clear: () => set({ isClosed: false }),
+  setIsClosed: (isClosed: boolean) => set((status: Status) => ({ isClosed })),
+  reset: () => set({ isClosed: false }),
 })
 
-const store = persist(visitorsRequestsSseStatus, {
-  name: 'visitors-requests-sse-status',
+const store = persist(visitorsRequestsAvailability, {
+  name: 'visitors-requests-availability',
   getStorage: () => sessionStorage,
 })
-const useVisitorsRequestsSseStatus = create(store)
+const useVisitorsRequestsAvailabilityStore = create(store)
 
-export default useVisitorsRequestsSseStatus
+export default useVisitorsRequestsAvailabilityStore

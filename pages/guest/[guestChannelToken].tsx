@@ -2,13 +2,12 @@ import Private from '@components/templates/Private'
 import React from 'react'
 import { langMap } from '@lang/guest/langMap'
 import { toggleVisibilityBySelector } from '@utils/Util'
-import Chat from '@components/organisms/Chat'
 import { randomInt } from '@utils/UnsafeRandom'
 
 function GuestChannel() {
   const channelName = 'fake channel' // TODO:
   const codename = 'guest'
-  const webSocketUrl = ''
+  const chatUrl = ''
   const secretKey = ''
 
   return (
@@ -30,11 +29,7 @@ function GuestChannel() {
           <div>
             <span data-lang="how-to-end"></span>
           </div>
-          <Chat
-            webSocketUrl={webSocketUrl}
-            codename={codename}
-            secretKey={secretKey}
-          />
+          {/* <Chat chatUrl={chatUrl} codename={codename} secretKey={secretKey} /> */}
         </div>
       </main>
     </Private>

@@ -1,6 +1,7 @@
 import axios from 'axios'
-import VisitorsAuthStatus from 'types/VisitorsAuthStatus'
+import VisitorsAuthStatus from 'types/messages/VisitorsAuthStatus'
 
+// DELETE:
 export default async function manageVisitorsRequestService(
   hostChannelToken: string,
   visitorsAuthStatus: VisitorsAuthStatus

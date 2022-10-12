@@ -1,60 +1,48 @@
-import useVisitorsRequestsSse from '@hooks/useVisitorsRequestsSse'
 import closeVisitorsRequestsService from '@services/closeVisitorsRequestsService'
-import manageVisitorsRequestService from '@services/manageVisitorsRequestService'
-import useVisitorsRequestsSseStatus from '@stores/useVisitorsRequestsSseStatus'
+import useVisitorsRequestsAvailabilityStore from '@stores/useVisitorsRequestsAvailabilityStore'
 import React, { useState, useEffect } from 'react'
-import VisitorsAuthStatus from 'types/VisitorsAuthStatus'
-import VisitorsRequest from 'types/VisitorsRequest'
+import VisitorsAuthStatus from 'types/messages/VisitorsAuthStatus'
+import VisitorsRequest from 'types/messages/VisitorsRequest'
 
 interface Props {
   hostChannelToken: string
   isChannelEnded: boolean
+  visitorsRequests: VisitorsRequest[]
+  sendApproval: (request: VisitorsRequest, isAuthenticated: boolean) => void
 }
 
 // originally ManageClientRequest
-function VisitorsRequestsManager({ hostChannelToken, isChannelEnded }: Props) {
-  const requestClosed = useVisitorsRequestsSseStatus.getState().isClosed
-  const setRequestClosed = useVisitorsRequestsSseStatus(
+function VisitorsRequestsManager({
+  hostChannelToken,
+  isChannelEnded,
+  visitorsRequests,
+  sendApproval,
+}: Props) {
+  const requestClosed = useVisitorsRequestsAvailabilityStore(
+    state => state.isClosed
+  )
+  const setRequestClosed = useVisitorsRequestsAvailabilityStore(
     state => state.setIsClosed
   )
-  const { eventSource, requests } = useVisitorsRequestsSse(hostChannelToken)
+  const resetVisitorsRequestAvailability = useVisitorsRequestsAvailabilityStore(
+    state => state.reset
+  )
 
   useEffect(() => {
     if (isChannelEnded) {
-      eventSource?.close()
-      useVisitorsRequestsSseStatus.getState().clear()
+      resetVisitorsRequestAvailability()
     }
   }, [isChannelEnded])
 
+  // TODO: これもwebsocketにしないと、visitorに対して、channelが閉じられた連絡ができない
   function closeRequest() {
     closeVisitorsRequestsService(hostChannelToken)
       .then(data => {
-        eventSource?.close()
         setRequestClosed(true)
       })
       .catch(error => {
         alert('TODO: メッセージをちゃんとする(マルチリンガル)')
       })
-  }
-
-  function accept(request: VisitorsRequest, index: number) {
-    const auth: VisitorsAuthStatus = {
-      visitorId: request.visitorId,
-      isAuthenticated: true,
-    }
-    manageVisitorsRequestService(hostChannelToken, auth).catch(error => {
-      alert(request.codename + 'TODO: メッセージをちゃんとする(マルチリンガル)')
-    })
-  }
-
-  function reject(request: VisitorsRequest, index: number) {
-    const auth: VisitorsAuthStatus = {
-      visitorId: request.visitorId,
-      isAuthenticated: false,
-    }
-    manageVisitorsRequestService(hostChannelToken, auth).catch(error => {
-      alert(request.codename + 'TODO: メッセージをちゃんとする(マルチリンガル)')
-    })
   }
 
   function showStatus(isAuthenticated: null | boolean): string {
@@ -95,7 +83,7 @@ function VisitorsRequestsManager({ hostChannelToken, isChannelEnded }: Props) {
       </div>
       <div className="flex justify-center mt-5">
         <ul>
-          {requests.map((request, index) => (
+          {visitorsRequests.map((request, index) => (
             <li
               key={index}
               className="border border-blue-300 rounded shadow py-1 px-2 mb-3"
@@ -105,7 +93,7 @@ function VisitorsRequestsManager({ hostChannelToken, isChannelEnded }: Props) {
                   <button
                     id={`accept-btn-${index}`}
                     className="btn btn-blue mr-2 focus:opacity-50 disabled:opacity-50"
-                    onClick={() => accept(request, index)}
+                    onClick={() => sendApproval(request, true)}
                     disabled={request.isAuthenticated !== null}
                     data-lang="accept-button"
                   >
@@ -114,7 +102,7 @@ function VisitorsRequestsManager({ hostChannelToken, isChannelEnded }: Props) {
                   <button
                     id={`reject-button-${index}`}
                     className="btn btn-red focus:opacity-50 disabled:opacity-50"
-                    onClick={() => reject(request, index)}
+                    onClick={() => sendApproval(request, false)}
                     disabled={request.isAuthenticated !== null}
                     data-lang="reject-button"
                   >
