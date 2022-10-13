@@ -1,9 +1,16 @@
 import { getCookie, setCookie } from './Cookie'
 
-export const cookieKey: string = 'FAKE_LANG' // TODO: Spring Boot, Nextjsの仕様と合わせる
+export const cookieKey = 'LANG'
 
-export const langAttribute: string = 'data-lang'
-export const langSelector: string = '[' + langAttribute + ']'
+export const langAttribute = 'data-lang'
+export const langSelector = '[' + langAttribute + ']'
+export const supportedLangTags = ['en', 'ja']
+
+export function getBrowserLanguage(): string {
+  return supportedLangTags.includes(navigator.language)
+    ? navigator.language
+    : 'en'
+}
 
 export function getLanguageSetting(): string {
   return getCookie(cookieKey) || document.documentElement.lang
@@ -32,6 +39,7 @@ export function setLanguage(
 }
 
 export function initLanguage(langMap: Map<string, Map<string, string>>): void {
+  document.documentElement.lang = getBrowserLanguage()
   const defaultLang = getLanguageSetting()
   setLanguage(defaultLang, langMap)
 }

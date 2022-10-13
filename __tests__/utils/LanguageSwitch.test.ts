@@ -6,7 +6,10 @@ import {
   initLanguage,
   getLangMessage,
   setLanguage,
+  getBrowserLanguage,
+  supportedLangTags,
 } from '@utils/LanguageSwitch'
+import { randomInt } from 'crypto'
 
 describe('LanguageSwitch', () => {
   const en = new Map([
@@ -23,9 +26,9 @@ describe('LanguageSwitch', () => {
     ['ja', ja],
   ])
 
-  beforeEach(() => {
-    document.documentElement.lang = 'en'
+  let browserLangMock: jest.SpyInstance
 
+  beforeEach(() => {
     const p1 = document.createElement('p')
     p1.setAttribute('id', 'title')
     p1.dataset.lang = 'title'
@@ -45,6 +48,8 @@ describe('LanguageSwitch', () => {
         <p id="desc" data-lang="desc">b</p>
       </div>
      */
+
+    browserLangMock = jest.spyOn(window.navigator, 'language', 'get')
   })
 
   afterEach(() => {
@@ -52,7 +57,33 @@ describe('LanguageSwitch', () => {
     document.cookie = `${cookieKey}=; max-age=0; path=/;`
   })
 
-  test('initLanguage should initialize depends on html lang setting', () => {
+  test('getBrowserLanguage should return supported lang tag string', () => {
+    const supported = supportedLangTags[randomInt(1)]
+    browserLangMock.mockReturnValue(supported)
+    const result = getBrowserLanguage()
+    expect(result).toBe(supported)
+  })
+
+  test('getBrowserLanguage should return en if browser lang not supported', () => {
+    const notSupportedLangTag = randomString(5)
+    browserLangMock.mockReturnValue(notSupportedLangTag)
+    const result = getBrowserLanguage()
+    expect(result).toBe('en')
+  })
+
+  test('initLanguage should initialize depends on browser lang setting', () => {
+    const supported = supportedLangTags[randomInt(1)]
+    browserLangMock.mockReturnValue(supported)
+    initLanguage(langMap)
+    const lang = langMap.get(supported)
+    expect(document.getElementById('title')?.textContent).toBe(
+      lang!.get('title')
+    )
+    expect(document.getElementById('desc')?.textContent).toBe(lang!.get('desc'))
+  })
+
+  test('initLanguage should initialize lang as en if browser language is not supported language', () => {
+    browserLangMock.mockReturnValue(randomString(5))
     initLanguage(langMap)
     expect(document.getElementById('title')?.textContent).toBe(en.get('title'))
     expect(document.getElementById('desc')?.textContent).toBe(en.get('desc'))
