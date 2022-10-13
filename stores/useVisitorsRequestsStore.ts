@@ -8,7 +8,6 @@ type VisitorsRequests = {
 // this is used by hosts
 const visitorsRequests = (set: any, get: any) => ({
   requests: new Array<VisitorsRequest>(),
-  get: () => get().requests,
   add: (newRequest: VisitorsRequest) => {
     set((prev: VisitorsRequests) => {
       // only accepts single visitorId per request

@@ -9,7 +9,6 @@ type Host = {
 
 const hostStore = (set: any, get: any) => ({
   channelName: '',
-  getChannelName: () => get().channelName,
   setChannelName: (channelName: string) =>
     set((state: Host) => ({ channelName: channelName })),
 

@@ -32,7 +32,12 @@ export function isJoinRequestMessage(maybeJoinRequest: any): boolean {
 export function isAuthenticationStatus(
   maybeAuthenticationStatus: any
 ): boolean {
-  const propertyNames = ['isClosed', 'isAuthenticated', 'guestChannelToken']
+  const propertyNames = [
+    'isClosed',
+    'isAuthenticated',
+    'guestId',
+    'guestChannelToken',
+  ]
   return hasAllPropertiesOf(maybeAuthenticationStatus, propertyNames)
 }
 

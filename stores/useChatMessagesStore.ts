@@ -9,7 +9,6 @@ type ChatMessages = {
 
 const chatMessages = (set: any, get: any) => ({
   messages: new Array<ChatMessage>(),
-  getMessages: () => get().messages,
   addMessage: (newChat: ChatMessage) => {
     // TODO: shift message more than 10
     set((prev: ChatMessages) => ({ messages: [...prev.messages, newChat] }))

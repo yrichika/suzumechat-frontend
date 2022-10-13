@@ -10,7 +10,6 @@ type Status = {
 // That's why this is a global state. You can't start new SSE session by reloading the page.
 const visitorsRequestsAvailability = (set: any, get: any) => ({
   isClosed: false,
-  getIsClosed: () => get().isClosed,
   setIsClosed: (isClosed: boolean) => set((status: Status) => ({ isClosed })),
   reset: () => set({ isClosed: false }),
 })
