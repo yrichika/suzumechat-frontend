@@ -1,4 +1,5 @@
 import { Client, IFrame, IMessage } from '@stomp/stompjs'
+import useGuestStore from '@stores/useGuestStore'
 import { isAuthenticationStatus, isError } from '@utils/WebSocketMessageHelper'
 import { useEffect, useState } from 'react'
 import AuthenticationStatus from 'types/messages/AuthenticationStatus'
@@ -9,15 +10,17 @@ export default function useVisitorMessageHandler(joinChannelToken: string) {
   const [stompClient, setStompClient] = useState<Client>()
   const WS_ENDPOINT_URL = `${process.env.NEXT_PUBLIC_BACK_PREFIX}/${process.env.NEXT_PUBLIC_WS_ENDPOINT}`
   const WS_SEND_URL = `${process.env.NEXT_PUBLIC_WS_SEND_PREFIX}/visitor/${joinChannelToken}`
-  const [visitorId, setVisitorId] = useState('')
-  // WARNING!
-  function wsReceiveUrl(visitorId: string) {
-    return `${process.env.NEXT_PUBLIC_WS_BROADCASTED_PREFIX}/visitor/${joinChannelToken}/${visitorId}`
-  }
 
   const [isClosed, setIsClosed] = useState(false)
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null)
   const [guestChannelToken, setGuestChannelToken] = useState('')
+  const setGuestId = useGuestStore(state => state.setGuestId)
+  const visitorId = useGuestStore(state => state.visitorId)
+  const setVisitorId = useGuestStore(state => state.setVisitorId)
+
+  function wsReceiveUrl(visitorId: string) {
+    return `${process.env.NEXT_PUBLIC_WS_BROADCASTED_PREFIX}/visitor/${joinChannelToken}/${visitorId}`
+  }
 
   function onConnect(stompClient: Client) {
     return (frame: IFrame) => {
@@ -43,6 +46,8 @@ export default function useVisitorMessageHandler(joinChannelToken: string) {
     setIsClosed(authStatus.isClosed)
     setIsAuthenticated(authStatus.isAuthenticated)
     setGuestChannelToken(authStatus.guestChannelToken)
+    setGuestId(authStatus.guestId)
+    // TODO: need secret key
     disconnect()
   }
 

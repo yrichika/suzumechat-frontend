@@ -15,7 +15,7 @@ function AuthenticationStatus({
   guestChannelToken,
   langMap,
 }: Props) {
-  const chatUrlPrefix = '/guest/'
+  const guestChannelUrl = `${process.env.NEXT_PUBLIC_FRONT_URL}/guest/`
   // messages
   const [defaultMessage, setDefaultMessage] = useState('')
   const [rejectedMessage, setRejectedMessage] = useState('')
@@ -30,7 +30,7 @@ function AuthenticationStatus({
   }, [])
 
   function guestChatUrl(validGuestChannelToken: string): string {
-    return chatUrlPrefix + validGuestChannelToken
+    return guestChannelUrl + validGuestChannelToken
   }
 
   return (
