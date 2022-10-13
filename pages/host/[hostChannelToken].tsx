@@ -7,12 +7,10 @@ import {
   copyToClipboard,
   isAnyOfEmpty,
 } from '@utils/Util'
-import HostChat from '@components/organisms/HostChat'
+import HostChat from '@components/organisms/host/HostChat'
 import { useRouter } from 'next/router'
 import endChannelService from '@services/endChannelService'
 
-// TODO: このページの表示は、backendからホストのセッションもしくはトークンがないと表示されないように
-// 制御させること
 function HostChannel() {
   const router = useRouter()
 
@@ -29,24 +27,23 @@ function HostChannel() {
 
   const endChannel = () => {
     setIsChannelEnded(true)
+    // DEBUG: このAPIでsession.invalidate()を呼ぶが、その際にhostIdの削除によって
+    //        正しくTerminateメッセージがguest側に届くか未確認
     endChannelService(hostChannelToken!)
       .then(response => {
         clearHostChannel()
-        // TODO: delete cookie?
         router.push('/channelEnded')
       })
       .catch(error => {
         clearHostChannel()
-        // TODO: delete cookie?
-        // router.push('/channelEnded')
+        router.push('/channelEnded')
       })
   }
 
   if (
     isAnyOfEmpty(hostChannelToken, channelName, joinChannelToken, secretKey)
   ) {
-    // router.push('/') でもいいかも
-    return <div>TODO: sorry</div>
+    router.push('/')
   }
 
   if (false) {

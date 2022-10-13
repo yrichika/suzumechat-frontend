@@ -1,7 +1,7 @@
 import Restricted from '@components/templates/Restricted'
 import React, { useEffect } from 'react'
 import { langMap } from '@lang/visitor/langMap'
-import VisitorsJoinRequest from '@components/organisms/VisitorsJoinRequest'
+import VisitorsJoinRequest from '@components/organisms/visitor/VisitorsJoinRequest'
 import { useRouter } from 'next/router'
 import getChannelNameByJoinTokenService from '@services/getChannelNameByJoinTokenService'
 import csrfTokenService from '@services/csrfTokenService'

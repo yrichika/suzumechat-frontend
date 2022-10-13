@@ -48,6 +48,7 @@ export function webSocketFactory(url: string) {
 }
 function debug(message: string) {
   // use when debugging
+  // console.log(message)
 }
 function onStompError(frame: IFrame) {
   // TODO:

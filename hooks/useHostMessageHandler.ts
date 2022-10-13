@@ -24,8 +24,8 @@ export default function useHostMessageHandler(
 ) {
   // common
   const [stompClient, setStompClient] = useState<Client>()
-  const WS_SEND_URL = `${process.env.NEXT_PUBLIC_WS_SEND_PREFIX}/host/${hostChannelToken}`
   const WS_ENDPOINT_URL = `${process.env.NEXT_PUBLIC_BACK_PREFIX}/${process.env.NEXT_PUBLIC_WS_ENDPOINT}`
+  const WS_SEND_URL = `${process.env.NEXT_PUBLIC_WS_SEND_PREFIX}/host/${hostChannelToken}`
   const WS_RECEIVE_URL = `${process.env.NEXT_PUBLIC_WS_BROADCASTED_PREFIX}/host/${hostChannelToken}`
 
   // Chat
@@ -106,7 +106,7 @@ export default function useHostMessageHandler(
     })
   }
 
-  function sendChannelEndedMessage() {
+  function sendTerminateMessage() {
     // TODO: handle this message on guest side
     const terminateMessage: Terminate = {
       terminatedBy: 'host',
@@ -126,7 +126,7 @@ export default function useHostMessageHandler(
     if (!stompClient.active) {
       return
     }
-    sendChannelEndedMessage()
+    sendTerminateMessage()
     clearChatMessages()
     clearRequests()
     stompClient.deactivate()

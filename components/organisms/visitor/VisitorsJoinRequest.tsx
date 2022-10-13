@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { pickLangMessage } from '@utils/LanguageSwitch'
 import { langMap } from '@lang/index/langMap'
-import AuthenticationStatus from '@components/molecules/AuthenticationStatus'
+import AuthenticationStatus from '@components/molecules/visitor/AuthenticationStatus'
 import useVisitorMessageHandler from '@hooks/useVisitorMessageHandler'
 
 interface Props {
