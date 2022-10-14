@@ -6,45 +6,47 @@ import { randomInt } from '@utils/UnsafeRandom'
 import useGuestStore from '@stores/useGuestStore'
 import getGuestService from '@services/getGuestService'
 import getGuestChannelByGuestTokenService from '@services/getGuestChannelByGuestTokenService'
+import Router from 'next/router'
+import GuestChat from '@components/organisms/guest/GuestChat'
 
 export async function getServerSideProps(context: any) {
   const { guestChannelToken } = context.query
   if (!guestChannelToken) {
-    return { props: { channelName: null } }
+    return { props: { channelName: null, guestChannelToken } }
   }
 
   const guestChannel = await getGuestChannelByGuestTokenService(
     guestChannelToken
   )
   if (!guestChannel) {
-    return { props: { channelName: null } }
+    return { props: { channelName: null, guestChannelToken } }
   }
   return {
-    props: { channelName: guestChannel.channelName },
+    props: { channelName: guestChannel.channelName, guestChannelToken },
   }
 }
 
 interface Prop {
   channelName: string | null
+  guestChannelToken: string
 }
 
-function GuestChannel({ channelName }: Prop) {
-  // TODO: guestページでは、以下の情報がないとチャットがそもそもできないので
-  //       useGuestStoreにvisitorの段階から入れる必要がある
+function GuestChannel({ channelName, guestChannelToken }: Prop) {
   const guestId = useGuestStore(store => store.guestId)
   const codename = useGuestStore(store => store.codename)
   const setCodename = useGuestStore(store => store.setCodename)
   const secretKey = useGuestStore(store => store.secretKey)
   const setSecretKey = useGuestStore(store => store.setSecretKey)
 
-  // useEffect(() => {
-  //   // TODO: 1. ここでguestIdをサーバー側に問い合わせて、codename, secretKeyを取得する
-  //   //       2. サーバー側で、guestIdをセッションに保存する
-  //   getGuestService(guestId).then(response => {
-  //     setCodename(response.data.codename)
-  //     setSecretKey(response.data.secretKey)
-  //   })
-  // }, [])
+  useEffect(() => {
+    getGuestService(guestId, guestChannelToken).then(guestDto => {
+      if (!guestDto) {
+        return // TODO: エラーページへリダイレクト
+      }
+      setCodename(guestDto.codename)
+      setSecretKey(guestDto.secretKey)
+    })
+  }, [])
 
   // TODO: 足りない情報があれば、即死
   if (!channelName) {
@@ -70,7 +72,7 @@ function GuestChannel({ channelName }: Prop) {
           <div>
             <span data-lang="how-to-end"></span>
           </div>
-          {/* <Chat chatUrl={chatUrl} codename={codename} secretKey={secretKey} /> */}
+          <GuestChat />
         </div>
       </main>
     </Private>
