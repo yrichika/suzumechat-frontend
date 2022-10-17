@@ -2,11 +2,9 @@ import Private from '@components/templates/Private'
 import React, { useEffect } from 'react'
 import { langMap } from '@lang/guest/langMap'
 import { toggleVisibilityBySelector } from '@utils/Util'
-import { randomInt } from '@utils/UnsafeRandom'
 import useGuestStore from '@stores/useGuestStore'
 import getGuestService from '@services/getGuestService'
 import getGuestChannelByGuestTokenService from '@services/getGuestChannelByGuestTokenService'
-import Router from 'next/router'
 import GuestChat from '@components/organisms/guest/GuestChat'
 
 export async function getServerSideProps(context: any) {
@@ -33,6 +31,7 @@ interface Prop {
 
 function GuestChannel({ channelName, guestChannelToken }: Prop) {
   const guestId = useGuestStore(store => store.guestId)
+  // FIXME: これらはvisitorの段階で取得したほうがいいか?
   const codename = useGuestStore(store => store.codename)
   const setCodename = useGuestStore(store => store.setCodename)
   const secretKey = useGuestStore(store => store.secretKey)
@@ -48,6 +47,10 @@ function GuestChannel({ channelName, guestChannelToken }: Prop) {
     })
   }, [])
 
+  function endChannel() {
+    // TODO:
+  }
+
   // TODO: 足りない情報があれば、即死
   if (!channelName) {
     return // TODO: sorryページ表示
@@ -55,7 +58,7 @@ function GuestChannel({ channelName, guestChannelToken }: Prop) {
 
   return (
     <Private langMap={langMap} channelName={channelName}>
-      <main className="container mx-auto">
+      <div className="container mx-auto">
         <div className="flex justify-end">
           <button
             onClick={event => toggleVisibilityBySelector(event, '.scc-tip')}
@@ -66,13 +69,30 @@ function GuestChannel({ channelName, guestChannelToken }: Prop) {
             ></span>
           </button>
         </div>
+        <div className="flex justify-start">
+          <div>
+            <button
+              type="button"
+              className="rounded bg-pink-500 hover:bg-pink-700 text-white px-2"
+              data-lang="logout-button"
+              onClick={endChannel}
+            ></button>
+          </div>
+        </div>
+      </div>
+
+      <main className="container mx-auto">
         <h1 className="text-4xl m-3">{channelName}</h1>
         <hr className="mx-2 my-4" />
         <div>
           <div>
             <span data-lang="how-to-end"></span>
           </div>
-          <GuestChat />
+          <GuestChat
+            guestChannelToken={guestChannelToken}
+            codename={codename}
+            secretKey={secretKey}
+          />
         </div>
       </main>
     </Private>

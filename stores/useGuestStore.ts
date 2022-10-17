@@ -17,6 +17,7 @@ const guestStore = (set: any, get: any) => ({
   setCodename: (codename: string) => set((state: Guest) => ({ codename })),
   secretKey: '',
   setSecretKey: (secretKey: string) => set((state: Guest) => ({ secretKey })),
+  clear: () => set({ visitorId: '', guestId: '', codename: '', secretKey: '' }),
 })
 
 const store = persist(guestStore, {

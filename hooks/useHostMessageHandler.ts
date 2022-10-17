@@ -1,13 +1,9 @@
 import { Client, IFrame, IMessage } from '@stomp/stompjs'
-import { htmlspecialchars } from '@utils/Util'
 import { useEffect, useState } from 'react'
-import ChatMessage from 'types/ChatMessage'
-import CryptoJS from 'crypto-js'
 import { connect, isInactive } from './stomp/config'
-import ChatMessageCapsule from 'types/messages/ChatMessageCapsule'
 import useVisitorsRequestsStore from '@stores/useVisitorsRequestsStore'
 import VisitorsAuthStatus from 'types/messages/VisitorsAuthStatus'
-import useChatMessagesStore from '@stores/useChatMessagesStore'
+import useHostChatMessagesStore from '@stores/useHostChatMessagesStore'
 import {
   isChatMessageCapsuleMessage,
   isError,
@@ -15,6 +11,7 @@ import {
 } from '@utils/WebSocketMessageHelper'
 import VisitorsRequest from 'types/messages/VisitorsRequest'
 import Terminate from 'types/messages/Terminate'
+import { useChatMessageHandler } from './stomp/useChatMessageHandler'
 
 export default function useHostMessageHandler(
   hostChannelToken: string,
@@ -29,16 +26,21 @@ export default function useHostMessageHandler(
   const WS_RECEIVE_URL = `${process.env.NEXT_PUBLIC_WS_BROADCASTED_PREFIX}/host/${hostChannelToken}`
 
   // Chat
-  const chatMessages = useChatMessagesStore(store => store.messages)
-  const addChatMessage = useChatMessagesStore(store => store.addMessage)
-  const clearChatMessages = useChatMessagesStore(store => store.clear)
-  const chatMessageIndex = useChatMessagesStore(store => store.index)
-  const incrementMessageIndex = useChatMessagesStore(
-    store => store.incrementIndex
+  const {
+    chatMessages,
+    sendChatMessage,
+    handleChatMessage,
+    clearChatMessages,
+  } = useChatMessageHandler(
+    useHostChatMessagesStore,
+    stompClient,
+    WS_SEND_URL,
+    codename,
+    secretKey,
+    color
   )
-  const CHANNEL_ENDED_MESSAGE = '__channel_ended__'
 
-  // visitors request handler
+  // visitors request handler REFACTOR: move to another hook
   const visitorsRequests = useVisitorsRequestsStore(state => state.requests)
   const addRequest = useVisitorsRequestsStore(state => state.add)
   const updateRequest = useVisitorsRequestsStore(state => state.update)
@@ -59,16 +61,10 @@ export default function useHostMessageHandler(
     } else if (isVisitorsRequestMessage(messageBody)) {
       handleVisitorsRequest(messageBody)
     } else if (isError(messageBody)) {
-      // TODO: error handling
-      // TODO: エラーメッセージごとに処理を変える?
+      // TODO: display error notification on screen
     } else {
-      console.log("can't handle this message!")
+      // TODO: display error notification on screen
     }
-  }
-
-  function handleChatMessage(messageBody: any) {
-    const chatMessage: ChatMessage = decrypt(messageBody)
-    addChatMessage(chatMessage)
   }
 
   function handleVisitorsRequest(messageBody: any) {
@@ -92,22 +88,9 @@ export default function useHostMessageHandler(
     updateRequest(request)
   }
 
-  function sendChatMessage(messageInput: string) {
-    if (isInactive(stompClient)) {
-      return
-    }
-
-    console.log('sending message: [' + messageInput + ']')
-    const encryptedMessage = encrypt(messageInput)
-    const messageCapsule: ChatMessageCapsule = { encryptedMessage }
-    stompClient?.publish({
-      destination: WS_SEND_URL,
-      body: JSON.stringify(messageCapsule),
-    })
-  }
-
   function sendTerminateMessage() {
     // TODO: handle this message on guest side
+    const CHANNEL_ENDED_MESSAGE = '__channel_ended__'
     const terminateMessage: Terminate = {
       terminatedBy: 'host',
       message: CHANNEL_ENDED_MESSAGE,
@@ -131,32 +114,6 @@ export default function useHostMessageHandler(
     clearRequests()
     stompClient.deactivate()
     console.log('WebSocket disconnected')
-  }
-
-  function encrypt(
-    sendingMessage: string,
-    timestamp: number = Date.now()
-  ): string {
-    const sanitizedMessage = htmlspecialchars(sendingMessage)
-    const chatMessage: ChatMessage = {
-      id: chatMessageIndex,
-      name: codename,
-      message: sanitizedMessage,
-      color: color,
-      timestamp: timestamp,
-    }
-    incrementMessageIndex()
-    const jsonedMessage = JSON.stringify(chatMessage)
-    return CryptoJS.AES.encrypt(jsonedMessage, secretKey).toString()
-  }
-
-  function decrypt(messageCapsule: ChatMessageCapsule): ChatMessage {
-    const bytes = CryptoJS.AES.decrypt(
-      messageCapsule.encryptedMessage,
-      secretKey
-    )
-    const decrypted = bytes.toString(CryptoJS.enc.Utf8)
-    return JSON.parse(decrypted)
   }
 
   useEffect(() => {

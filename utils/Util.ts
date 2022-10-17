@@ -76,3 +76,14 @@ export function toggleVisibilityBySelector(
     }
   })
 }
+
+// TEST:
+/**
+ * text-white, text-black are Tailwind's classes
+ */
+export function getClearTextColorForBg(bgColor: string): string {
+  if (bgColor.match(/[5|6|7|8|9]00/)) {
+    return 'text-white'
+  }
+  return 'text-black'
+}
