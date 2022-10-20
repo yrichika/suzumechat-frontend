@@ -1,6 +1,7 @@
 import axios from 'axios'
 import GuestDto from 'types/GuestDto'
 
+// DELETE:
 export default function getGuestService(
   guestId: string,
   guestChannelToken: string

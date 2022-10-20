@@ -14,14 +14,16 @@ export function isChatMessageCapsuleMessage(
   return hasAllPropertiesOf(maybeChatMessageCapsule, propertyNames)
 }
 
-export function isVisitorsRequestMessage(maybeVisitorsRequest: any): boolean {
+export function isManagedJoinRequestMessage(
+  maybeManagedJoinRequest: any
+): boolean {
   const propertyNames = [
     'visitorId',
     'codename',
     'passphrase',
     'isAuthenticated',
   ]
-  return hasAllPropertiesOf(maybeVisitorsRequest, propertyNames)
+  return hasAllPropertiesOf(maybeManagedJoinRequest, propertyNames)
 }
 
 export function isJoinRequestMessage(maybeJoinRequest: any): boolean {

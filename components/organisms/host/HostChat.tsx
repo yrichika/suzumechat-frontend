@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, KeyboardEvent } from 'react'
 import useHostMessageHandler from '@hooks/useHostMessageHandler'
-import VisitorsRequestsManager from './VisitorsRequestsManager'
+import JoinRequestsManager from './JoinRequestsManager'
 import Chat from '@components/organisms/Chat'
 
 import useChatColor from '@hooks/useChatColor'
@@ -22,7 +22,7 @@ function HostChat({
   const { color, nameTextColor } = useChatColor()
   const {
     chatMessages,
-    visitorsRequests,
+    managedJoinRequests,
     sendChatMessage,
     sendApproval,
     disconnect,
@@ -46,10 +46,10 @@ function HostChat({
         />
       </div>
       <div className="mt-5">
-        <VisitorsRequestsManager
+        <JoinRequestsManager
           hostChannelToken={hostChannelToken}
           isChannelEnded={isChannelEnded}
-          visitorsRequests={visitorsRequests}
+          managedJoinRequests={managedJoinRequests}
           sendApproval={sendApproval}
         />
       </div>

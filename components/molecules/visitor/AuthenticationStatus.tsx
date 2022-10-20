@@ -5,17 +5,14 @@ import { isEmpty, isNotEmpty } from '@utils/Util'
 interface Props {
   isWaitingForAuthentication: boolean
   isAuthenticated: boolean | null
-  guestChannelToken: string
   langMap: Map<string, Map<string, string>>
 }
 
 function AuthenticationStatus({
   isWaitingForAuthentication,
   isAuthenticated,
-  guestChannelToken,
   langMap,
 }: Props) {
-  const guestChannelUrl = `${process.env.NEXT_PUBLIC_FRONT_URL}/guest/`
   // messages
   const [defaultMessage, setDefaultMessage] = useState('')
   const [rejectedMessage, setRejectedMessage] = useState('')
@@ -29,12 +26,7 @@ function AuthenticationStatus({
     setWaitingMessage(pickLangMessage('waiting-for-authentication', langMap))
   }, [])
 
-  function guestChatUrl(validGuestChannelToken: string): string {
-    return guestChannelUrl + validGuestChannelToken
-  }
-
   return (
-    // REFACTOR: too much nesting ifs
     <div className="flex justify-center mt-5 mx-2">
       {!isWaitingForAuthentication ? (
         <span>
@@ -44,17 +36,8 @@ function AuthenticationStatus({
         <span className="break-all">
           {/* ACCEPTED message */}
           {isAuthenticated === true && (
-            <span>
-              <span className="font-bold" data-lang="accepted">
-                {acceptedMessage}
-              </span>
-              <span>: </span>
-              <a
-                href={guestChatUrl(guestChannelToken)}
-                className="underline text-blue-500 break-all overflow-ellipsis"
-              >
-                {guestChatUrl(guestChannelToken)}
-              </a>
+            <span className="font-bold" data-lang="accepted">
+              {acceptedMessage}
             </span>
           )}
           {/* REJECTED message */}

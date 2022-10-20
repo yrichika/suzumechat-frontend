@@ -2,15 +2,16 @@ import create from 'zustand'
 import { persist } from 'zustand/middleware'
 
 type Guest = {
-  visitorId: string
+  channelName: string
   guestId: string
   codename: string
   secretKey: string
 }
 
 const guestStore = (set: any, get: any) => ({
-  visitorId: '',
-  setVisitorId: (visitorId: string) => set((state: Guest) => ({ visitorId })),
+  channelName: '',
+  setChannelName: (channelName: string) =>
+    set((state: Guest) => ({ channelName })),
   guestId: '',
   setGuestId: (guestId: string) => set((state: Guest) => ({ guestId })),
   codename: '',

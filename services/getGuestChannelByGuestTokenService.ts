@@ -1,6 +1,7 @@
 import axios from 'axios'
 import GuestChannel from 'types/GuestChannel'
 
+// DELETE:
 export default async function getGuestChannelByGuestTokenService(
   guestChannelToken: string
 ): Promise<GuestChannel | null> {

@@ -7,8 +7,9 @@ import {
 } from '@utils/WebSocketMessageHelper'
 import { useEffect, useState } from 'react'
 import Terminate from 'types/messages/Terminate'
-import { connect } from './stomp/config'
-import { useChatMessageHandler } from './stomp/useChatMessageHandler'
+import useGuestReceiver from './receivers/useGuestReceiver'
+import { connect, isInactive } from './stomp/config'
+import { useChatMessageHandler } from './messagehandlers/useChatMessageHandler'
 
 export default function useGuestMessageHandler(
   guestChannelToken: string,
@@ -19,58 +20,34 @@ export default function useGuestMessageHandler(
   const [stompClient, setStompClient] = useState<Client>()
   const WS_ENDPOINT_URL = `${process.env.NEXT_PUBLIC_BACK_PREFIX}/${process.env.NEXT_PUBLIC_WS_ENDPOINT}`
   const WS_SEND_URL = `${process.env.NEXT_PUBLIC_WS_SEND_PREFIX}/guest/${guestChannelToken}`
-  const WS_RECEIVE_URL = `${process.env.NEXT_PUBLIC_WS_BROADCASTED_PREFIX}/guest/${guestChannelToken}`
 
-  const {
-    chatMessages,
-    sendChatMessage,
-    handleChatMessage,
-    clearChatMessages,
-  } = useChatMessageHandler(
-    useGuestChatMessagesStore,
+  const chatMessages = useGuestChatMessagesStore(store => store.messages)
+  const addChatMessage = useGuestChatMessagesStore(store => store.addMessage)
+  const clearChatMessages = useGuestChatMessagesStore(store => store.clear)
+  const chatMessageIndex = useGuestChatMessagesStore(store => store.index)
+  const incrementMessageIndex = useGuestChatMessagesStore(
+    store => store.incrementIndex
+  )
+  const userAppearance = { codename, color }
+  const { sendChatMessage, receiveChatMessage } = useChatMessageHandler(
     stompClient,
     WS_SEND_URL,
-    codename,
+    userAppearance,
     secretKey,
-    color
+    addChatMessage,
+    chatMessageIndex,
+    incrementMessageIndex
   )
 
-  function onConnect(stompClient: Client) {
-    return (frame: IFrame) => {
-      console.log('guest chat ws connected')
-      stompClient.subscribe(WS_RECEIVE_URL, receive)
-    }
-  }
-
-  function receive(message: IMessage) {
-    console.log('received message:' + message.body)
-    const messageBody = JSON.parse(message.body)
-    if (isChatMessageCapsuleMessage(messageBody)) {
-      handleChatMessage(messageBody)
-    } else if (isTerminateMessage(messageBody)) {
-      handleTerminate(messageBody)
-    } else if (isError(messageBody)) {
-      // TODO: display error notification on screen
-    } else {
-      // TODO: display error notification on screen
-    }
-  }
-
-  function handleTerminate(terminate: Terminate) {
-    // TODO: end chat and redirect to chat ended page
-    disconnect()
-  }
+  const { onConnect } = useGuestReceiver(guestChannelToken, receiveChatMessage)
 
   function disconnect() {
-    if (!stompClient) {
-      return
-    }
-    if (!stompClient.active) {
-      return
+    if (isInactive(stompClient)) {
+      return new Promise(() => {})
     }
     clearChatMessages()
-    stompClient.deactivate()
     console.log('WebSocket disconnected')
+    return stompClient?.deactivate()
   }
 
   useEffect(() => {

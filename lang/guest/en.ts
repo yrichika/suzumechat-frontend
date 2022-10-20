@@ -4,4 +4,5 @@ export const en = new Map([
   ['how-to-end', 'Close the window if you want to end this chat'],
   ['tip-label', 'How Tos!'],
   ['send-button', 'send'],
+  ['logout-button', 'End Chat'],
 ])

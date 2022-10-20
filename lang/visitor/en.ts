@@ -8,7 +8,7 @@ export const en = new Map<string, string>([
   ['send-auth', 'Please send your authentication info.'],
   [
     'accepted',
-    'Authenticated by the host. You can join this chat room from the link.',
+    'Authenticated by the host. Redirecting to the chat room. Please wait...',
   ],
   [
     'rejected',

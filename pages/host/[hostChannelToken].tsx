@@ -23,7 +23,7 @@ function HostChannel() {
   const [isChannelEnded, setIsChannelEnded] = useState(false)
 
   const absoluteUrl = process.env.NEXT_PUBLIC_FRONT_URL
-  const visitorsRequestUrl = '/visitor/'
+  const joinRequestUrl = '/visitor/'
 
   const endChannel = () => {
     setIsChannelEnded(true)
@@ -102,7 +102,7 @@ function HostChannel() {
                   type="text"
                   id="guest-request-url"
                   className="w-full text-gray-600 bg-gray-200 rounded-r px-3"
-                  value={`${absoluteUrl}${visitorsRequestUrl}${joinChannelToken}`}
+                  value={`${absoluteUrl}${joinRequestUrl}${joinChannelToken}`}
                   readOnly
                 />
               </div>

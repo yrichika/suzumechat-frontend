@@ -1,17 +1,13 @@
 import { Client, IFrame, IMessage } from '@stomp/stompjs'
 import { useEffect, useState } from 'react'
 import { connect, isInactive } from './stomp/config'
-import useVisitorsRequestsStore from '@stores/useVisitorsRequestsStore'
-import VisitorsAuthStatus from 'types/messages/VisitorsAuthStatus'
+import useManagedJoinRequestsStore from '@stores/useManagedJoinRequestsStore'
 import useHostChatMessagesStore from '@stores/useHostChatMessagesStore'
-import {
-  isChatMessageCapsuleMessage,
-  isError,
-  isVisitorsRequestMessage,
-} from '@utils/WebSocketMessageHelper'
-import VisitorsRequest from 'types/messages/VisitorsRequest'
-import Terminate from 'types/messages/Terminate'
-import { useChatMessageHandler } from './stomp/useChatMessageHandler'
+import { useChatMessageHandler } from './messagehandlers/useChatMessageHandler'
+import useHostReceiver from './receivers/useHostReceiver'
+import useHostSender from './senders/useHostSender'
+import useJoinRequestMessageHandler from './messagehandlers/useJoinRequestMessageHandler'
+import ChatUserAppearance from 'types/ChatUserAppearance'
 
 export default function useHostMessageHandler(
   hostChannelToken: string,
@@ -25,95 +21,58 @@ export default function useHostMessageHandler(
   const WS_SEND_URL = `${process.env.NEXT_PUBLIC_WS_SEND_PREFIX}/host/${hostChannelToken}`
   const WS_RECEIVE_URL = `${process.env.NEXT_PUBLIC_WS_BROADCASTED_PREFIX}/host/${hostChannelToken}`
 
-  // Chat
-  const {
-    chatMessages,
-    sendChatMessage,
-    handleChatMessage,
-    clearChatMessages,
-  } = useChatMessageHandler(
-    useHostChatMessagesStore,
-    stompClient,
-    WS_SEND_URL,
-    codename,
-    secretKey,
-    color
+  const chatMessages = useHostChatMessagesStore(store => store.messages)
+  const addChatMessage = useHostChatMessagesStore(store => store.addMessage)
+  const clearChatMessages = useHostChatMessagesStore(store => store.clear)
+  const chatMessageIndex = useHostChatMessagesStore(store => store.index)
+  const incrementMessageIndex = useHostChatMessagesStore(
+    store => store.incrementIndex
   )
 
-  // visitors request handler REFACTOR: move to another hook
-  const visitorsRequests = useVisitorsRequestsStore(state => state.requests)
-  const addRequest = useVisitorsRequestsStore(state => state.add)
-  const updateRequest = useVisitorsRequestsStore(state => state.update)
-  const clearRequests = useVisitorsRequestsStore(state => state.clear)
+  const managedJoinRequests = useManagedJoinRequestsStore(
+    state => state.requests
+  )
+  const addJoinRequest = useManagedJoinRequestsStore(state => state.add)
+  const updateJoinRequest = useManagedJoinRequestsStore(state => state.update)
+  const clearJoinRequests = useManagedJoinRequestsStore(state => state.clear)
 
-  function onConnect(stompClient: Client) {
-    return (frame: IFrame) => {
-      console.log('chat ws connected!')
-      stompClient.subscribe(WS_RECEIVE_URL, receive)
-    }
-  }
+  const userAppearance: ChatUserAppearance = { codename, color }
 
-  function receive(message: IMessage) {
-    console.log('received message: ' + message.body)
-    const messageBody = JSON.parse(message.body)
-    if (isChatMessageCapsuleMessage(messageBody)) {
-      handleChatMessage(messageBody)
-    } else if (isVisitorsRequestMessage(messageBody)) {
-      handleVisitorsRequest(messageBody)
-    } else if (isError(messageBody)) {
-      // TODO: display error notification on screen
-    } else {
-      // TODO: display error notification on screen
-    }
-  }
+  // handle chat
+  const { sendChatMessage, receiveChatMessage } = useChatMessageHandler(
+    stompClient,
+    WS_SEND_URL,
+    userAppearance,
+    secretKey,
+    addChatMessage,
+    chatMessageIndex,
+    incrementMessageIndex
+  )
 
-  function handleVisitorsRequest(messageBody: any) {
-    addRequest(messageBody)
-  }
+  // handle JoinRequest
+  const { receiveJoinRequest, sendApproval } = useJoinRequestMessageHandler(
+    stompClient,
+    WS_SEND_URL,
+    addJoinRequest,
+    updateJoinRequest
+  )
 
-  function sendApproval(request: VisitorsRequest, isAuthenticated: boolean) {
-    if (isInactive(stompClient)) {
-      return
-    }
-    const auth: VisitorsAuthStatus = {
-      visitorId: request.visitorId,
-      isAuthenticated: isAuthenticated,
-    }
-    stompClient!.publish({
-      destination: WS_SEND_URL,
-      body: JSON.stringify(auth),
-    })
-
-    request.isAuthenticated = isAuthenticated
-    updateRequest(request)
-  }
-
-  function sendTerminateMessage() {
-    // TODO: handle this message on guest side
-    const CHANNEL_ENDED_MESSAGE = '__channel_ended__'
-    const terminateMessage: Terminate = {
-      terminatedBy: 'host',
-      message: CHANNEL_ENDED_MESSAGE,
-      data: null,
-    }
-    stompClient?.publish({
-      destination: WS_SEND_URL,
-      body: JSON.stringify(terminateMessage),
-    })
-  }
+  const { onConnect } = useHostReceiver(
+    WS_RECEIVE_URL,
+    receiveChatMessage,
+    receiveJoinRequest
+  )
+  const { sendTerminateMessage } = useHostSender(stompClient, WS_SEND_URL)
 
   function disconnect() {
-    if (!stompClient) {
-      return
-    }
-    if (!stompClient.active) {
-      return
+    if (isInactive(stompClient)) {
+      return new Promise(() => {})
     }
     sendTerminateMessage()
     clearChatMessages()
-    clearRequests()
-    stompClient.deactivate()
+    clearJoinRequests()
     console.log('WebSocket disconnected')
+    return stompClient?.deactivate()
   }
 
   useEffect(() => {
@@ -122,7 +81,7 @@ export default function useHostMessageHandler(
 
   return {
     chatMessages,
-    visitorsRequests,
+    managedJoinRequests,
     sendChatMessage,
     sendApproval,
     disconnect,

@@ -1,42 +1,40 @@
-import closeVisitorsRequestsService from '@services/closeVisitorsRequestsService'
-import useVisitorsRequestsAvailabilityStore from '@stores/useVisitorsRequestsAvailabilityStore'
+import closeJoinRequestService from '@services/closeJoinRequestService'
+import useJoinRequestAvailabilityStore from '@stores/useJoinRequestAvailabilityStore'
 import React, { useState, useEffect } from 'react'
 import VisitorsAuthStatus from 'types/messages/VisitorsAuthStatus'
-import VisitorsRequest from 'types/messages/VisitorsRequest'
+import ManagedJoinRequest from 'types/messages/ManagedJoinRequest'
 
 interface Props {
   hostChannelToken: string
   isChannelEnded: boolean
-  visitorsRequests: VisitorsRequest[]
-  sendApproval: (request: VisitorsRequest, isAuthenticated: boolean) => void
+  managedJoinRequests: ManagedJoinRequest[]
+  sendApproval: (request: ManagedJoinRequest, isAuthenticated: boolean) => void
 }
 
 // originally ManageClientRequest
-function VisitorsRequestsManager({
+function JoinRequestsManager({
   hostChannelToken,
   isChannelEnded,
-  visitorsRequests,
+  managedJoinRequests,
   sendApproval,
 }: Props) {
-  const requestClosed = useVisitorsRequestsAvailabilityStore(
-    state => state.isClosed
-  )
-  const setRequestClosed = useVisitorsRequestsAvailabilityStore(
+  const requestClosed = useJoinRequestAvailabilityStore(state => state.isClosed)
+  const setRequestClosed = useJoinRequestAvailabilityStore(
     state => state.setIsClosed
   )
-  const resetVisitorsRequestAvailability = useVisitorsRequestsAvailabilityStore(
+  const resetJoinRequestAvailability = useJoinRequestAvailabilityStore(
     state => state.reset
   )
 
   useEffect(() => {
     if (isChannelEnded) {
-      resetVisitorsRequestAvailability()
+      resetJoinRequestAvailability()
     }
   }, [isChannelEnded])
 
-  // TODO: これもwebsocketにしないと、visitorに対して、channelが閉じられた連絡ができない
+  // TODO: change this to websocket. otherwise host can't notify others channel already closed
   function closeRequest() {
-    closeVisitorsRequestsService(hostChannelToken)
+    closeJoinRequestService(hostChannelToken)
       .then(data => {
         setRequestClosed(true)
       })
@@ -83,7 +81,7 @@ function VisitorsRequestsManager({
       </div>
       <div className="flex justify-center mt-5">
         <ul>
-          {visitorsRequests.map((request, index) => (
+          {managedJoinRequests.map((request, index) => (
             <li
               key={index}
               className="border border-blue-300 rounded shadow py-1 px-2 mb-3"
@@ -137,4 +135,4 @@ function VisitorsRequestsManager({
   )
 }
 
-export default VisitorsRequestsManager
+export default JoinRequestsManager

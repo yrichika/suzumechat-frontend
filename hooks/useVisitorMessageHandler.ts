@@ -4,52 +4,20 @@ import { isAuthenticationStatus, isError } from '@utils/WebSocketMessageHelper'
 import { useEffect, useState } from 'react'
 import AuthenticationStatus from 'types/messages/AuthenticationStatus'
 import JoinRequest from 'types/messages/JoinRequest'
-import { connect, isInactive } from './stomp/config'
+import useVisitorReceiver from './receivers/useVisitorReceiver'
+import {
+  connect,
+  isInactive,
+  stompBasicConfig,
+  webSocketFactory,
+} from './stomp/config'
 
 export default function useVisitorMessageHandler(joinChannelToken: string) {
   const [stompClient, setStompClient] = useState<Client>()
   const WS_ENDPOINT_URL = `${process.env.NEXT_PUBLIC_BACK_PREFIX}/${process.env.NEXT_PUBLIC_WS_ENDPOINT}`
   const WS_SEND_URL = `${process.env.NEXT_PUBLIC_WS_SEND_PREFIX}/visitor/${joinChannelToken}`
-
-  const [isClosed, setIsClosed] = useState(false)
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null)
-  const [guestChannelToken, setGuestChannelToken] = useState('')
-  const setGuestId = useGuestStore(state => state.setGuestId)
-  const visitorId = useGuestStore(state => state.visitorId)
-  const setVisitorId = useGuestStore(state => state.setVisitorId)
-
-  function wsReceiveUrl(visitorId: string) {
-    return `${process.env.NEXT_PUBLIC_WS_BROADCASTED_PREFIX}/visitor/${joinChannelToken}/${visitorId}`
-  }
-
-  function onConnect(stompClient: Client) {
-    return (frame: IFrame) => {
-      const visitorId = crypto.randomUUID()
-      setVisitorId(visitorId)
-      console.log('visitor ws connected!')
-      console.log('receiving at: ' + wsReceiveUrl(visitorId))
-      stompClient.subscribe(wsReceiveUrl(visitorId), receive)
-    }
-  }
-
-  function receive(message: IMessage) {
-    console.log('message received: ' + message.body)
-    const messageBody = JSON.parse(message.body)
-    if (isAuthenticationStatus(messageBody)) {
-      handleAuthenticationStatusMessage(messageBody)
-    } else if (isError(messageBody)) {
-      // TODO: handle error
-    }
-  }
-
-  function handleAuthenticationStatusMessage(authStatus: AuthenticationStatus) {
-    setIsClosed(authStatus.isClosed)
-    setIsAuthenticated(authStatus.isAuthenticated)
-    setGuestChannelToken(authStatus.guestChannelToken)
-    setGuestId(authStatus.guestId)
-    // TODO: need secret key
-    disconnect()
-  }
+  const { isClosed, isAuthenticated, guestChannelToken, visitorId, onConnect } =
+    useVisitorReceiver(joinChannelToken)
 
   function sendJoinRequest(joinRequest: JoinRequest) {
     if (isInactive(stompClient)) {
@@ -62,12 +30,31 @@ export default function useVisitorMessageHandler(joinChannelToken: string) {
     console.log('message sent:' + JSON.stringify(joinRequest))
   }
 
-  function disconnect() {
+  function disconnect(): Promise<void> {
     if (isInactive(stompClient)) {
-      return
+      return new Promise(() => {})
     }
-    stompClient!.deactivate()
-    console.log('websocket disconnected')
+    return stompClient!.deactivate()
+  }
+
+  function switchConnectionToGuest() {
+    stompClient?.configure({
+      ...stompBasicConfig,
+      // FIXME: webSocketFactoryは同じなので、再指定しなくてもいい
+      webSocketFactory: webSocketFactory(`/back/websocket`),
+      // ここだけ上書きになるので、もともとのconfigを上書きできないか?
+      onConnect: (frame: IFrame) => {
+        console.log('guest chat ws connected')
+        stompClient.subscribe(
+          `/receive/guest/${guestChannelToken}`,
+          (message: IMessage) => {
+            console.log('受け取り', message)
+          }
+        )
+      },
+    })
+
+    stompClient!.activate()
   }
 
   useEffect(() => {
@@ -80,5 +67,7 @@ export default function useVisitorMessageHandler(joinChannelToken: string) {
     isClosed,
     isAuthenticated,
     sendJoinRequest,
+    disconnect,
+    switchConnectionToGuest,
   }
 }

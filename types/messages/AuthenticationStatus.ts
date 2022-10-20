@@ -4,6 +4,9 @@ type AuthenticationStatus = {
   isAuthenticated: boolean | null
   guestId: string
   guestChannelToken: string
+  channelName: string
+  codename: string
+  secretKey: string
 }
 
 export default AuthenticationStatus
