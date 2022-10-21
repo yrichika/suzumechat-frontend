@@ -6,10 +6,9 @@ import ChatMessageCapsule from 'types/messages/ChatMessageCapsule'
 
 // REFACTOR: too many parameters, and not sure if order of parameter is right
 export default function useChatSender(
-  stompClient: Client | undefined,
+  stompClient: Client,
   wsSendUrl: string,
   chatMessageIndex: number,
-  incrementMessageIndex: any,
   userAppearance: ChatUserAppearance,
   secretKey: string
 ) {
@@ -26,7 +25,6 @@ export default function useChatSender(
       userAppearance.color,
       secretKey
     )
-    incrementMessageIndex()
     const messageCapsule: ChatMessageCapsule = { encryptedMessage }
     stompClient?.publish({
       destination: wsSendUrl,

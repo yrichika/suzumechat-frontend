@@ -10,6 +10,7 @@ import Terminate from 'types/messages/Terminate'
 import useGuestReceiver from './receivers/useGuestReceiver'
 import { connect, isInactive } from './stomp/config'
 import { useChatMessageHandler } from './messagehandlers/useChatMessageHandler'
+import useVisitorGuestSharedStompClientStore from '@stores/useVisitorGuestSharedStompClientStore'
 
 export default function useGuestMessageHandler(
   guestChannelToken: string,
@@ -17,17 +18,17 @@ export default function useGuestMessageHandler(
   secretKey: string,
   color: string
 ) {
-  const [stompClient, setStompClient] = useState<Client>()
-  const WS_ENDPOINT_URL = `${process.env.NEXT_PUBLIC_BACK_PREFIX}/${process.env.NEXT_PUBLIC_WS_ENDPOINT}`
+  const stompClient = useVisitorGuestSharedStompClientStore(
+    store => store.stompClient
+  )
+
   const WS_SEND_URL = `${process.env.NEXT_PUBLIC_WS_SEND_PREFIX}/guest/${guestChannelToken}`
 
   const chatMessages = useGuestChatMessagesStore(store => store.messages)
   const addChatMessage = useGuestChatMessagesStore(store => store.addMessage)
   const clearChatMessages = useGuestChatMessagesStore(store => store.clear)
   const chatMessageIndex = useGuestChatMessagesStore(store => store.index)
-  const incrementMessageIndex = useGuestChatMessagesStore(
-    store => store.incrementIndex
-  )
+
   const userAppearance = { codename, color }
   const { sendChatMessage, receiveChatMessage } = useChatMessageHandler(
     stompClient,
@@ -35,8 +36,7 @@ export default function useGuestMessageHandler(
     userAppearance,
     secretKey,
     addChatMessage,
-    chatMessageIndex,
-    incrementMessageIndex
+    chatMessageIndex
   )
 
   const { onConnect } = useGuestReceiver(guestChannelToken, receiveChatMessage)
@@ -51,7 +51,7 @@ export default function useGuestMessageHandler(
   }
 
   useEffect(() => {
-    connect(setStompClient, onConnect, WS_ENDPOINT_URL)
+    connect(stompClient, onConnect)
   }, [])
 
   return {

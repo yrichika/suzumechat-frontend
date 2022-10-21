@@ -22,11 +22,11 @@ export default function chatMessages(set: any, get: any) {
         if (prev.messages.length >= maxChatMessages) {
           prev.messages.shift()
         }
+        get().incrementIndex()
         return { messages: [...prev.messages, newChat] }
       })
     },
     index: 1,
-    getIndex: () => get().index,
     incrementIndex: () =>
       set((prev: ChatMessages) => ({ index: prev.index + 1 })),
     clear: () => set({ messages: new Array<ChatMessage>(), index: 1 }),

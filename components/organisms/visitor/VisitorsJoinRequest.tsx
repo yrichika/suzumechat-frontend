@@ -25,7 +25,6 @@ function VisitorsJoinRequest({ joinChannelToken, langMap }: Props) {
     isAuthenticated,
     sendJoinRequest,
     disconnect,
-    switchConnectionToGuest,
   } = useVisitorMessageHandler(joinChannelToken)
 
   const [codename, setCodename] = useState('')
@@ -48,8 +47,7 @@ function VisitorsJoinRequest({ joinChannelToken, langMap }: Props) {
       disconnect()?.then(() => {
         setGuestSessionService(guestId, guestChannelToken)
           .then(response => {
-            switchConnectionToGuest()
-            // router.push(`/guest/${guestChannelToken}`)
+            router.push(`/guest/${guestChannelToken}`)
           })
           .catch(error => {
             // TODO: 認証に失敗した表示にする

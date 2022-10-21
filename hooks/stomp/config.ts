@@ -2,26 +2,28 @@ import { Client, frameCallbackType, IFrame, StompConfig } from '@stomp/stompjs'
 import { Dispatch, SetStateAction } from 'react'
 import SockJS from 'sockjs-client'
 
+const WS_ENDPOINT_URL = `${process.env.NEXT_PUBLIC_BACK_PREFIX}/${process.env.NEXT_PUBLIC_WS_ENDPOINT}`
+const sockJsProtocols = ['xhr-streaming', 'xhr-polling']
+
 export function connect(
-  setStompClient: Dispatch<SetStateAction<Client | undefined>>,
-  onConnect: (stompClient: Client) => frameCallbackType | undefined,
-  url: string
+  stompClient: Client,
+  onConnect: (stompClient: Client) => frameCallbackType | undefined
 ) {
-  const stompClient = new Client()
   stompClient.configure({
     ...stompBasicConfig,
-    webSocketFactory: webSocketFactory(url),
+    webSocketFactory: webSocketFactory(WS_ENDPOINT_URL),
     onConnect: onConnect(stompClient),
   })
   stompClient.activate()
-  setStompClient(stompClient)
 }
 
-export function isActive(stompClient: Client | undefined) {
+// DELETE: stompClientがundefinedやnullになることはないので、不要になった。
+// 後で削除すること
+export function isActive(stompClient: Client | undefined | null) {
   return stompClient && stompClient.active
 }
-
-export function isInactive(stompClient: Client | undefined) {
+// DELETE:
+export function isInactive(stompClient: Client | undefined | null) {
   return !isActive(stompClient)
 }
 
@@ -38,8 +40,6 @@ export const stompBasicConfig: StompConfig = {
   onWebSocketError: onWebSocketError,
 }
 
-const sockJsProtocols = ['xhr-streaming', 'xhr-polling']
-
 export function webSocketFactory(url: string) {
   return () =>
     new SockJS(url, null, {
@@ -47,8 +47,10 @@ export function webSocketFactory(url: string) {
     })
 }
 function debug(message: string) {
-  // use when debugging
-  // console.log(message)
+  // use `yarn wsdebug` to output this message
+  if (process.env.NEXT_PUBLIC_WS_DEBUG) {
+    console.log(message)
+  }
 }
 function onStompError(frame: IFrame) {
   // TODO:

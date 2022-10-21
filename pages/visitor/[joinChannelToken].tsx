@@ -34,9 +34,12 @@ interface Prop {
 
 function Visitor({ channelName, joinChannelToken, isAccepting }: Prop) {
   useEffect(() => {
-    csrfTokenService()
+    csrfTokenService() // DELETE: necessary?
   }, [])
 
+  if (false) {
+    // TODO: もしguestとしてすでに認証されていれば、ここは表示させないようにする
+  }
   if (!isAccepting) {
     // TODO: チャンネルの受付が終わっていることの表示をするコンポーネントにする
     return <div>Sorry, this channel is closed.</div>

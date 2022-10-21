@@ -4,7 +4,7 @@ import { Client } from '@stomp/stompjs'
 import ManagedJoinRequest from 'types/messages/ManagedJoinRequest'
 
 export default function useJoinRequestMessageHandler(
-  stompClient: Client | undefined,
+  stompClient: Client,
   wsSendUrl: string,
   addJoinRequest: (newRequest: ManagedJoinRequest) => void,
   updateRequest: (request: ManagedJoinRequest) => void

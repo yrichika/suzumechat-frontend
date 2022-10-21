@@ -16,9 +16,10 @@ export default function useHostMessageHandler(
   color: string
 ) {
   // common
-  const [stompClient, setStompClient] = useState<Client>()
-  const WS_ENDPOINT_URL = `${process.env.NEXT_PUBLIC_BACK_PREFIX}/${process.env.NEXT_PUBLIC_WS_ENDPOINT}`
+  const [stompClient] = useState<Client>(new Client())
+
   const WS_SEND_URL = `${process.env.NEXT_PUBLIC_WS_SEND_PREFIX}/host/${hostChannelToken}`
+  // FIXME: useHostReceiver の中に移す
   const WS_RECEIVE_URL = `${process.env.NEXT_PUBLIC_WS_BROADCASTED_PREFIX}/host/${hostChannelToken}`
 
   const chatMessages = useHostChatMessagesStore(store => store.messages)
@@ -76,7 +77,7 @@ export default function useHostMessageHandler(
   }
 
   useEffect(() => {
-    connect(setStompClient, onConnect, WS_ENDPOINT_URL)
+    connect(stompClient, onConnect)
   }, [])
 
   return {

@@ -6,20 +6,18 @@ import ChatUserAppearance from 'types/ChatUserAppearance'
 import ChatMessage from 'types/ChatMessage'
 
 export function useChatMessageHandler(
-  stompClient: Client | undefined,
+  stompClient: Client,
   wsSendUrl: string,
   userAppearance: ChatUserAppearance,
   secretKey: string,
   addChatMessage: (newChat: ChatMessage) => void,
-  chatMessageIndex: number,
-  incrementMessageIndex: () => any
+  chatMessageIndex: number
 ) {
   const { receiveChatMessage } = useChatReceiver(addChatMessage, secretKey)
   const { sendChatMessage } = useChatSender(
     stompClient,
     wsSendUrl,
     chatMessageIndex,
-    incrementMessageIndex,
     userAppearance,
     secretKey
   )

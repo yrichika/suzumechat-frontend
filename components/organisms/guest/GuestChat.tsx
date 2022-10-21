@@ -20,11 +20,6 @@ function GuestChat({ guestChannelToken, codename, secretKey }: Props) {
     color
   )
 
-  // TODO:
-  if (isAnyOfEmpty(guestChannelToken, codename, secretKey)) {
-    return <div>please wait...</div>
-  }
-
   return (
     <div>
       <Chat

@@ -4,7 +4,7 @@ import VisitorsAuthStatus from 'types/messages/VisitorsAuthStatus'
 import ManagedJoinRequest from 'types/messages/ManagedJoinRequest'
 
 export default function useApprovalSender(
-  stompClient: Client | undefined,
+  stompClient: Client,
   wsSendUrl: string,
   updateRequest: (request: ManagedJoinRequest) => void
 ) {

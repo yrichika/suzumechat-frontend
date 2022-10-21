@@ -1,9 +1,9 @@
 import { Client, IFrame, IMessage } from '@stomp/stompjs'
 import {
   isChatMessageCapsuleMessage,
+  isError,
   isTerminateMessage,
 } from '@utils/WebSocketMessageHelper'
-import { isErrored } from 'stream'
 import Terminate from 'types/messages/Terminate'
 
 export default function useGuestReceiver(
@@ -26,7 +26,7 @@ export default function useGuestReceiver(
       receiveChatMessage(messageBody)
     } else if (isTerminateMessage(messageBody)) {
       handleTerminate(messageBody)
-    } else if (isErrored(messageBody)) {
+    } else if (isError(messageBody)) {
       // TODO: display error notification on screen
     } else {
       // TODO: display error notification on screen
