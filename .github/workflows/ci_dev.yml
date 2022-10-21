@@ -1,4 +1,4 @@
-name: Next.js
+name: SuzumeChat Front Dev CI
 
 on:
   push:
