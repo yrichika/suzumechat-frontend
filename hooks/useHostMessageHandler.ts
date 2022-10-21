@@ -46,8 +46,7 @@ export default function useHostMessageHandler(
     userAppearance,
     secretKey,
     addChatMessage,
-    chatMessageIndex,
-    incrementMessageIndex
+    chatMessageIndex
   )
 
   // handle JoinRequest
