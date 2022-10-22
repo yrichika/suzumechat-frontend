@@ -14,7 +14,9 @@ export default function chatMessages(set: any, get: any) {
       // NOTICE: don't know why, but the backend sends two messages at once
       // this is to avoid adding the same messages to the store
       if (
-        get().messages.some((message: ChatMessage) => message.id === newChat.id)
+        get().messages.some(
+          (message: ChatMessage) => message.timestamp === newChat.timestamp
+        )
       ) {
         return
       }
@@ -26,7 +28,7 @@ export default function chatMessages(set: any, get: any) {
         return { messages: [...prev.messages, newChat] }
       })
     },
-    index: 1,
+    index: 1, // DELETE: id not used
     incrementIndex: () =>
       set((prev: ChatMessages) => ({ index: prev.index + 1 })),
     clear: () => set({ messages: new Array<ChatMessage>(), index: 1 }),

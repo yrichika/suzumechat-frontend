@@ -85,7 +85,7 @@ function Chat({
           {chatMessages.map(message => (
             <CSSTransition
               nodeRef={nodeRef}
-              key={message.id}
+              key={message.timestamp}
               timeout={500}
               classNames="fade-chat-message"
             >
