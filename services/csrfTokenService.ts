@@ -6,7 +6,6 @@ export default function csrfTokenService() {
   if (getCookie(csrfTokenSaveKey)) {
     return
   }
-  // FIXME: get `/back` part of the string from .env
   axios
     .get(`${process.env.NEXT_PUBLIC_BACK_PREFIX}/csrfToken`)
     .then(response => {

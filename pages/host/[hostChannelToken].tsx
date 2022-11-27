@@ -1,48 +1,24 @@
-import useHostStore from '@stores/useHostStore'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import Private from '@components/templates/Private'
 import { langMap } from '@lang/host/langMap'
-import {
-  toggleVisibilityBySelector,
-  copyToClipboard,
-  isAnyOfEmpty,
-} from '@utils/Util'
-import HostChat from '@components/organisms/host/HostChat'
-import { useRouter } from 'next/router'
-import endChannelService from '@services/endChannelService'
+import { toggleVisibilityBySelector, copyToClipboard } from '@utils/Util'
+import HostMessageHandler from '@components/organisms/host/HostMessageHandler'
+import useHostChannel from '@hooks/useHostChannel'
 
 function HostChannel() {
-  const router = useRouter()
-
-  const hostChannelToken = router.query.hostChannelToken as string | undefined
-
-  const channelName = useHostStore(state => state.channelName)
-  const joinChannelToken = useHostStore(state => state.joinChannelToken)
-  const secretKey = useHostStore(state => state.secretKey)
-  const clearHostChannel = useHostStore(state => state.clear)
-  const [isChannelEnded, setIsChannelEnded] = useState(false)
-
   const absoluteUrl = process.env.NEXT_PUBLIC_FRONT_URL
   const joinRequestUrl = '/visitor/'
+  const {
+    isPageNotReady,
+    channelName,
+    endChannel,
+    hostChannelToken,
+    secretKey,
+    isChannelEnded,
+    joinChannelToken,
+  } = useHostChannel()
 
-  const endChannel = () => {
-    setIsChannelEnded(true)
-    // DEBUG: このAPIでsession.invalidate()を呼ぶが、その際にhostIdの削除によって
-    //        正しくTerminateメッセージがguest側に届くか未確認
-    endChannelService(hostChannelToken!)
-      .then(response => {
-        clearHostChannel()
-        router.push('/channelEnded')
-      })
-      .catch(error => {
-        clearHostChannel()
-        router.push('/channelEnded')
-      })
-  }
-
-  if (
-    isAnyOfEmpty(hostChannelToken, channelName, joinChannelToken, secretKey)
-  ) {
+  if (isPageNotReady()) {
     // FIXME: 最初にこのページに来た瞬間は、上の変数のどれかが無いので、一瞬ここが実行されてしまう
     //        そのため、個々の処理はリダイレクトさせるには、setTimeoutとか必要
     //        もしくはエラー表示でもいい。ただしエラー表示の場合は、一瞬表示されてしまう
@@ -108,9 +84,8 @@ function HostChannel() {
               </div>
             </div>
             <hr className="mt-5" />
-            <HostChat
+            <HostMessageHandler
               hostChannelToken={hostChannelToken!}
-              codename="Host"
               secretKey={secretKey}
               isChannelEnded={isChannelEnded}
             />

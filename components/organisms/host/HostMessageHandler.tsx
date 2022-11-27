@@ -7,18 +7,16 @@ import useChatColor from '@hooks/useChatColor'
 
 interface Props {
   hostChannelToken: string
-  codename: string
   secretKey: string
   isChannelEnded: boolean
 }
 
-// FIXME: change name to HostWebSocket
-function HostChat({
+function HostMessageHandler({
   hostChannelToken,
-  codename,
   secretKey,
   isChannelEnded,
 }: Props) {
+  const codename = 'Host'
   const { color, nameTextColor } = useChatColor()
   const {
     chatMessages,
@@ -57,4 +55,4 @@ function HostChat({
   )
 }
 
-export default HostChat
+export default HostMessageHandler
