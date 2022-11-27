@@ -1,6 +1,8 @@
 import { isInactive } from '@hooks/stomp/config'
 import { encrypt } from '@hooks/utils/ChatMessageCrypter'
 import { Client } from '@stomp/stompjs'
+import { sanitizeText } from '@utils/Util'
+import ChatMessage from 'types/ChatMessage'
 import ChatUserAppearance from 'types/ChatUserAppearance'
 import ChatMessageCapsule from 'types/messages/ChatMessageCapsule'
 
@@ -16,15 +18,17 @@ export default function useChatSender(
     if (isInactive(stompClient)) {
       return
     }
-
     console.log('sending message: [' + messageInput + ']')
-    const encryptedMessage = encrypt(
-      userAppearance.codename,
-      messageInput,
-      chatMessageIndex,
-      userAppearance.color,
-      secretKey
-    )
+    const timestamp = Date.now()
+    const sanitizedMessage = sanitizeText(messageInput)
+    const chatMessage: ChatMessage = {
+      id: chatMessageIndex,
+      name: userAppearance.codename,
+      message: sanitizedMessage,
+      color: userAppearance.color,
+      timestamp: timestamp,
+    }
+    const encryptedMessage = encrypt(chatMessage, secretKey)
     const messageCapsule: ChatMessageCapsule = { encryptedMessage }
     stompClient?.publish({
       destination: wsSendUrl,

@@ -1,4 +1,5 @@
 import useVisitorGuestSharedStompClientStore from '@stores/useVisitorGuestSharedStompClientStore'
+import { sanitizeText } from '@utils/Util'
 import { useEffect, useState } from 'react'
 import JoinRequest from 'types/messages/JoinRequest'
 import useVisitorReceiver from './receivers/useVisitorReceiver'
@@ -13,10 +14,20 @@ export default function useVisitorMessageHandler(joinChannelToken: string) {
   const { isClosed, isAuthenticated, guestChannelToken, visitorId, onConnect } =
     useVisitorReceiver(joinChannelToken)
 
-  function sendJoinRequest(joinRequest: JoinRequest) {
+  // REFACTOR: useVisitorSenderに移す
+  function sendJoinRequest(codename: string, passphrase: string) {
+    const safeCodename = sanitizeText(codename)
+    const safePassphrase = sanitizeText(passphrase)
+    const joinRequest: JoinRequest = {
+      visitorId: visitorId,
+      codename: safeCodename,
+      passphrase: safePassphrase,
+    }
     if (isInactive(stompClient)) {
       return
     }
+    // TODO: encrypt joinRequest message by asymmetric keys
+
     stompClient!.publish({
       destination: WS_SEND_URL,
       body: JSON.stringify(joinRequest),
@@ -36,7 +47,6 @@ export default function useVisitorMessageHandler(joinChannelToken: string) {
   }, [])
 
   return {
-    visitorId,
     guestChannelToken,
     isClosed,
     isAuthenticated,

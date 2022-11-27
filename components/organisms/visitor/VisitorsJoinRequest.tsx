@@ -18,15 +18,6 @@ function VisitorsJoinRequest({ joinChannelToken, langMap }: Props) {
   const guestId = useGuestStore(state => state.guestId)
   const clearGuestStore = useGuestStore(state => state.clear)
 
-  const {
-    visitorId,
-    guestChannelToken,
-    isClosed,
-    isAuthenticated,
-    sendJoinRequest,
-    disconnect,
-  } = useVisitorMessageHandler(joinChannelToken)
-
   const [codename, setCodename] = useState('')
   const [isWaitingForAuthentication, setIsWaitingForAuthentication] =
     useState(false)
@@ -34,6 +25,14 @@ function VisitorsJoinRequest({ joinChannelToken, langMap }: Props) {
 
   // messages
   const [errorChatClosedMessage, setErrorChatClosedMessage] = useState('')
+
+  const {
+    guestChannelToken,
+    isClosed,
+    isAuthenticated,
+    sendJoinRequest,
+    disconnect,
+  } = useVisitorMessageHandler(joinChannelToken)
 
   useEffect(() => {
     setErrorChatClosedMessage(pickLangMessage('chat-closed', langMap))
@@ -59,13 +58,7 @@ function VisitorsJoinRequest({ joinChannelToken, langMap }: Props) {
 
   function send() {
     // TODO: add validation here
-    const joinRequest = {
-      visitorId: visitorId,
-      codename: codename,
-      passphrase: passphrase,
-    }
-    // TODO: encrypt joinRequest message by asymmetric keys
-    sendJoinRequest(joinRequest)
+    sendJoinRequest(codename, passphrase)
     setIsWaitingForAuthentication(true)
   }
 

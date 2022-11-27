@@ -54,7 +54,7 @@ function debug(message: string) {
 }
 function onStompError(frame: IFrame) {
   // TODO:
-  console.log('Stomp Error', frame)
+  console.warn('Stomp Error', frame)
 }
 function onDisconnect(frame: IFrame) {
   // TODO:
@@ -66,5 +66,5 @@ function onWebSocketClose(frame: IFrame) {
 }
 function onWebSocketError(frame: IFrame) {
   // TODO:
-  console.log('Stomp WebSocket Error', frame)
+  console.warn('Stomp WebSocket Error', frame)
 }

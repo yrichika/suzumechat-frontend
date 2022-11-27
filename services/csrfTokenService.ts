@@ -1,6 +1,6 @@
 import { csrfTokenSaveKey, getCookie, setCookie } from '@utils/Cookie'
 import axios from 'axios'
-import { GetServerSideProps } from 'next'
+import SpringBootCsrfTokenResponseBody from 'types/SpringBootCsrfTokenResponseBody'
 
 export default function csrfTokenService() {
   if (getCookie(csrfTokenSaveKey)) {
@@ -8,10 +8,10 @@ export default function csrfTokenService() {
   }
   // FIXME: get `/back` part of the string from .env
   axios
-    .get('/back/csrfToken')
+    .get(`${process.env.NEXT_PUBLIC_BACK_PREFIX}/csrfToken`)
     .then(response => {
-      const csrfToken = response.data.token
-      setCookie(csrfTokenSaveKey, csrfToken)
+      const csrfTokenData = response.data as SpringBootCsrfTokenResponseBody
+      setCookie(csrfTokenData.headerName, csrfTokenData.token)
     })
-    .catch(error => console.log(error))
+    .catch(error => console.warn(error))
 }

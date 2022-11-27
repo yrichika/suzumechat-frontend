@@ -34,7 +34,11 @@ export default function useGuestReceiver(
   }
 
   function handleTerminate(terminate: Terminate) {
-    // TODO: end chat and redirect to chat ended page
+    // 1. websocket disconnect
+    // 2. storeのデータを削除
+    // 3. guestのbackendにリクエストを投げて、(`/back/guest/invalidateSession/${guestChannelToken}`)
+    //    backendで httpSession.invalidate() を実行させる
+    // 4. redirect to chat ended page
   }
 
   return {

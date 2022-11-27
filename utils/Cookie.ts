@@ -1,3 +1,4 @@
+// WARNING! the key string might change depending on versions
 export const csrfTokenSaveKey = 'XSRF-TOKEN'
 export const csrfTokenSendKey = 'X-XSRF-TOKEN'
 

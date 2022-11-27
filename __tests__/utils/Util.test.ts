@@ -3,7 +3,7 @@ import {
   copyToClipboard,
   disableButtons,
   hideTips,
-  htmlspecialchars,
+  sanitizeText,
   isAnyOfEmpty,
   isEmpty,
   toggleVisibilityBySelector,
@@ -103,45 +103,45 @@ describe('Utils', () => {
     expect(resultWin).toMatch('aaa<br>bbb')
   })
 
-  test('htmlspecialchars should convert & to &amp; within text', () => {
+  test('sanitizeText should convert & to &amp; within text', () => {
     const input = 'abc&abc'
     const expected = 'abc&amp;abc'
-    const result = htmlspecialchars(input)
+    const result = sanitizeText(input)
     expect(result).toBe(expected)
   })
 
-  test('htmlspecialchars should convert " to &quot; within text', () => {
+  test('sanitizeText should convert " to &quot; within text', () => {
     const input = 'abc"abc'
     const expected = 'abc&quot;abc'
-    const result = htmlspecialchars(input)
+    const result = sanitizeText(input)
     expect(result).toBe(expected)
   })
 
-  test("htmlspecialchars should convert ' to &apos; within text", () => {
+  test("sanitizeText should convert ' to &apos; within text", () => {
     const input = "abc'abc"
     const expected = 'abc&apos;abc'
-    const result = htmlspecialchars(input)
+    const result = sanitizeText(input)
     expect(result).toBe(expected)
   })
 
-  test('htmlspecialchars should convert < to &lt; within text', () => {
+  test('sanitizeText should convert < to &lt; within text', () => {
     const input = 'abc<abc'
     const expected = 'abc&lt;abc'
-    const result = htmlspecialchars(input)
+    const result = sanitizeText(input)
     expect(result).toBe(expected)
   })
 
-  test('htmlspecialchars should convert > to &gt; within text', () => {
+  test('sanitizeText should convert > to &gt; within text', () => {
     const input = 'abc>abc'
     const expected = 'abc&gt;abc'
-    const result = htmlspecialchars(input)
+    const result = sanitizeText(input)
     expect(result).toBe(expected)
   })
 
-  test('htmlspecialchars should convert multiple special chars at once', () => {
+  test('sanitizeText should convert multiple special chars at once', () => {
     const input = 'abc<>abc'
     const expected = 'abc&lt;&gt;abc'
-    const result = htmlspecialchars(input)
+    const result = sanitizeText(input)
     expect(result).toBe(expected)
   })
 

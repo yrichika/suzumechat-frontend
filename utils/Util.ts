@@ -37,7 +37,7 @@ export function breakLines(message: string): string {
   return message.replace(/(?:\r\n|\r|\n)/g, '<br>')
 }
 
-export function htmlspecialchars(text: string): string {
+export function sanitizeText(text: string): string {
   return text
     .replace(/&/g, '&amp;')
     .replace(/"/g, '&quot;')

@@ -26,9 +26,6 @@ export default function useHostMessageHandler(
   const addChatMessage = useHostChatMessagesStore(store => store.addMessage)
   const clearChatMessages = useHostChatMessagesStore(store => store.clear)
   const chatMessageIndex = useHostChatMessagesStore(store => store.index)
-  const incrementMessageIndex = useHostChatMessagesStore(
-    store => store.incrementIndex
-  )
 
   const managedJoinRequests = useManagedJoinRequestsStore(
     state => state.requests
