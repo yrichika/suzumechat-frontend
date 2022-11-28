@@ -1,12 +1,12 @@
 import { Client, IFrame, IMessage } from '@stomp/stompjs'
 import { useEffect, useState } from 'react'
-import { connect, isInactive } from './stomp/config'
+import { connect, isInactive } from '../../stomp/config'
 import useManagedJoinRequestsStore from '@stores/useManagedJoinRequestsStore'
 import useHostChatMessagesStore from '@stores/useHostChatMessagesStore'
-import { useChatMessageHandler } from './messagehandlers/useChatMessageHandler'
-import useHostReceiver from './receivers/useHostReceiver'
-import useHostSender from './senders/useHostSender'
-import useJoinRequestMessageHandler from './messagehandlers/useJoinRequestMessageHandler'
+import { useChatMessageHandler } from '../../messagehandlers/useChatMessageHandler'
+import useHostReceiver from '../../receivers/useHostReceiver'
+import useHostSender from '../../senders/useHostSender'
+import useJoinRequestMessageHandler from '../../messagehandlers/useJoinRequestMessageHandler'
 import ChatUserAppearance from 'types/ChatUserAppearance'
 
 export default function useHostMessageHandler(

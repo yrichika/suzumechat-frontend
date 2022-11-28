@@ -7,9 +7,9 @@ import {
 } from '@utils/WebSocketMessageHelper'
 import { useEffect, useState } from 'react'
 import Terminate from 'types/messages/Terminate'
-import useGuestReceiver from './receivers/useGuestReceiver'
-import { connect, isInactive } from './stomp/config'
-import { useChatMessageHandler } from './messagehandlers/useChatMessageHandler'
+import useGuestReceiver from '../../receivers/useGuestReceiver'
+import { connect, isInactive } from '../../stomp/config'
+import { useChatMessageHandler } from '../../messagehandlers/useChatMessageHandler'
 import useVisitorGuestSharedStompClientStore from '@stores/useVisitorGuestSharedStompClientStore'
 
 export default function useGuestMessageHandler(

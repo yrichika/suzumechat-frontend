@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef, KeyboardEvent } from 'react'
-import useHostMessageHandler from '@hooks/useHostMessageHandler'
+import useHostMessageHandler from '@hooks/pages/host/useHostMessageHandler'
 import JoinRequestManager from './JoinRequestManager'
 import Chat from '@components/organisms/Chat'
 

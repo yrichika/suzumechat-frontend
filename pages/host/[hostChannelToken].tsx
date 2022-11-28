@@ -3,7 +3,7 @@ import Private from '@components/templates/Private'
 import { langMap } from '@lang/host/langMap'
 import { toggleVisibilityBySelector, copyToClipboard } from '@utils/Util'
 import HostMessageHandler from '@components/organisms/host/HostMessageHandler'
-import useHostChannel from '@hooks/useHostChannel'
+import useHostChannel from '@hooks/pages/host/useHostChannel'
 
 function HostChannel() {
   const absoluteUrl = process.env.NEXT_PUBLIC_FRONT_URL

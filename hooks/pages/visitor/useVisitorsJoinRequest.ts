@@ -3,7 +3,7 @@ import useGuestStore from '@stores/useGuestStore'
 import { pickLangMessage } from '@utils/LanguageSwitch'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import useVisitorMessageHandler from '../useVisitorMessageHandler'
+import useVisitorMessageHandler from './useVisitorMessageHandler'
 
 export default function useVisitorsJoinRequest(
   joinChannelToken: string,

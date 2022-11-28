@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import useGuestMessageHandler from '@hooks/useGuestMessageHandler'
+import useGuestMessageHandler from '@hooks/pages/guest/useGuestMessageHandler'
 import Chat from '@components/organisms/Chat'
 import { isAnyOfEmpty } from '@utils/Util'
 import useChatColor from '@hooks/useChatColor'

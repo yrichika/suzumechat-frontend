@@ -2,8 +2,8 @@ import useVisitorGuestSharedStompClientStore from '@stores/useVisitorGuestShared
 import { sanitizeText } from '@utils/Util'
 import { useEffect, useState } from 'react'
 import JoinRequest from 'types/messages/JoinRequest'
-import useVisitorReceiver from './receivers/useVisitorReceiver'
-import { connect, isInactive } from './stomp/config'
+import useVisitorReceiver from '../../receivers/useVisitorReceiver'
+import { connect, isInactive } from '../../stomp/config'
 
 export default function useVisitorMessageHandler(joinChannelToken: string) {
   const stompClient = useVisitorGuestSharedStompClientStore(

@@ -1,6 +1,6 @@
 import React from 'react'
 import AuthenticationStatus from '@components/molecules/visitor/AuthenticationStatus'
-import useVisitorsJoinRequest from '@hooks/visitor/useVisitorsJoinRequest'
+import useVisitorsJoinRequest from '@hooks/pages/visitor/useVisitorsJoinRequest'
 
 interface Props {
   joinChannelToken: string
