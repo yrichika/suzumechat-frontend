@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, KeyboardEvent } from 'react'
 import useHostMessageHandler from '@hooks/useHostMessageHandler'
-import JoinRequestsManager from './JoinRequestsManager'
+import JoinRequestManager from './JoinRequestManager'
 import Chat from '@components/organisms/Chat'
 
 import useChatColor from '@hooks/useChatColor'
@@ -44,7 +44,7 @@ function HostMessageHandler({
         />
       </div>
       <div className="mt-5">
-        <JoinRequestsManager
+        <JoinRequestManager
           hostChannelToken={hostChannelToken}
           isChannelEnded={isChannelEnded}
           managedJoinRequests={managedJoinRequests}

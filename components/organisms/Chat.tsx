@@ -3,6 +3,7 @@ import React, { KeyboardEvent, useEffect, useRef, useState } from 'react'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
 import ChatMessage from 'types/ChatMessage'
 import { breakLines } from '@utils/Util'
+import useChat from '@hooks/useChat'
 
 type Props = {
   codename: string
@@ -20,24 +21,8 @@ function Chat({
   sendChatMessage,
 }: Props) {
   const nodeRef = useRef(null) // this is for avoiding CSSTransition warning
-  const [messageInput, setMessageInput] = useState('')
-
-  function handleMessage() {
-    if (messageInput === '') {
-      return
-    }
-    // TODO: validation: less than 1000 letters
-    sendChatMessage(messageInput)
-    setMessageInput('')
-  }
-
-  function sendShortcut(event: KeyboardEvent<HTMLTextAreaElement>): void {
-    if (event.shiftKey && event.key == 'Enter') {
-      event.preventDefault() // prevents extra line break in textarea
-      sendChatMessage(messageInput)
-      setMessageInput('')
-    }
-  }
+  const { messageInput, setMessageInput, handleMessage, sendShortcut } =
+    useChat(sendChatMessage)
 
   return (
     <div className="grid grid-rows-2 md:grid-rows-1 grid-cols-1 md:grid-cols-2 gap-4">
