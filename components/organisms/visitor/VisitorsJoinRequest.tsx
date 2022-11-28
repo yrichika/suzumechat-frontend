@@ -1,11 +1,6 @@
-import React, { useEffect, useState } from 'react'
-import { pickLangMessage } from '@utils/LanguageSwitch'
-import { langMap } from '@lang/index/langMap'
+import React from 'react'
 import AuthenticationStatus from '@components/molecules/visitor/AuthenticationStatus'
-import useVisitorMessageHandler from '@hooks/useVisitorMessageHandler'
-import { useRouter } from 'next/router'
-import setGuestSessionService from '@services/setGuestSessionService'
-import useGuestStore from '@stores/useGuestStore'
+import useVisitorsJoinRequest from '@hooks/visitor/useVisitorsJoinRequest'
 
 interface Props {
   joinChannelToken: string
@@ -13,54 +8,17 @@ interface Props {
 }
 
 function VisitorsJoinRequest({ joinChannelToken, langMap }: Props) {
-  // REFACTOR: move most of variables and functions to this parent
-  const router = useRouter()
-  const guestId = useGuestStore(state => state.guestId)
-  const clearGuestStore = useGuestStore(state => state.clear)
-
-  const [codename, setCodename] = useState('')
-  const [isWaitingForAuthentication, setIsWaitingForAuthentication] =
-    useState(false)
-  const [passphrase, setPassphrase] = useState('')
-
-  // messages
-  const [errorChatClosedMessage, setErrorChatClosedMessage] = useState('')
-
   const {
-    guestChannelToken,
     isClosed,
+    errorChatClosedMessage,
+    codename,
+    setCodename,
+    isWaitingForAuthentication,
+    passphrase,
+    setPassphrase,
+    send,
     isAuthenticated,
-    sendJoinRequest,
-    disconnect,
-  } = useVisitorMessageHandler(joinChannelToken)
-
-  useEffect(() => {
-    setErrorChatClosedMessage(pickLangMessage('chat-closed', langMap))
-    // TODO: backendに問い合わせて、すでにchannelが閉じていないか確認
-    // 閉じていたら、すでに閉じている表示をさせる
-  }, [])
-
-  // REFACTOR: move to the parent
-  useEffect(() => {
-    if (isAuthenticated === true) {
-      disconnect()?.then(() => {
-        setGuestSessionService(guestId, guestChannelToken)
-          .then(response => {
-            router.push(`/guest/${guestChannelToken}`)
-          })
-          .catch(error => {
-            // TODO: 認証に失敗した表示にする
-            clearGuestStore()
-          })
-      })
-    }
-  }, [isAuthenticated])
-
-  function send() {
-    // TODO: add validation here
-    sendJoinRequest(codename, passphrase)
-    setIsWaitingForAuthentication(true)
-  }
+  } = useVisitorsJoinRequest(joinChannelToken, langMap)
 
   return (
     <div>
