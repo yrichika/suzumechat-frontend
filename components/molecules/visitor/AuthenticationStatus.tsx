@@ -1,6 +1,5 @@
-import { pickLangMessage } from '@utils/LanguageSwitch'
-import React, { useEffect, useState } from 'react'
-import { isEmpty, isNotEmpty } from '@utils/Util'
+import React from 'react'
+import useAuthenticationStatus from '@hooks/pages/visitor/useAuthenticationStatus'
 
 interface Props {
   isWaitingForAuthentication: boolean
@@ -13,18 +12,8 @@ function AuthenticationStatus({
   isAuthenticated,
   langMap,
 }: Props) {
-  // messages
-  const [defaultMessage, setDefaultMessage] = useState('')
-  const [rejectedMessage, setRejectedMessage] = useState('')
-  const [acceptedMessage, setAcceptedMessage] = useState('')
-  const [waitingMessage, setWaitingMessage] = useState('')
-
-  useEffect(() => {
-    setDefaultMessage(pickLangMessage('send-auth', langMap))
-    setRejectedMessage(pickLangMessage('rejected', langMap))
-    setAcceptedMessage(pickLangMessage('accepted', langMap))
-    setWaitingMessage(pickLangMessage('waiting-for-authentication', langMap))
-  }, [])
+  const { defaultMessage, acceptedMessage, rejectedMessage, waitingMessage } =
+    useAuthenticationStatus(langMap)
 
   return (
     <div className="flex justify-center mt-5 mx-2">
