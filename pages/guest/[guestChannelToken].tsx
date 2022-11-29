@@ -1,26 +1,22 @@
 import Private from '@components/templates/Private'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { langMap } from '@lang/guest/langMap'
-import { isAnyOfEmpty, toggleVisibilityBySelector } from '@utils/Util'
-import useGuestStore from '@stores/useGuestStore'
+import { toggleVisibilityBySelector } from '@utils/Util'
 import GuestChat from '@components/organisms/guest/GuestChat'
-import { useRouter } from 'next/router'
+import useGuestChannel from '@hooks/pages/guest/useGuestChannel'
 
 function GuestChannel() {
-  const router = useRouter()
-  const guestChannelToken = router.query.guestChannelToken as string | undefined
-
-  const channelName = useGuestStore(store => store.channelName)
-  const guestId = useGuestStore(store => store.guestId)
-  const codename = useGuestStore(store => store.codename)
-  const secretKey = useGuestStore(store => store.secretKey)
-
-  function endChannel() {
-    // TODO:
-  }
+  const {
+    channelName,
+    guestChannelToken,
+    codename,
+    secretKey,
+    isPageNotReady,
+    endChannel,
+  } = useGuestChannel()
 
   // FIXME: does not work here!: Error: "Hydration failed because the initial UI does not match what was rendered on the server"
-  // if (isAnyOfEmpty(channelName, codename, secretKey)) {
+  // if (isPageNotReady()) {
   //   return <div>sorry</div> // TODO: sorryページ表示
   // }
 

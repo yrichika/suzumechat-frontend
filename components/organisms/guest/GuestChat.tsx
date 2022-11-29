@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import useGuestMessageHandler from '@hooks/pages/guest/useGuestMessageHandler'
 import Chat from '@components/organisms/Chat'
-import { isAnyOfEmpty } from '@utils/Util'
 import useChatColor from '@hooks/useChatColor'
 
 interface Props {
