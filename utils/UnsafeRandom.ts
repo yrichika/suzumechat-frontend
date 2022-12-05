@@ -1,8 +1,10 @@
-export function randomInt(min: number, max: number): number {
+// TEST:
+export function randomInt(min: number = 0, max: number = 1000000): number {
   return Math.floor(Math.random() * (max - min)) + min
 }
 
-export function randomString(length: number): string {
+// TEST:
+export function randomString(length: number = 5): string {
   let result = ''
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
   const charactersLength = characters.length
@@ -12,6 +14,7 @@ export function randomString(length: number): string {
   return result
 }
 
+// TEST:
 /**
  * @param {number} percentOfGettingTrue set float number! not integer
  */

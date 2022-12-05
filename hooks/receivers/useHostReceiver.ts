@@ -4,21 +4,20 @@ import {
   isError,
   isManagedJoinRequestMessage,
 } from '@utils/WebSocketMessageHelper'
+import ChatMessageCapsule from 'types/messages/ChatMessageCapsule'
 
 export default function useHostReceiver(
   wsReceiveUrl: string,
-  receiveChatMessage: any,
-  receiveJoinRequest: any
+  receiveChatMessage: (messageBody: ChatMessageCapsule) => void,
+  receiveJoinRequest: (messageBody: any) => void
 ) {
   function onConnect(stompClient: Client) {
     return (frame: IFrame) => {
-      console.log('chat ws connected!')
       stompClient.subscribe(wsReceiveUrl, receive)
     }
   }
 
   function receive(message: IMessage) {
-    console.log('received message: ' + message.body)
     const messageBody = JSON.parse(message.body)
     if (isChatMessageCapsuleMessage(messageBody)) {
       receiveChatMessage(messageBody)
@@ -33,5 +32,6 @@ export default function useHostReceiver(
 
   return {
     onConnect,
+    receive,
   }
 }

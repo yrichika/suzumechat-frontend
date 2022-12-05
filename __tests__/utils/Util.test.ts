@@ -214,4 +214,6 @@ describe('Utils', () => {
       expect(paragraph.style.display).toBe('')
     })
   })
+
+  test.todo('getClearTextColorForBg')
 })

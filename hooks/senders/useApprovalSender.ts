@@ -16,7 +16,7 @@ export default function useApprovalSender(
       visitorId: request.visitorId,
       isAuthenticated: isAuthenticated,
     }
-    stompClient!.publish({
+    stompClient.publish({
       destination: wsSendUrl,
       body: JSON.stringify(auth),
     })

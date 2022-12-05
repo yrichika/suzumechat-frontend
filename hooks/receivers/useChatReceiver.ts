@@ -6,7 +6,7 @@ export default function useChatReceiver(
   addChatMessage: (chatMessage: ChatMessage) => void,
   secretKey: string
 ) {
-  function receiveChatMessage(messageBody: ChatMessageCapsule) {
+  function receiveChatMessage(messageBody: ChatMessageCapsule): void {
     const encryptedMessage = messageBody.encryptedMessage
     const chatMessage: ChatMessage = decrypt(encryptedMessage, secretKey)
     addChatMessage(chatMessage)

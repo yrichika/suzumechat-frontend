@@ -14,11 +14,10 @@ export default function useChatSender(
   userAppearance: ChatUserAppearance,
   secretKey: string
 ) {
-  function sendChatMessage(messageInput: string) {
+  function sendChatMessage(messageInput: string): void {
     if (isInactive(stompClient)) {
       return
     }
-    console.log('sending message: [' + messageInput + ']')
     const timestamp = Date.now()
     const sanitizedMessage = sanitizeText(messageInput)
     const chatMessage: ChatMessage = {
@@ -30,7 +29,7 @@ export default function useChatSender(
     }
     const encryptedMessage = encrypt(chatMessage, secretKey)
     const messageCapsule: ChatMessageCapsule = { encryptedMessage }
-    stompClient?.publish({
+    stompClient.publish({
       destination: wsSendUrl,
       body: JSON.stringify(messageCapsule),
     })
