@@ -7,8 +7,9 @@ import {
   isAnyOfEmpty,
   isEmpty,
   toggleVisibilityBySelector,
+  getClearTextColorForBg,
 } from '@utils/Util'
-import { randomString } from '@utils/UnsafeRandom'
+import { randomInt, randomString } from '@utils/UnsafeRandom'
 
 describe('Utils', () => {
   let docBaseElement: HTMLDivElement
@@ -215,5 +216,17 @@ describe('Utils', () => {
     })
   })
 
-  test.todo('getClearTextColorForBg')
+  test('getClearTextColorForBg should return text-white if given background color is dark', () => {
+    const color = randomString() + randomInt(5, 9).toString() + '00'
+
+    const result = getClearTextColorForBg(color)
+    expect(result).toBe('text-white')
+  })
+
+  test('getClearTextColorForBg should return text-black if given background color is light', () => {
+    const color = randomString() + randomInt(2, 4).toString() + '00'
+
+    const result = getClearTextColorForBg(color)
+    expect(result).toBe('text-black')
+  })
 })

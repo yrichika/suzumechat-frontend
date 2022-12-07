@@ -1,3 +1,4 @@
+// DELETE: not used. replaced by zustand
 /**
  * example:
  * const sessionStorageMock = new storageMock()

@@ -1,5 +1,5 @@
 export default interface ChatMessage {
-  id: number
+  id: number // FIXME: not used?
   name: string
   message: string
   color: string

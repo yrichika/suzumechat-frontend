@@ -5,7 +5,7 @@ type ChatMessages = {
   index: number
 }
 
-const maxChatMessages = 10
+export const maxChatMessages = 10
 
 export default function chatMessages(set: any, get: any) {
   return {
@@ -28,7 +28,7 @@ export default function chatMessages(set: any, get: any) {
         return { messages: [...prev.messages, newChat] }
       })
     },
-    index: 1, // DELETE: id not used
+    index: 1, // FIXME: not used?
     incrementIndex: () =>
       set((prev: ChatMessages) => ({ index: prev.index + 1 })),
     clear: () => set({ messages: new Array<ChatMessage>(), index: 1 }),

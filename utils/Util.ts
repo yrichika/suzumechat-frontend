@@ -77,7 +77,6 @@ export function toggleVisibilityBySelector(
   })
 }
 
-// TEST:
 /**
  * text-white, text-black are Tailwind's classes
  */
