@@ -4,6 +4,7 @@ import useHostStore from '@stores/useHostStore'
 import { useRouter } from 'next/router'
 import { FormEvent, useEffect, useState } from 'react'
 import HostChannel from 'types/HostChannel'
+import { encode as encodeBase64 } from '@stablelib/base64'
 
 export default function useChannelCreation() {
   const [channelNameInput, setChannelNameInput] = useState('')
@@ -12,14 +13,20 @@ export default function useChannelCreation() {
   const setChannelName = useHostStore(state => state.setChannelName)
   const setSecretKey = useHostStore(state => state.setSecretKey)
   const setJoinChannelToken = useHostStore(state => state.setJoinChannelToken)
+  const publicKey = useHostStore(state => state.publicKeyEncKeyPair.publicKey)
+  const initPublicKeyEncKeyPair = useHostStore(
+    state => state.initPublicKeyEncKeyPair
+  )
 
   useEffect(() => {
     csrfTokenService()
+    initPublicKeyEncKeyPair()
   }, [])
 
   function postChannelName(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    createChannelService(channelNameInput).then(
+    const publicKeyString = encodeBase64(publicKey)
+    createChannelService(channelNameInput, publicKeyString).then(
       (hostChannel: HostChannel | null) => {
         if (!hostChannel) {
           // just ignoring is fine for now. Usually it's validation error from backend

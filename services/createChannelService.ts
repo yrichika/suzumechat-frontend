@@ -5,11 +5,13 @@ import { NextRouter } from 'next/router'
 import HostChannel from 'types/HostChannel'
 
 export default async function createChannelService(
-  channelName: string
+  channelName: string,
+  publicKey: string
 ): Promise<HostChannel | null> {
   return await axios
     .post(`${process.env.NEXT_PUBLIC_BACK_PREFIX}/createChannel`, {
-      channelName: channelName,
+      channelName,
+      publicKey,
     })
     .then(response => {
       return response.data as HostChannel

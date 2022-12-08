@@ -1,8 +1,11 @@
+import { generateKeyPair } from '@hooks/utils/PublicKeyEncryption'
+import { BoxKeyPair } from 'tweetnacl'
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
 
 type Host = {
   channelName: string
+  publicKeyEncKeyPair: BoxKeyPair
   secretKey: string
   joinChannelToken: string
 }
@@ -12,6 +15,13 @@ const hostStore = (set: any, get: any) => ({
   setChannelName: (channelName: string) =>
     set((state: Host) => ({ channelName: channelName })),
 
+  publicKeyEncKeyPair: {
+    publicKey: new Uint8Array(),
+    secretKey: new Uint8Array(),
+  },
+  initPublicKeyEncKeyPair: () =>
+    set((state: Host) => ({ publicKeyEncKeyPair: generateKeyPair() })),
+
   secretKey: '',
   setSecretKey: (secretKey: string) =>
     set((state: Host) => ({ secretKey: secretKey })),
@@ -19,8 +29,7 @@ const hostStore = (set: any, get: any) => ({
   joinChannelToken: '',
   setJoinChannelToken: (joinChannelToken: string) =>
     set((state: Host) => ({ joinChannelToken: joinChannelToken })),
-  // TODO: publicKey
-  //       privateKey
+
   clear: () => set({ channelName: '', secretKey: '', joinChannelToken: '' }),
 })
 
