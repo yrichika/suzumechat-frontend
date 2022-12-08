@@ -4,14 +4,20 @@ import { pickLangMessage } from '@utils/LanguageSwitch'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import useVisitorMessageHandler from './useVisitorMessageHandler'
+import { decode as decodeBase64 } from '@stablelib/base64'
 
 export default function useVisitorsJoinRequest(
   joinChannelToken: string,
+  hostPublicKey: string,
   langMap: Map<string, Map<string, string>>
 ) {
   const router = useRouter()
   const guestId = useGuestStore(state => state.guestId)
   const clearGuestStore = useGuestStore(state => state.clear)
+  const initPublicKeyEncKeyPair = useGuestStore(
+    store => store.initPublicKeyEncKeyPair
+  )
+  const setHostPublicKey = useGuestStore(store => store.setHostPublicKey)
 
   const [codename, setCodename] = useState('')
   const [isWaitingForAuthentication, setIsWaitingForAuthentication] =
@@ -30,9 +36,10 @@ export default function useVisitorsJoinRequest(
   } = useVisitorMessageHandler(joinChannelToken)
 
   useEffect(() => {
+    initPublicKeyEncKeyPair()
+    const hostPublicKeyUnit8Array = decodeBase64(hostPublicKey)
+    setHostPublicKey(hostPublicKeyUnit8Array)
     setErrorChatClosedMessage(pickLangMessage('chat-closed', langMap))
-    // TODO: backendに問い合わせて、すでにchannelが閉じていないか確認
-    // 閉じていたら、すでに閉じている表示をさせる
   }, [])
 
   useEffect(() => {
@@ -52,6 +59,7 @@ export default function useVisitorsJoinRequest(
 
   function send() {
     // TODO: add validation here
+
     sendJoinRequest(codename, passphrase)
     setIsWaitingForAuthentication(true)
   }

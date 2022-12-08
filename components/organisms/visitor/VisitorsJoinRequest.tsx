@@ -4,10 +4,15 @@ import useVisitorsJoinRequest from '@hooks/pages/visitor/useVisitorsJoinRequest'
 
 interface Props {
   joinChannelToken: string
+  hostPublicKey: string
   langMap: Map<string, Map<string, string>>
 }
 
-function VisitorsJoinRequest({ joinChannelToken, langMap }: Props) {
+function VisitorsJoinRequest({
+  joinChannelToken,
+  hostPublicKey,
+  langMap,
+}: Props) {
   const {
     isClosed,
     errorChatClosedMessage,
@@ -18,7 +23,7 @@ function VisitorsJoinRequest({ joinChannelToken, langMap }: Props) {
     setPassphrase,
     send,
     isAuthenticated,
-  } = useVisitorsJoinRequest(joinChannelToken, langMap)
+  } = useVisitorsJoinRequest(joinChannelToken, hostPublicKey, langMap)
 
   return (
     <div>

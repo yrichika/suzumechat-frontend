@@ -3,36 +3,52 @@ import React, { useEffect } from 'react'
 import { langMap } from '@lang/visitor/langMap'
 import VisitorsJoinRequest from '@components/organisms/visitor/VisitorsJoinRequest'
 import { useRouter } from 'next/router'
-import getChannelNameByJoinTokenService from '@services/getChannelNameByJoinTokenService'
+import getChannelStatusByJoinTokenService from '@services/getChannelStatusByJoinTokenService'
 import csrfTokenService from '@services/csrfTokenService'
+import useGuestStore from '@stores/useGuestStore'
+import { decode as decodeBase64 } from '@stablelib/base64'
 
 // originally client/request/view
 export async function getServerSideProps(context: any) {
   const { joinChannelToken } = context.query
   if (!joinChannelToken) {
     return {
-      props: { channelName: null, joinChannelToken: null, isAccepting: false },
+      props: {
+        joinChannelToken: null,
+        channelName: null,
+        hostPublicKey: null,
+        isAccepting: false,
+      },
     }
   }
 
-  const channelStatus = await getChannelNameByJoinTokenService(joinChannelToken)
+  const channelStatus = await getChannelStatusByJoinTokenService(
+    joinChannelToken
+  )
 
   return {
     props: {
-      channelName: channelStatus?.channelName,
       joinChannelToken,
+      channelName: channelStatus?.channelName,
+      hostPublicKey: channelStatus?.hostPublicKey,
       isAccepting: channelStatus?.isAccepting,
     },
   }
 }
 
 interface Prop {
-  channelName: string | null
   joinChannelToken: string
+  channelName: string | null
+  hostPublicKey: string | null
   isAccepting: boolean
 }
 
-function Visitor({ channelName, joinChannelToken, isAccepting }: Prop) {
+function Visitor({
+  joinChannelToken,
+  channelName,
+  hostPublicKey,
+  isAccepting,
+}: Prop) {
   useEffect(() => {
     csrfTokenService() // DELETE: necessary?
   }, [])
@@ -40,7 +56,7 @@ function Visitor({ channelName, joinChannelToken, isAccepting }: Prop) {
   if (false) {
     // TODO: もしguestとしてすでに認証されていれば、ここは表示させないようにする
   }
-  if (!isAccepting) {
+  if (!isAccepting || !hostPublicKey) {
     // TODO: チャンネルの受付が終わっていることの表示をするコンポーネントにする
     return <div>Sorry, this channel is closed.</div>
   }
@@ -57,8 +73,9 @@ function Visitor({ channelName, joinChannelToken, isAccepting }: Prop) {
         <div className="mx-2" data-lang="try-joining-to"></div>
         <h1 className="text-4xl m-3">{channelName}</h1>
         <VisitorsJoinRequest
-          langMap={langMap}
           joinChannelToken={joinChannelToken}
+          hostPublicKey={hostPublicKey}
+          langMap={langMap}
         />
       </main>
     </Restricted>
