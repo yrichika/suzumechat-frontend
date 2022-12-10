@@ -1,7 +1,7 @@
 type JoinRequest = {
   visitorId: string
-  codename: string
-  passphrase: string
+  visitorPublicKey: string
+  whoIAmEnc: string
 }
 
 export default JoinRequest

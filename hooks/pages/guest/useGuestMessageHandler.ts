@@ -1,12 +1,5 @@
-import { Client, IFrame, IMessage } from '@stomp/stompjs'
 import useGuestChatMessagesStore from '@stores/useGuestChatMessagesStore'
-import {
-  isChatMessageCapsuleMessage,
-  isError,
-  isTerminateMessage,
-} from '@utils/WebSocketMessageHelper'
-import { useEffect, useState } from 'react'
-import Terminate from 'types/messages/Terminate'
+import { useEffect } from 'react'
 import useGuestReceiver from '../../receivers/useGuestReceiver'
 import { connect, isInactive } from '../../stomp/config'
 import { useChatMessageHandler } from '../../messagehandlers/useChatMessageHandler'

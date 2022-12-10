@@ -1,15 +1,16 @@
 import { Client, IFrame, IMessage } from '@stomp/stompjs'
 import {
-  isChatMessageCapsuleMessage,
-  isError,
-  isManagedJoinRequestMessage,
+  isChatMessageCapsule,
+  isErrorMessage,
+  isJoinRequest,
 } from '@utils/WebSocketMessageHelper'
 import ChatMessageCapsule from 'types/messages/ChatMessageCapsule'
+import JoinRequest from 'types/messages/JoinRequest'
 
 export default function useHostReceiver(
   wsReceiveUrl: string,
   receiveChatMessage: (messageBody: ChatMessageCapsule) => void,
-  receiveJoinRequest: (messageBody: any) => void
+  receiveJoinRequest: (messageBody: JoinRequest) => void
 ) {
   function onConnect(stompClient: Client) {
     return (frame: IFrame) => {
@@ -19,11 +20,11 @@ export default function useHostReceiver(
 
   function receive(message: IMessage) {
     const messageBody = JSON.parse(message.body)
-    if (isChatMessageCapsuleMessage(messageBody)) {
+    if (isChatMessageCapsule(messageBody)) {
       receiveChatMessage(messageBody)
-    } else if (isManagedJoinRequestMessage(messageBody)) {
+    } else if (isJoinRequest(messageBody)) {
       receiveJoinRequest(messageBody)
-    } else if (isError(messageBody)) {
+    } else if (isErrorMessage(messageBody)) {
       // TODO: display error notification on screen
     } else {
       // TODO: display error notification on screen

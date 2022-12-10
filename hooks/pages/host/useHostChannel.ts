@@ -13,6 +13,9 @@ export default function useHostChannel() {
   const joinChannelToken = useHostStore(state => state.joinChannelToken)
   const secretKey = useHostStore(state => state.secretKey)
   const clearHostChannel = useHostStore(state => state.clear)
+  const publicKeyEncSecretKey = useHostStore(
+    store => store.publicKeyEncKeyPair
+  ).secretKey
   const [isChannelEnded, setIsChannelEnded] = useState(false)
 
   function endChannel() {
@@ -45,6 +48,7 @@ export default function useHostChannel() {
     endChannel,
     hostChannelToken,
     secretKey,
+    publicKeyEncSecretKey,
     isChannelEnded,
     joinChannelToken,
   }

@@ -1,6 +1,9 @@
 import { Client, IFrame, IMessage } from '@stomp/stompjs'
 import useGuestStore from '@stores/useGuestStore'
-import { isAuthenticationStatus, isError } from '@utils/WebSocketMessageHelper'
+import {
+  isAuthenticationStatus,
+  isErrorMessage,
+} from '@utils/WebSocketMessageHelper'
 import { useState } from 'react'
 import AuthenticationStatus from 'types/messages/AuthenticationStatus'
 
@@ -13,7 +16,6 @@ export default function useVisitorReceiver(joinChannelToken: string) {
   const [visitorId, setVisitorId] = useState('')
   const setGuestId = useGuestStore(state => state.setGuestId)
   const setChannelName = useGuestStore(store => store.setChannelName)
-  const setCodename = useGuestStore(store => store.setCodename)
   const setSecretKey = useGuestStore(store => store.setSecretKey)
 
   function wsReceiveUrl(visitorId: string) {
@@ -24,8 +26,6 @@ export default function useVisitorReceiver(joinChannelToken: string) {
     return (frame: IFrame) => {
       const visitorId = crypto.randomUUID()
       setVisitorId(visitorId)
-      console.log('visitor ws connected!')
-      console.log('receiving at: ' + wsReceiveUrl(visitorId))
       stompClient.subscribe(wsReceiveUrl(visitorId), receive)
     }
   }
@@ -35,7 +35,7 @@ export default function useVisitorReceiver(joinChannelToken: string) {
     const messageBody = JSON.parse(message.body)
     if (isAuthenticationStatus(messageBody)) {
       handleAuthenticationStatusMessage(messageBody)
-    } else if (isError(messageBody)) {
+    } else if (isErrorMessage(messageBody)) {
       // TODO: handle error
     }
   }
@@ -44,8 +44,7 @@ export default function useVisitorReceiver(joinChannelToken: string) {
     setIsClosed(authStatus.isClosed)
     setGuestChannelToken(authStatus.guestChannelToken)
     setGuestId(authStatus.guestId)
-    setChannelName(authStatus.channelName)
-    setCodename(authStatus.codename)
+    setChannelName(authStatus.channelName) // FIXME: move to more appropriate location
     setSecretKey(authStatus.secretKey)
     // isAuthenticated has to be last to be updated
     // because it's used to redirect to chat page after all other

@@ -14,6 +14,7 @@ function HostChannel() {
     endChannel,
     hostChannelToken,
     secretKey,
+    publicKeyEncSecretKey,
     isChannelEnded,
     joinChannelToken,
   } = useHostChannel()
@@ -87,6 +88,7 @@ function HostChannel() {
             <HostMessageHandler
               hostChannelToken={hostChannelToken!}
               secretKey={secretKey}
+              publicKeyEncSecretKey={publicKeyEncSecretKey}
               isChannelEnded={isChannelEnded}
             />
           </div>

@@ -1,18 +1,21 @@
 import React from 'react'
-import ManagedJoinRequest from 'types/messages/ManagedJoinRequest'
+import ManageableJoinRequest from 'types/messages/ManageableJoinRequest'
 import useJoinRequestManager from '@hooks/pages/host/useJoinRequestManager'
 
 interface Props {
   hostChannelToken: string
   isChannelEnded: boolean
-  managedJoinRequests: ManagedJoinRequest[]
-  sendApproval: (request: ManagedJoinRequest, isAuthenticated: boolean) => void
+  manageableJoinRequests: ManageableJoinRequest[]
+  sendApproval: (
+    request: ManageableJoinRequest,
+    isAuthenticated: boolean
+  ) => void
 }
 
 function JoinRequestManager({
   hostChannelToken,
   isChannelEnded,
-  managedJoinRequests,
+  manageableJoinRequests,
   sendApproval,
 }: Props) {
   const { requestClosed, closeRequest, showStatus, writeStatusClass } =
@@ -39,7 +42,7 @@ function JoinRequestManager({
       </div>
       <div className="flex justify-center mt-5">
         <ul>
-          {managedJoinRequests.map((request, index) => (
+          {manageableJoinRequests.map((request, index) => (
             <li
               key={index}
               className="border border-blue-300 rounded shadow py-1 px-2 mb-3"

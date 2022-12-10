@@ -1,15 +1,15 @@
 import { persist } from 'zustand/middleware'
 import create from 'zustand'
-import ManagedJoinRequest from 'types/messages/ManagedJoinRequest'
+import ManageableJoinRequest from 'types/messages/ManageableJoinRequest'
 
-type ManagedJoinRequests = {
-  requests: ManagedJoinRequest[]
+type ManageableJoinRequests = {
+  requests: ManageableJoinRequest[]
 }
 // this is used by hosts
-const managedJoinRequests = (set: any, get: any) => ({
-  requests: new Array<ManagedJoinRequest>(),
-  add: (newRequest: ManagedJoinRequest) => {
-    set((prev: ManagedJoinRequests) => {
+const manageableJoinRequests = (set: any, get: any) => ({
+  requests: new Array<ManageableJoinRequest>(),
+  add: (newRequest: ManageableJoinRequest) => {
+    set((prev: ManageableJoinRequests) => {
       // only accepts single visitorId per request
       const exists = prev.requests.some(
         request => request.visitorId === newRequest.visitorId
@@ -21,8 +21,8 @@ const managedJoinRequests = (set: any, get: any) => ({
       }
     })
   },
-  update: (updatingRequest: ManagedJoinRequest) => {
-    set((prev: ManagedJoinRequests) => {
+  update: (updatingRequest: ManageableJoinRequest) => {
+    set((prev: ManageableJoinRequests) => {
       const updated = prev.requests.find(
         request => request.visitorId === updatingRequest.visitorId
       )
@@ -32,13 +32,13 @@ const managedJoinRequests = (set: any, get: any) => ({
       }
     })
   },
-  clear: () => set({ requests: new Array<ManagedJoinRequest>() }),
+  clear: () => set({ requests: new Array<ManageableJoinRequest>() }),
 })
 
-const store = persist(managedJoinRequests, {
+const store = persist(manageableJoinRequests, {
   name: 'visitors-requests',
   getStorage: () => sessionStorage,
 })
-const useManagedJoinRequestsStore = create(store)
+const useManageableJoinRequestsStore = create(store)
 
-export default useManagedJoinRequestsStore
+export default useManageableJoinRequestsStore

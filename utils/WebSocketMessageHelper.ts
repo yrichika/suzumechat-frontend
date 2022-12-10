@@ -7,27 +7,13 @@ export function hasAllPropertiesOf(
     .includes(false)
 }
 
-export function isChatMessageCapsuleMessage(
-  maybeChatMessageCapsule: any
-): boolean {
+export function isChatMessageCapsule(maybeChatMessageCapsule: any): boolean {
   const propertyNames = ['encryptedMessage']
   return hasAllPropertiesOf(maybeChatMessageCapsule, propertyNames)
 }
 
-export function isManagedJoinRequestMessage(
-  maybeManagedJoinRequest: any
-): boolean {
-  const propertyNames = [
-    'visitorId',
-    'codename',
-    'passphrase',
-    'isAuthenticated',
-  ]
-  return hasAllPropertiesOf(maybeManagedJoinRequest, propertyNames)
-}
-
-export function isJoinRequestMessage(maybeJoinRequest: any): boolean {
-  const propertyNames = ['visitorId', 'codename', 'passphrase']
+export function isJoinRequest(maybeJoinRequest: any): boolean {
+  const propertyNames = ['visitorId', 'visitorPublicKey', 'whoIAmEnc']
   return hasAllPropertiesOf(maybeJoinRequest, propertyNames)
 }
 
@@ -39,16 +25,18 @@ export function isAuthenticationStatus(
     'isAuthenticated',
     'guestId',
     'guestChannelToken',
+    'channelName',
+    'secretKey',
   ]
   return hasAllPropertiesOf(maybeAuthenticationStatus, propertyNames)
 }
 
-export function isTerminateMessage(maybeTerminate: any): boolean {
+export function isTerminate(maybeTerminate: any): boolean {
   const propertyNames = ['terminatedBy', 'message', 'data']
   return hasAllPropertiesOf(maybeTerminate, propertyNames)
 }
 
-export function isError(maybeError: any): boolean {
+export function isErrorMessage(maybeError: any): boolean {
   const propertyNames = ['isError', 'type']
   return hasAllPropertiesOf(maybeError, propertyNames)
 }

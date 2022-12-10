@@ -1,7 +1,7 @@
 import { Client, IFrame, IMessage } from '@stomp/stompjs'
 import { useEffect, useState } from 'react'
 import { connect, isInactive } from '../../stomp/config'
-import useManagedJoinRequestsStore from '@stores/useManagedJoinRequestsStore'
+import useManageableJoinRequestsStore from '@stores/useManageableJoinRequestsStore'
 import useHostChatMessagesStore from '@stores/useHostChatMessagesStore'
 import { useChatMessageHandler } from '../../messagehandlers/useChatMessageHandler'
 import useHostReceiver from '../../receivers/useHostReceiver'
@@ -13,6 +13,7 @@ export default function useHostMessageHandler(
   hostChannelToken: string,
   codename: string,
   secretKey: string,
+  publicKeyEncSecretKey: Uint8Array,
   color: string
 ) {
   // common
@@ -27,12 +28,16 @@ export default function useHostMessageHandler(
   const clearChatMessages = useHostChatMessagesStore(store => store.clear)
   const chatMessageIndex = useHostChatMessagesStore(store => store.index)
 
-  const managedJoinRequests = useManagedJoinRequestsStore(
+  const manageableJoinRequests = useManageableJoinRequestsStore(
     state => state.requests
   )
-  const addJoinRequest = useManagedJoinRequestsStore(state => state.add)
-  const updateJoinRequest = useManagedJoinRequestsStore(state => state.update)
-  const clearJoinRequests = useManagedJoinRequestsStore(state => state.clear)
+  const addManageableJoinRequest = useManageableJoinRequestsStore(
+    state => state.add
+  )
+  const updateManageableJoinRequest = useManageableJoinRequestsStore(
+    state => state.update
+  )
+  const clearJoinRequests = useManageableJoinRequestsStore(state => state.clear)
 
   const userAppearance: ChatUserAppearance = { codename, color }
 
@@ -50,8 +55,9 @@ export default function useHostMessageHandler(
   const { receiveJoinRequest, sendApproval } = useJoinRequestMessageHandler(
     stompClient,
     WS_SEND_URL,
-    addJoinRequest,
-    updateJoinRequest
+    publicKeyEncSecretKey,
+    addManageableJoinRequest,
+    updateManageableJoinRequest
   )
 
   const { onConnect } = useHostReceiver(
@@ -78,7 +84,7 @@ export default function useHostMessageHandler(
 
   return {
     chatMessages,
-    managedJoinRequests,
+    manageableJoinRequests,
     sendChatMessage,
     sendApproval,
     disconnect,

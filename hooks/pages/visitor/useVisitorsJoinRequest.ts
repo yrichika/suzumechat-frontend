@@ -59,6 +59,8 @@ export default function useVisitorsJoinRequest(
 
   function send() {
     // TODO: add validation here
+    // codename <= 30
+    // passphrase <= 400
 
     sendJoinRequest(codename, passphrase)
     setIsWaitingForAuthentication(true)

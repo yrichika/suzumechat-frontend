@@ -8,23 +8,31 @@ import useChatColor from '@hooks/useChatColor'
 interface Props {
   hostChannelToken: string
   secretKey: string
+  publicKeyEncSecretKey: Uint8Array
   isChannelEnded: boolean
 }
 
 function HostMessageHandler({
   hostChannelToken,
   secretKey,
+  publicKeyEncSecretKey,
   isChannelEnded,
 }: Props) {
   const codename = 'Host'
   const { color, nameTextColor } = useChatColor()
   const {
     chatMessages,
-    managedJoinRequests,
+    manageableJoinRequests,
     sendChatMessage,
     sendApproval,
     disconnect,
-  } = useHostMessageHandler(hostChannelToken, codename, secretKey, color)
+  } = useHostMessageHandler(
+    hostChannelToken,
+    codename,
+    secretKey,
+    publicKeyEncSecretKey,
+    color
+  )
 
   useEffect(() => {
     if (isChannelEnded) {
@@ -47,7 +55,7 @@ function HostMessageHandler({
         <JoinRequestManager
           hostChannelToken={hostChannelToken}
           isChannelEnded={isChannelEnded}
-          managedJoinRequests={managedJoinRequests}
+          manageableJoinRequests={manageableJoinRequests}
           sendApproval={sendApproval}
         />
       </div>

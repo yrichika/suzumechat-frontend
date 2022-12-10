@@ -1,8 +1,8 @@
 import { Client, IFrame, IMessage } from '@stomp/stompjs'
 import {
-  isChatMessageCapsuleMessage,
-  isError,
-  isTerminateMessage,
+  isChatMessageCapsule,
+  isErrorMessage,
+  isTerminate,
 } from '@utils/WebSocketMessageHelper'
 import Terminate from 'types/messages/Terminate'
 
@@ -20,13 +20,12 @@ export default function useGuestReceiver(
   }
 
   function receive(message: IMessage) {
-    console.log('received message:' + message.body)
     const messageBody = JSON.parse(message.body)
-    if (isChatMessageCapsuleMessage(messageBody)) {
+    if (isChatMessageCapsule(messageBody)) {
       receiveChatMessage(messageBody)
-    } else if (isTerminateMessage(messageBody)) {
+    } else if (isTerminate(messageBody)) {
       handleTerminate(messageBody)
-    } else if (isError(messageBody)) {
+    } else if (isErrorMessage(messageBody)) {
       // TODO: display error notification on screen
     } else {
       // TODO: display error notification on screen

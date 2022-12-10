@@ -1,46 +1,46 @@
-import useManagedJoinRequestsStore from '@stores/useManagedJoinRequestsStore'
+import useManageableJoinRequestsStore from '@stores/useManageableJoinRequestsStore'
 import { act, renderHook } from '@testing-library/react'
 import { randomBoolean, randomInt, randomString } from '@utils/UnsafeRandom'
-import ManagedJoinRequest from 'types/messages/ManagedJoinRequest'
+import ManageableJoinRequest from 'types/messages/ManageableJoinRequest'
 
-describe('useManagedJoinRequestsStore', () => {
+describe('useManageableJoinRequestsStore', () => {
   beforeEach(() => {
     //
   })
 
   test('add should add request', () => {
-    const { result } = renderHook(() => useManagedJoinRequestsStore())
-    const managedJoinRequest = createManagedJoinRequest()
+    const { result } = renderHook(() => useManageableJoinRequestsStore())
+    const manageableJoinRequest = createManageableJoinRequest()
     act(() => {
-      result.current.add(managedJoinRequest)
+      result.current.add(manageableJoinRequest)
     })
-    expect(result.current.requests).toEqual([managedJoinRequest])
+    expect(result.current.requests).toEqual([manageableJoinRequest])
 
     // 2nd request
-    const newRequest = createManagedJoinRequest()
+    const newRequest = createManageableJoinRequest()
     act(() => {
       result.current.add(newRequest)
     })
-    expect(result.current.requests).toEqual([managedJoinRequest, newRequest])
+    expect(result.current.requests).toEqual([manageableJoinRequest, newRequest])
   })
 
   test('add should not add request if request has the same visitor id', () => {
-    const { result } = renderHook(() => useManagedJoinRequestsStore())
-    const managedJoinRequest = createManagedJoinRequest()
-    const sameVisitorIdRequest = createManagedJoinRequest()
+    const { result } = renderHook(() => useManageableJoinRequestsStore())
+    const manageableJoinRequest = createManageableJoinRequest()
+    const sameVisitorIdRequest = createManageableJoinRequest()
     // same visitor id
-    sameVisitorIdRequest.visitorId = managedJoinRequest.visitorId
+    sameVisitorIdRequest.visitorId = manageableJoinRequest.visitorId
     act(() => {
-      result.current.add(managedJoinRequest)
+      result.current.add(manageableJoinRequest)
       result.current.add(sameVisitorIdRequest)
     })
 
-    expect(result.current.requests).toEqual([managedJoinRequest])
+    expect(result.current.requests).toEqual([manageableJoinRequest])
   })
 
   test('update should update isAuthenticated', () => {
-    const { result } = renderHook(() => useManagedJoinRequestsStore())
-    const request = createManagedJoinRequest()
+    const { result } = renderHook(() => useManageableJoinRequestsStore())
+    const request = createManageableJoinRequest()
     const clonedRequest = { ...request } // or Object.assign({}, request)
     const expected = randomBoolean()
     clonedRequest.isAuthenticated = expected
@@ -57,8 +57,8 @@ describe('useManagedJoinRequestsStore', () => {
   })
 
   test("update should not update request's isAuthenticated that does not match visitor id", () => {
-    const { result } = renderHook(() => useManagedJoinRequestsStore())
-    const request = createManagedJoinRequest()
+    const { result } = renderHook(() => useManageableJoinRequestsStore())
+    const request = createManageableJoinRequest()
 
     const clonedRequest = { ...request }
     // different visitor id
@@ -76,13 +76,14 @@ describe('useManagedJoinRequestsStore', () => {
     expect(result.current.requests[0].isAuthenticated).toBeNull()
   })
 
-  function createManagedJoinRequest(
+  function createManageableJoinRequest(
     isAuthenticated: boolean | null = null
-  ): ManagedJoinRequest {
+  ): ManageableJoinRequest {
     return {
       visitorId: randomString(),
       codename: randomString(),
       passphrase: randomString(),
+      publicKey: new Uint8Array(),
       isAuthenticated,
     }
   }

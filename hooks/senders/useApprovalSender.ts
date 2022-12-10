@@ -1,14 +1,17 @@
 import { isInactive } from '@hooks/stomp/config'
 import { Client } from '@stomp/stompjs'
 import VisitorsAuthStatus from 'types/messages/VisitorsAuthStatus'
-import ManagedJoinRequest from 'types/messages/ManagedJoinRequest'
+import ManageableJoinRequest from 'types/messages/ManageableJoinRequest'
 
 export default function useApprovalSender(
   stompClient: Client,
   wsSendUrl: string,
-  updateRequest: (request: ManagedJoinRequest) => void
+  updateManageableJoinRequest: (request: ManageableJoinRequest) => void
 ) {
-  function sendApproval(request: ManagedJoinRequest, isAuthenticated: boolean) {
+  function sendApproval(
+    request: ManageableJoinRequest,
+    isAuthenticated: boolean
+  ) {
     if (isInactive(stompClient)) {
       return
     }
@@ -22,7 +25,7 @@ export default function useApprovalSender(
     })
 
     request.isAuthenticated = isAuthenticated
-    updateRequest(request)
+    updateManageableJoinRequest(request)
   }
 
   return {

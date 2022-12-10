@@ -1,19 +1,23 @@
 import useJoinRequestReceiver from '@hooks/receivers/useJoinRequestReceiver'
 import useApprovalSender from '@hooks/senders/useApprovalSender'
 import { Client } from '@stomp/stompjs'
-import ManagedJoinRequest from 'types/messages/ManagedJoinRequest'
+import ManageableJoinRequest from 'types/messages/ManageableJoinRequest'
 
 export default function useJoinRequestMessageHandler(
   stompClient: Client,
   wsSendUrl: string,
-  addJoinRequest: (newRequest: ManagedJoinRequest) => void,
-  updateRequest: (request: ManagedJoinRequest) => void
+  hostSecretKey: Uint8Array,
+  addManageableJoinRequest: (newRequest: ManageableJoinRequest) => void,
+  updateManageableRequest: (request: ManageableJoinRequest) => void
 ) {
-  const { receiveJoinRequest } = useJoinRequestReceiver(addJoinRequest)
+  const { receiveJoinRequest } = useJoinRequestReceiver(
+    addManageableJoinRequest,
+    hostSecretKey
+  )
   const { sendApproval } = useApprovalSender(
     stompClient,
     wsSendUrl,
-    updateRequest
+    updateManageableRequest
   )
 
   return {

@@ -1,7 +1,7 @@
 import useHostReceiver from '@hooks/receivers/useHostReceiver'
 import { randomBoolean, randomInt, randomString } from '@utils/UnsafeRandom'
 import ChatMessageCapsule from 'types/messages/ChatMessageCapsule'
-import ManagedJoinRequest from 'types/messages/ManagedJoinRequest'
+import JoinRequest from 'types/messages/JoinRequest'
 
 describe('useHostReceiver', () => {
   let receiveUrl: string
@@ -36,12 +36,11 @@ describe('useHostReceiver', () => {
     expect(receiveJoinRequest).not.toHaveBeenCalled()
   })
 
-  test('receive should call receiveJoinRequest if message body is ManagedJoinRequest', () => {
-    const messageBody: ManagedJoinRequest = {
+  test('receive should call receiveJoinRequest if message body is JoinRequest', () => {
+    const messageBody: JoinRequest = {
       visitorId: randomString(),
-      codename: randomString(),
-      passphrase: randomString(),
-      isAuthenticated: randomBoolean(),
+      visitorPublicKey: randomString(),
+      whoIAmEnc: randomString(),
     }
     const message: any = {
       body: JSON.stringify(messageBody),
