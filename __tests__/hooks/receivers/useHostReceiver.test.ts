@@ -30,8 +30,7 @@ describe('useHostReceiver', () => {
 
     receive(message)
 
-    expect(receiveChatMessage).toHaveBeenCalledTimes(1)
-    expect(receiveChatMessage).toHaveBeenCalledWith(messageBody)
+    expect(receiveChatMessage).toHaveBeenNthCalledWith(1, messageBody)
 
     expect(receiveJoinRequest).not.toHaveBeenCalled()
   })
@@ -54,8 +53,7 @@ describe('useHostReceiver', () => {
 
     receive(message)
 
-    expect(receiveJoinRequest).toHaveBeenCalledTimes(1)
-    expect(receiveJoinRequest).toHaveBeenCalledWith(messageBody)
+    expect(receiveJoinRequest).toHaveBeenNthCalledWith(1, messageBody)
 
     expect(receiveChatMessage).not.toHaveBeenCalled()
   })

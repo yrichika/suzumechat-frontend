@@ -29,7 +29,6 @@ describe('useChatReceiver', () => {
     const { receiveChatMessage } = useChatReceiver(addChatMessage, secretKey)
     receiveChatMessage(messageBody)
 
-    expect(addChatMessage).toHaveBeenCalledTimes(1)
-    expect(addChatMessage).toHaveBeenCalledWith(chatMessage)
+    expect(addChatMessage).toHaveBeenNthCalledWith(1, chatMessage)
   })
 })

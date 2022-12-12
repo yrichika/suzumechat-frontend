@@ -2,7 +2,6 @@ import JoinRequest from 'types/messages/JoinRequest'
 import ManageableJoinRequest from 'types/messages/ManageableJoinRequest'
 import { box } from 'tweetnacl'
 import { decode as decodeBase64 } from '@stablelib/base64'
-import useHostStore from '@stores/useHostStore'
 import { decrypt } from '@hooks/utils/PublicKeyEncryption'
 import WhoIAm from 'types/messages/WhoIAm'
 

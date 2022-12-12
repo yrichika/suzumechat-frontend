@@ -1,14 +1,9 @@
 import useGuestStore from '@stores/useGuestStore'
 import useVisitorGuestSharedStompClientStore from '@stores/useVisitorGuestSharedStompClientStore'
-import { sanitizeText } from '@utils/Util'
 import { useEffect, useState } from 'react'
-import JoinRequest from 'types/messages/JoinRequest'
 import useVisitorReceiver from '../../receivers/useVisitorReceiver'
 import { connect, isInactive } from '../../stomp/config'
-import { box } from 'tweetnacl'
-import { encrypt } from '@hooks/utils/PublicKeyEncryption'
-import WhoIAm from 'types/messages/WhoIAm'
-import { encode as encodeBase64 } from '@stablelib/base64'
+import useVisitorSender from '@hooks/senders/useVisitorSender'
 
 export default function useVisitorMessageHandler(joinChannelToken: string) {
   const stompClient = useVisitorGuestSharedStompClientStore(
@@ -22,35 +17,14 @@ export default function useVisitorMessageHandler(joinChannelToken: string) {
   const publicKeyEncKeyPair = useGuestStore(store => store.publicKeyEncKeyPair)
   const setCodename = useGuestStore(store => store.setCodename)
 
-  // REFACTOR: useVisitorSenderに移す
-  function sendJoinRequest(codename: string, passphrase: string) {
-    const safeCodename = sanitizeText(codename)
-    const safePassphrase = sanitizeText(passphrase)
-    setCodename(safeCodename)
-    const visitorSendingKey = box.before(
-      hostPublicKey,
-      publicKeyEncKeyPair.secretKey
-    )
-    const whoIAm: WhoIAm = {
-      codename: safeCodename,
-      passphrase: safePassphrase,
-    }
-    const whoIAmEnc = encrypt(visitorSendingKey, whoIAm)
-    const publicKeyString = encodeBase64(publicKeyEncKeyPair.publicKey)
-    const joinRequest: JoinRequest = {
-      visitorId: visitorId,
-      visitorPublicKey: publicKeyString,
-      whoIAmEnc,
-    }
-    if (isInactive(stompClient)) {
-      return
-    }
-
-    stompClient!.publish({
-      destination: WS_SEND_URL,
-      body: JSON.stringify(joinRequest),
-    })
-  }
+  const { sendJoinRequest } = useVisitorSender(
+    stompClient,
+    WS_SEND_URL,
+    visitorId,
+    publicKeyEncKeyPair,
+    hostPublicKey,
+    setCodename
+  )
 
   function disconnect(): Promise<void> {
     if (isInactive(stompClient)) {
