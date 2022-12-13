@@ -33,11 +33,13 @@ export default function useGuestReceiver(
   }
 
   function handleTerminate(terminate: Terminate) {
+    // WORKING: #29
+    console.log('received terminate message!')
     // 1. websocket disconnect
     // 2. storeのデータを削除
     // 3. guestのbackendにリクエストを投げて、(`/back/guest/invalidateSession/${guestChannelToken}`)
     //    backendで httpSession.invalidate() を実行させる
-    // 4. redirect to chat ended page
+    // 4. redirect to chat ended page: show message like "Channel is closed by host"
   }
 
   return {

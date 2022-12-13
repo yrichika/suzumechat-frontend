@@ -47,7 +47,7 @@ export default function useVisitorsJoinRequest(
       disconnect()?.then(() => {
         setGuestSessionService(guestId, guestChannelToken)
           .then(response => {
-            router.push(`/guest/${guestChannelToken}`)
+            router.push(`/guest/chat/${guestChannelToken}`)
           })
           .catch(error => {
             // TODO: 認証に失敗した表示にする

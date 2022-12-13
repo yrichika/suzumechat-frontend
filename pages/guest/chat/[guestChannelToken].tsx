@@ -1,6 +1,6 @@
 import Private from '@components/templates/Private'
 import React from 'react'
-import { langMap } from '@lang/guest/langMap'
+import { langMap } from '@lang/guest/chat/langMap'
 import { toggleVisibilityBySelector } from '@utils/Util'
 import GuestChat from '@components/organisms/guest/GuestChat'
 import useGuestChannel from '@hooks/pages/guest/useGuestChannel'

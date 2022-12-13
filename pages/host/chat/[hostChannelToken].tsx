@@ -1,6 +1,6 @@
 import React from 'react'
 import Private from '@components/templates/Private'
-import { langMap } from '@lang/host/langMap'
+import { langMap } from '@lang/host/chat/langMap'
 import { toggleVisibilityBySelector, copyToClipboard } from '@utils/Util'
 import HostMessageHandler from '@components/organisms/host/HostMessageHandler'
 import useHostChannel from '@hooks/pages/host/useHostChannel'

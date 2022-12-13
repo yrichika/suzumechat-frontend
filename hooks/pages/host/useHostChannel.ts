@@ -25,11 +25,11 @@ export default function useHostChannel() {
     endChannelService(hostChannelToken!)
       .then(response => {
         clearHostChannel()
-        router.push('/channelEnded')
+        router.push('/host/channelEnded')
       })
       .catch(error => {
         clearHostChannel()
-        router.push('/channelEnded')
+        router.push('/host/channelEnded')
       })
   }
 

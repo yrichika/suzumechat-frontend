@@ -36,8 +36,8 @@ export default function useChannelCreation() {
         setJoinChannelToken(hostChannel.joinChannelToken)
         setSecretKey(hostChannel.secretKey)
 
-        const redirectTo = '/host'
-        router.push(`${redirectTo}/${hostChannel.hostChannelToken}`)
+        const redirectTo = '/host/chat/'
+        router.push(`${redirectTo}${hostChannel.hostChannelToken}`)
       }
     )
   }
