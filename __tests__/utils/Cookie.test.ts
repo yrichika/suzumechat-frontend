@@ -2,7 +2,8 @@ import { randomString } from '@utils/UnsafeRandom'
 import { setCookie, getCookie } from '@utils/Cookie'
 
 /**
- * Cookie class functionality depends on browsers.
+ * FIXME: rewrite tests with jest.mock()
+ *
  * Note that this test is not really testing how it behaves on browsers.
  * This test is treating `document.cookie` as just a string variable.
  * `setCookie` appends string with `=` operator on actual browsers.
