@@ -33,22 +33,21 @@ export default function useGuestMessageHandler(
     chatMessageIndex
   )
 
-  const { onConnect } = useGuestReceiver(
-    guestChannelToken,
-    stompClient,
-    receiveChatMessage,
-    clearGuestStore,
-    clearChatMessages
-  )
-
-  function disconnect() {
-    clearGuestStore()
+  function disconnect(): Promise<void> {
     clearChatMessages()
     if (stompClient.active) {
       return stompClient.deactivate()
     }
     return new Promise(() => {})
   }
+
+  const { onConnect } = useGuestReceiver(
+    guestChannelToken,
+    stompClient,
+    receiveChatMessage,
+    clearGuestStore,
+    disconnect
+  )
 
   useEffect(() => {
     connect(stompClient, onConnect)

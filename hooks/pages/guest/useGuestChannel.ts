@@ -1,6 +1,8 @@
+import endChatService from '@services/endChatService'
 import useGuestStore from '@stores/useGuestStore'
 import { isAnyOfEmpty } from '@utils/Util'
 import { useRouter } from 'next/router'
+import { useState } from 'react'
 
 export default function useGuestChannel() {
   const router = useRouter()
@@ -11,16 +13,23 @@ export default function useGuestChannel() {
   const codename = useGuestStore(store => store.codename)
   const secretKey = useGuestStore(store => store.secretKey)
   const clearGuestStore = useGuestStore(store => store.clear)
+  const [isChatEnded, setIsChatEnded] = useState(false)
 
   function isPageNotReady(): boolean {
     return isAnyOfEmpty(channelName, codename, secretKey)
   }
 
   function endChannel() {
-    // TODO:
-    // disconnect websocket
-    // send request to invalidate session
-    // clear all data (store)
+    setIsChatEnded(true)
+    endChatService(guestChannelToken!)
+      .then(response => {
+        clearGuestStore()
+        router.push('/guest/ended')
+      })
+      .catch(error => {
+        clearGuestStore()
+        router.push('/guest/ended')
+      })
   }
 
   return {
@@ -28,6 +37,7 @@ export default function useGuestChannel() {
     guestChannelToken,
     codename,
     secretKey,
+    isChatEnded,
     isPageNotReady,
     clearGuestStore,
     endChannel,

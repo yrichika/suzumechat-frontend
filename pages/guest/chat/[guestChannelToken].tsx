@@ -11,6 +11,7 @@ function GuestChannel() {
     guestChannelToken,
     codename,
     secretKey,
+    isChatEnded,
     isPageNotReady,
     clearGuestStore,
     endChannel,
@@ -61,6 +62,7 @@ function GuestChannel() {
               guestChannelToken={guestChannelToken!}
               codename={codename}
               secretKey={secretKey}
+              isChatEnded={isChatEnded}
               clearGuestStore={clearGuestStore}
             />
           </div>

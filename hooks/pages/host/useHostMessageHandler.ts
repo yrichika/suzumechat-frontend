@@ -68,14 +68,13 @@ export default function useHostMessageHandler(
   const { sendTerminateMessage } = useHostSender(stompClient, WS_SEND_URL)
 
   function disconnect() {
-    if (isInactive(stompClient)) {
-      return new Promise(() => {})
-    }
     sendTerminateMessage()
     clearChatMessages()
     clearJoinRequests()
-    console.log('WebSocket disconnected')
-    return stompClient?.deactivate()
+    if (stompClient.active) {
+      return stompClient.deactivate()
+    }
+    return new Promise(() => {})
   }
 
   useEffect(() => {

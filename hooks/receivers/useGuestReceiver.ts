@@ -13,7 +13,7 @@ export default function useGuestReceiver(
   stompClient: Client,
   receiveChatMessage: (messageBody: any) => void,
   clearGuestStore: () => void,
-  clearChatMessages: () => void
+  disconnect: () => Promise<void>
 ) {
   const WS_RECEIVE_URL = `${process.env.NEXT_PUBLIC_WS_BROADCASTED_PREFIX}/guest/${guestChannelToken}`
 
@@ -40,18 +40,14 @@ export default function useGuestReceiver(
   }
 
   function handleTerminate(terminate: Terminate) {
-    if (stompClient.active) {
-      stompClient.deactivate()
-    }
+    disconnect()
     endChatService(guestChannelToken!)
       .then(response => {
         clearGuestStore()
-        clearChatMessages()
         router.push('/guest/ended')
       })
       .catch(error => {
         clearGuestStore()
-        clearChatMessages()
         router.push('/guest/ended')
       })
   }
