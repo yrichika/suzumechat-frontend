@@ -9,7 +9,8 @@ export default function useGuestMessageHandler(
   guestChannelToken: string,
   codename: string,
   secretKey: string,
-  color: string
+  color: string,
+  clearGuestStore: () => void
 ) {
   const stompClient = useVisitorGuestSharedStompClientStore(
     store => store.stompClient
@@ -32,15 +33,21 @@ export default function useGuestMessageHandler(
     chatMessageIndex
   )
 
-  const { onConnect } = useGuestReceiver(guestChannelToken, receiveChatMessage)
+  const { onConnect } = useGuestReceiver(
+    guestChannelToken,
+    stompClient,
+    receiveChatMessage,
+    clearGuestStore,
+    clearChatMessages
+  )
 
   function disconnect() {
-    if (isInactive(stompClient)) {
-      return new Promise(() => {})
-    }
+    clearGuestStore()
     clearChatMessages()
-    console.log('WebSocket disconnected')
-    return stompClient?.deactivate()
+    if (stompClient.active) {
+      return stompClient.deactivate()
+    }
+    return new Promise(() => {})
   }
 
   useEffect(() => {

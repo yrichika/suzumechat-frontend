@@ -1,16 +1,23 @@
+import endChatService from '@services/endChatService'
 import { Client, IFrame, IMessage } from '@stomp/stompjs'
 import {
   isChatMessageCapsule,
   isErrorMessage,
   isTerminate,
 } from '@utils/WebSocketMessageHelper'
+import { useRouter } from 'next/router'
 import Terminate from 'types/messages/Terminate'
 
 export default function useGuestReceiver(
   guestChannelToken: string,
-  receiveChatMessage: (messageBody: any) => void
+  stompClient: Client,
+  receiveChatMessage: (messageBody: any) => void,
+  clearGuestStore: () => void,
+  clearChatMessages: () => void
 ) {
   const WS_RECEIVE_URL = `${process.env.NEXT_PUBLIC_WS_BROADCASTED_PREFIX}/guest/${guestChannelToken}`
+
+  const router = useRouter()
 
   function onConnect(stompClient: Client) {
     return (frame: IFrame) => {
@@ -33,13 +40,20 @@ export default function useGuestReceiver(
   }
 
   function handleTerminate(terminate: Terminate) {
-    // WORKING: #29
-    console.log('received terminate message!')
-    // 1. websocket disconnect
-    // 2. storeのデータを削除
-    // 3. guestのbackendにリクエストを投げて、(`/back/guest/invalidateSession/${guestChannelToken}`)
-    //    backendで httpSession.invalidate() を実行させる
-    // 4. redirect to chat ended page: show message like "Channel is closed by host"
+    if (stompClient.active) {
+      stompClient.deactivate()
+    }
+    endChatService(guestChannelToken!)
+      .then(response => {
+        clearGuestStore()
+        clearChatMessages()
+        router.push('/guest/ended')
+      })
+      .catch(error => {
+        clearGuestStore()
+        clearChatMessages()
+        router.push('/guest/ended')
+      })
   }
 
   return {

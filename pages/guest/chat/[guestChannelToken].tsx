@@ -12,6 +12,7 @@ function GuestChannel() {
     codename,
     secretKey,
     isPageNotReady,
+    clearGuestStore,
     endChannel,
   } = useGuestChannel()
 
@@ -60,6 +61,7 @@ function GuestChannel() {
               guestChannelToken={guestChannelToken!}
               codename={codename}
               secretKey={secretKey}
+              clearGuestStore={clearGuestStore}
             />
           </div>
         </main>

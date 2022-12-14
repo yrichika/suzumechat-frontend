@@ -36,7 +36,18 @@ const guestStore = (set: any, get: any) => ({
 
   secretKey: '',
   setSecretKey: (secretKey: string) => set((state: Guest) => ({ secretKey })),
-  clear: () => set({ visitorId: '', guestId: '', codename: '', secretKey: '' }),
+  clear: () =>
+    set({
+      channelName: '',
+      guestId: '',
+      codename: '',
+      publicKeyEncKeyPair: {
+        publicKey: new Uint8Array(),
+        secretKey: new Uint8Array(),
+      },
+      hostPublicKey: new Uint8Array(),
+      secretKey: '',
+    }),
 })
 
 const store = persist(guestStore, {

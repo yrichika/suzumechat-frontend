@@ -10,6 +10,7 @@ export default function useGuestChannel() {
   // const guestId = useGuestStore(store => store.guestId)
   const codename = useGuestStore(store => store.codename)
   const secretKey = useGuestStore(store => store.secretKey)
+  const clearGuestStore = useGuestStore(store => store.clear)
 
   function isPageNotReady(): boolean {
     return isAnyOfEmpty(channelName, codename, secretKey)
@@ -17,6 +18,9 @@ export default function useGuestChannel() {
 
   function endChannel() {
     // TODO:
+    // disconnect websocket
+    // send request to invalidate session
+    // clear all data (store)
   }
 
   return {
@@ -25,6 +29,7 @@ export default function useGuestChannel() {
     codename,
     secretKey,
     isPageNotReady,
+    clearGuestStore,
     endChannel,
   }
 }
