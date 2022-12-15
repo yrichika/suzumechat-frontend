@@ -31,6 +31,11 @@ export function isAuthenticationStatus(
   return hasAllPropertiesOf(maybeAuthenticationStatus, propertyNames)
 }
 
+export function isJoinRequestClosed(maybeJoinRequestClosed: any): boolean {
+  const propertyName = ['isJoinRequestClosed']
+  return hasAllPropertiesOf(maybeJoinRequestClosed, propertyName)
+}
+
 export function isTerminate(maybeTerminate: any): boolean {
   const propertyNames = ['terminatedBy', 'message', 'data']
   return hasAllPropertiesOf(maybeTerminate, propertyNames)

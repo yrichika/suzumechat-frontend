@@ -44,14 +44,14 @@ export default function useVisitorsJoinRequest(
 
   useEffect(() => {
     if (isAuthenticated === true) {
-      disconnect()?.then(() => {
+      disconnect().then(() => {
         setGuestSessionService(guestId, guestChannelToken)
           .then(response => {
             router.push(`/guest/chat/${guestChannelToken}`)
           })
           .catch(error => {
             // TODO: 認証に失敗した表示にする
-            clearGuestStore()
+            sessionStorage.clear()
           })
       })
     }

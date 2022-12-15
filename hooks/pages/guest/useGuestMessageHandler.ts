@@ -9,8 +9,7 @@ export default function useGuestMessageHandler(
   guestChannelToken: string,
   codename: string,
   secretKey: string,
-  color: string,
-  clearGuestStore: () => void
+  color: string
 ) {
   const stompClient = useVisitorGuestSharedStompClientStore(
     store => store.stompClient
@@ -20,7 +19,6 @@ export default function useGuestMessageHandler(
 
   const chatMessages = useGuestChatMessagesStore(store => store.messages)
   const addChatMessage = useGuestChatMessagesStore(store => store.addMessage)
-  const clearChatMessages = useGuestChatMessagesStore(store => store.clear)
   const chatMessageIndex = useGuestChatMessagesStore(store => store.index)
 
   const userAppearance = { codename, color }
@@ -34,7 +32,6 @@ export default function useGuestMessageHandler(
   )
 
   function disconnect(): Promise<void> {
-    clearChatMessages()
     if (stompClient.active) {
       return stompClient.deactivate()
     }
@@ -45,7 +42,6 @@ export default function useGuestMessageHandler(
     guestChannelToken,
     stompClient,
     receiveChatMessage,
-    clearGuestStore,
     disconnect
   )
 

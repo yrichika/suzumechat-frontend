@@ -1,35 +1,24 @@
-import closeJoinRequestService from '@services/closeJoinRequestService'
 import useJoinRequestAvailabilityStore from '@stores/useJoinRequestAvailabilityStore'
 import { useEffect } from 'react'
 
 export default function useJoinRequestManager(
   hostChannelToken: string,
-  isChannelEnded: boolean
+  isChannelEnded: boolean,
+  sendCloseJoinRequest: () => void
 ) {
   const requestClosed = useJoinRequestAvailabilityStore(state => state.isClosed)
   const setRequestClosed = useJoinRequestAvailabilityStore(
     state => state.setIsClosed
   )
-  const resetJoinRequestAvailability = useJoinRequestAvailabilityStore(
-    state => state.reset
+  const clearJoinRequestAvailability = useJoinRequestAvailabilityStore(
+    state => state.clear
   )
 
   useEffect(() => {
     if (isChannelEnded) {
-      resetJoinRequestAvailability()
+      clearJoinRequestAvailability()
     }
   }, [isChannelEnded])
-
-  // TODO: change this to websocket. otherwise host can't notify others channel already closed
-  function closeRequest() {
-    closeJoinRequestService(hostChannelToken)
-      .then(data => {
-        setRequestClosed(true)
-      })
-      .catch(error => {
-        alert('TODO: メッセージをちゃんとする(マルチリンガル)')
-      })
-  }
 
   function showStatus(isAuthenticated: null | boolean): string {
     if (isAuthenticated === null) {
@@ -49,10 +38,15 @@ export default function useJoinRequestManager(
       : baseStyle + rejectedStyle
   }
 
+  function closeJoinRequest() {
+    sendCloseJoinRequest()
+    setRequestClosed(true)
+  }
+
   return {
     requestClosed,
-    closeRequest,
     showStatus,
     writeStatusClass,
+    closeJoinRequest,
   }
 }

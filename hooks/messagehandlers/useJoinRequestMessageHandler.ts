@@ -1,6 +1,7 @@
 import useJoinRequestReceiver from '@hooks/receivers/useJoinRequestReceiver'
 import useApprovalSender from '@hooks/senders/useApprovalSender'
 import { Client } from '@stomp/stompjs'
+import CloseJoinRequest from 'types/messages/CloseJoinRequest'
 import ManageableJoinRequest from 'types/messages/ManageableJoinRequest'
 
 export default function useJoinRequestMessageHandler(
@@ -20,8 +21,22 @@ export default function useJoinRequestMessageHandler(
     updateManageableRequest
   )
 
+  function sendCloseJoinRequest() {
+    if (!stompClient.active) {
+      return
+    }
+    const channelClosed: CloseJoinRequest = {
+      joinRequestClosing: true,
+    }
+    stompClient.publish({
+      destination: wsSendUrl,
+      body: JSON.stringify(channelClosed),
+    })
+  }
+
   return {
     sendApproval,
+    sendCloseJoinRequest,
     receiveJoinRequest,
   }
 }

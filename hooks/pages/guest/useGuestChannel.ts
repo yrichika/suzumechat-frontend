@@ -12,7 +12,6 @@ export default function useGuestChannel() {
   // const guestId = useGuestStore(store => store.guestId)
   const codename = useGuestStore(store => store.codename)
   const secretKey = useGuestStore(store => store.secretKey)
-  const clearGuestStore = useGuestStore(store => store.clear)
   const [isChatEnded, setIsChatEnded] = useState(false)
 
   function isPageNotReady(): boolean {
@@ -23,11 +22,11 @@ export default function useGuestChannel() {
     setIsChatEnded(true)
     endChatService(guestChannelToken!)
       .then(response => {
-        clearGuestStore()
+        sessionStorage.clear()
         router.push('/guest/ended')
       })
       .catch(error => {
-        clearGuestStore()
+        sessionStorage.clear()
         router.push('/guest/ended')
       })
   }
@@ -39,7 +38,6 @@ export default function useGuestChannel() {
     secretKey,
     isChatEnded,
     isPageNotReady,
-    clearGuestStore,
     endChannel,
   }
 }

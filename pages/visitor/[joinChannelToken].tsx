@@ -50,6 +50,8 @@ function Visitor({
   isAccepting,
 }: Prop) {
   useEffect(() => {
+    sessionStorage.clear()
+
     csrfTokenService() // DELETE: necessary?
   }, [])
 

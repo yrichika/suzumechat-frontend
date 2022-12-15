@@ -10,6 +10,7 @@ interface Props {
     request: ManageableJoinRequest,
     isAuthenticated: boolean
   ) => void
+  sendCloseJoinRequest: () => void
 }
 
 function JoinRequestManager({
@@ -17,9 +18,14 @@ function JoinRequestManager({
   isChannelEnded,
   manageableJoinRequests,
   sendApproval,
+  sendCloseJoinRequest,
 }: Props) {
-  const { requestClosed, closeRequest, showStatus, writeStatusClass } =
-    useJoinRequestManager(hostChannelToken, isChannelEnded)
+  const { requestClosed, showStatus, writeStatusClass, closeJoinRequest } =
+    useJoinRequestManager(
+      hostChannelToken,
+      isChannelEnded,
+      sendCloseJoinRequest
+    )
 
   return (
     <div>
@@ -29,8 +35,7 @@ function JoinRequestManager({
           id="close-request-button"
           className="rounded text-white px-2 text-sm mx-2 bg-blue-500 hover:bg-blue-700 disabled:opacity-50"
           data-lang="stop-visitors-requests"
-          // TODO: change closeRequest implementation to websocket
-          onClick={() => closeRequest()}
+          onClick={() => closeJoinRequest()}
           disabled={requestClosed}
         ></button>
       </div>

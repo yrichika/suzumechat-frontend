@@ -12,7 +12,7 @@ export default function useVisitorMessageHandler(joinChannelToken: string) {
 
   const WS_SEND_URL = `${process.env.NEXT_PUBLIC_WS_SEND_PREFIX}/visitor/${joinChannelToken}`
   const { isClosed, isAuthenticated, guestChannelToken, visitorId, onConnect } =
-    useVisitorReceiver(joinChannelToken)
+    useVisitorReceiver(stompClient, joinChannelToken)
   const hostPublicKey = useGuestStore(store => store.hostPublicKey)
   const publicKeyEncKeyPair = useGuestStore(store => store.publicKeyEncKeyPair)
   const setCodename = useGuestStore(store => store.setCodename)

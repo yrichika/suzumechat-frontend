@@ -12,7 +12,6 @@ export default function useHostChannel() {
   const channelName = useHostStore(state => state.channelName)
   const joinChannelToken = useHostStore(state => state.joinChannelToken)
   const secretKey = useHostStore(state => state.secretKey)
-  const clearHostChannel = useHostStore(state => state.clear)
   const publicKeyEncSecretKey = useHostStore(
     store => store.publicKeyEncKeyPair
   ).secretKey
@@ -20,15 +19,13 @@ export default function useHostChannel() {
 
   function endChannel() {
     setIsChannelEnded(true)
-    // DEBUG: このAPIでsession.invalidate()を呼ぶが、その際にhostIdの削除によって
-    //        正しくTerminateメッセージがguest側に届くか未確認
     endChannelService(hostChannelToken!)
       .then(response => {
-        clearHostChannel()
+        sessionStorage.clear()
         router.push('/host/channelEnded')
       })
       .catch(error => {
-        clearHostChannel()
+        sessionStorage.clear()
         router.push('/host/channelEnded')
       })
   }

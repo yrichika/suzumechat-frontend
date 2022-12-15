@@ -25,7 +25,6 @@ export default function useHostMessageHandler(
 
   const chatMessages = useHostChatMessagesStore(store => store.messages)
   const addChatMessage = useHostChatMessagesStore(store => store.addMessage)
-  const clearChatMessages = useHostChatMessagesStore(store => store.clear)
   const chatMessageIndex = useHostChatMessagesStore(store => store.index)
 
   const manageableJoinRequests = useManageableJoinRequestsStore(
@@ -37,7 +36,6 @@ export default function useHostMessageHandler(
   const updateManageableJoinRequest = useManageableJoinRequestsStore(
     state => state.update
   )
-  const clearJoinRequests = useManageableJoinRequestsStore(state => state.clear)
 
   const userAppearance: ChatUserAppearance = { codename, color }
 
@@ -52,13 +50,14 @@ export default function useHostMessageHandler(
   )
 
   // handle JoinRequest
-  const { receiveJoinRequest, sendApproval } = useJoinRequestMessageHandler(
-    stompClient,
-    WS_SEND_URL,
-    publicKeyEncSecretKey,
-    addManageableJoinRequest,
-    updateManageableJoinRequest
-  )
+  const { receiveJoinRequest, sendApproval, sendCloseJoinRequest } =
+    useJoinRequestMessageHandler(
+      stompClient,
+      WS_SEND_URL,
+      publicKeyEncSecretKey,
+      addManageableJoinRequest,
+      updateManageableJoinRequest
+    )
 
   const { onConnect } = useHostReceiver(
     WS_RECEIVE_URL,
@@ -69,8 +68,7 @@ export default function useHostMessageHandler(
 
   function disconnect() {
     sendTerminateMessage()
-    clearChatMessages()
-    clearJoinRequests()
+    sessionStorage.clear()
     if (stompClient.active) {
       return stompClient.deactivate()
     }
@@ -86,6 +84,7 @@ export default function useHostMessageHandler(
     manageableJoinRequests,
     sendChatMessage,
     sendApproval,
+    sendCloseJoinRequest,
     disconnect,
   }
 }

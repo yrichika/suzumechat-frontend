@@ -19,6 +19,9 @@ export default function useChannelCreation() {
   )
 
   useEffect(() => {
+    sessionStorage.clear()
+
+    // setting necessary data for host
     csrfTokenService()
     initPublicKeyEncKeyPair()
   }, [])

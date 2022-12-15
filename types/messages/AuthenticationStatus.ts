@@ -1,6 +1,6 @@
 // originally: ClientAuthentication
 type AuthenticationStatus = {
-  isClosed: boolean
+  isClosed: boolean // DELETE:
   isAuthenticated: boolean | null
   guestId: string
   guestChannelToken: string

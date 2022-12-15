@@ -11,7 +11,7 @@ type Status = {
 const joinRequestAvailability = (set: any, get: any) => ({
   isClosed: false,
   setIsClosed: (isClosed: boolean) => set((status: Status) => ({ isClosed })),
-  reset: () => set({ isClosed: false }),
+  clear: () => set({ isClosed: false }),
 })
 
 const store = persist(joinRequestAvailability, {

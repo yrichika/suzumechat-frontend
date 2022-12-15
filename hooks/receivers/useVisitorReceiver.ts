@@ -2,6 +2,7 @@ import { Client, IFrame, IMessage } from '@stomp/stompjs'
 import useGuestStore from '@stores/useGuestStore'
 import {
   isAuthenticationStatus,
+  isJoinRequestClosed,
   isErrorMessage,
 } from '@utils/WebSocketMessageHelper'
 import { useState } from 'react'
@@ -9,7 +10,10 @@ import AuthenticationStatus from 'types/messages/AuthenticationStatus'
 
 // DO NOT include stompjs `Client` in this function.
 // this function is to separate functions from the functions using Client object.
-export default function useVisitorReceiver(joinChannelToken: string) {
+export default function useVisitorReceiver(
+  stompClient: Client,
+  joinChannelToken: string
+) {
   const [isClosed, setIsClosed] = useState(false)
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null)
   const [guestChannelToken, setGuestChannelToken] = useState('')
@@ -31,9 +35,10 @@ export default function useVisitorReceiver(joinChannelToken: string) {
   }
 
   function receive(message: IMessage) {
-    console.log('message received: ' + message.body)
     const messageBody = JSON.parse(message.body)
-    if (isAuthenticationStatus(messageBody)) {
+    if (isJoinRequestClosed(messageBody)) {
+      handleJoinRequestClosed()
+    } else if (isAuthenticationStatus(messageBody)) {
       handleAuthenticationStatusMessage(messageBody)
     } else if (isErrorMessage(messageBody)) {
       // TODO: handle error
@@ -41,7 +46,7 @@ export default function useVisitorReceiver(joinChannelToken: string) {
   }
 
   function handleAuthenticationStatusMessage(authStatus: AuthenticationStatus) {
-    setIsClosed(authStatus.isClosed)
+    setIsClosed(authStatus.isClosed) // DELETE:
     setGuestChannelToken(authStatus.guestChannelToken)
     setGuestId(authStatus.guestId)
     setChannelName(authStatus.channelName) // FIXME: move to more appropriate location
@@ -50,6 +55,15 @@ export default function useVisitorReceiver(joinChannelToken: string) {
     // because it's used to redirect to chat page after all other
     // guest data is set.
     setIsAuthenticated(authStatus.isAuthenticated)
+  }
+
+  function handleJoinRequestClosed() {
+    setIsClosed(true)
+    // FIXME: duplicate of `disconnect()`
+    if (stompClient.active) {
+      stompClient.deactivate()
+    }
+    sessionStorage.clear()
   }
 
   return {

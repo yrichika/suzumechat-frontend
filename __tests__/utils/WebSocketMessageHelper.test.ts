@@ -2,6 +2,7 @@ import { randomBoolean, randomString } from '@utils/UnsafeRandom'
 import {
   hasAllPropertiesOf,
   isAuthenticationStatus,
+  isJoinRequestClosed,
   isChatMessageCapsule,
   isErrorMessage,
   isJoinRequest,
@@ -97,6 +98,22 @@ describe('sonHelper', () => {
       secretKey: randomString(),
     }
     const result = isAuthenticationStatus(message)
+    expect(result).toBe(false)
+  })
+
+  test('isJoinRequestClosed should return true if message has all props of JoinRequestClosed', () => {
+    const message = {
+      isJoinRequestClosed: randomBoolean(),
+    }
+    const result = isJoinRequestClosed(message)
+    expect(result).toBe(true)
+  })
+
+  test('isJoinRequestClosed should return false if message does not have all props of JoinRequestClosed', () => {
+    const message = {
+      [randomString()]: randomBoolean(),
+    }
+    const result = isJoinRequestClosed(message)
     expect(result).toBe(false)
   })
 
