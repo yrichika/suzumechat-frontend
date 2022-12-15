@@ -19,6 +19,7 @@ export default function useJoinRequestReceiver(
       passphrase: whoIAm.passphrase,
       publicKey: visitorPublicKey,
       isAuthenticated: null,
+      isSendable: true,
     }
 
     addManageableJoinRequest(manageableJoinRequest)

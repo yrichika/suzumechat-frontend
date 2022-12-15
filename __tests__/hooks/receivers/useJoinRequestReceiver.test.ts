@@ -40,6 +40,7 @@ describe('useJoinRequestReceiver', () => {
       passphrase: whoIAm.passphrase,
       publicKey: visitorKeyPair.publicKey,
       isAuthenticated: null,
+      isSendable: true,
     }
 
     const { receiveJoinRequest } = useJoinRequestReceiver(

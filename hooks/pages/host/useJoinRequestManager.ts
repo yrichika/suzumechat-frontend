@@ -4,7 +4,8 @@ import { useEffect } from 'react'
 export default function useJoinRequestManager(
   hostChannelToken: string,
   isChannelEnded: boolean,
-  sendCloseJoinRequest: () => void
+  sendCloseJoinRequest: () => void,
+  disableSendingManageableJoinRequest: () => void
 ) {
   const requestClosed = useJoinRequestAvailabilityStore(state => state.isClosed)
   const setRequestClosed = useJoinRequestAvailabilityStore(
@@ -30,7 +31,7 @@ export default function useJoinRequestManager(
   }
 
   function writeStatusClass(isAuthenticated: null | boolean): string {
-    const baseStyle = 'text-sm px-1 border text-white rounded-full '
+    const baseStyle = 'text-sm px-2 text-white rounded-full '
     const acceptedStyle = 'border-green-500 bg-green-500 '
     const rejectedStyle = 'border-red-500 bg-red-500 '
     return isAuthenticated
@@ -41,6 +42,7 @@ export default function useJoinRequestManager(
   function closeJoinRequest() {
     sendCloseJoinRequest()
     setRequestClosed(true)
+    disableSendingManageableJoinRequest()
   }
 
   return {

@@ -11,6 +11,7 @@ interface Props {
     isAuthenticated: boolean
   ) => void
   sendCloseJoinRequest: () => void
+  disableSendingManageableJoinRequest: () => void
 }
 
 function JoinRequestManager({
@@ -19,12 +20,14 @@ function JoinRequestManager({
   manageableJoinRequests,
   sendApproval,
   sendCloseJoinRequest,
+  disableSendingManageableJoinRequest,
 }: Props) {
   const { requestClosed, showStatus, writeStatusClass, closeJoinRequest } =
     useJoinRequestManager(
       hostChannelToken,
       isChannelEnded,
-      sendCloseJoinRequest
+      sendCloseJoinRequest,
+      disableSendingManageableJoinRequest
     )
 
   return (
@@ -58,7 +61,7 @@ function JoinRequestManager({
                     id={`accept-btn-${index}`}
                     className="btn btn-blue mr-2 focus:opacity-50 disabled:opacity-50"
                     onClick={() => sendApproval(request, true)}
-                    disabled={request.isAuthenticated !== null}
+                    disabled={!request.isSendable}
                     data-lang="accept-button"
                   >
                     Accept
@@ -67,7 +70,7 @@ function JoinRequestManager({
                     id={`reject-button-${index}`}
                     className="btn btn-red focus:opacity-50 disabled:opacity-50"
                     onClick={() => sendApproval(request, false)}
-                    disabled={request.isAuthenticated !== null}
+                    disabled={!request.isSendable}
                     data-lang="reject-button"
                   >
                     Reject
@@ -86,7 +89,7 @@ function JoinRequestManager({
                   </p>
                   <p className="text-sm md:text-base">
                     <span data-lang="visitor-status">Status</span>
-                    <span className="mr-2">:</span>
+                    <span className="mr-1">:</span>
                     <span className={writeStatusClass(request.isAuthenticated)}>
                       {showStatus(request.isAuthenticated)}
                     </span>

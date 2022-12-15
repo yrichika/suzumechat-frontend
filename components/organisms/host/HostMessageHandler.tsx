@@ -26,6 +26,7 @@ function HostMessageHandler({
     sendChatMessage,
     sendApproval,
     sendCloseJoinRequest,
+    disableSendingManageableJoinRequest,
     disconnect,
   } = useHostMessageHandler(
     hostChannelToken,
@@ -59,6 +60,9 @@ function HostMessageHandler({
           manageableJoinRequests={manageableJoinRequests}
           sendApproval={sendApproval}
           sendCloseJoinRequest={sendCloseJoinRequest}
+          disableSendingManageableJoinRequest={
+            disableSendingManageableJoinRequest
+          }
         />
       </div>
     </div>

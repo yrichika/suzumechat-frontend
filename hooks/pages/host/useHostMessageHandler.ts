@@ -36,6 +36,9 @@ export default function useHostMessageHandler(
   const updateManageableJoinRequest = useManageableJoinRequestsStore(
     state => state.update
   )
+  const disableSendingManageableJoinRequest = useManageableJoinRequestsStore(
+    state => state.disableSending
+  )
 
   const userAppearance: ChatUserAppearance = { codename, color }
 
@@ -85,6 +88,7 @@ export default function useHostMessageHandler(
     sendChatMessage,
     sendApproval,
     sendCloseJoinRequest,
+    disableSendingManageableJoinRequest,
     disconnect,
   }
 }

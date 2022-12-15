@@ -28,8 +28,18 @@ const manageableJoinRequests = (set: any, get: any) => ({
       )
       if (updated) {
         updated.isAuthenticated = updatingRequest.isAuthenticated
+        updated.isSendable = false
         return { requests: [...prev.requests] }
       }
+    })
+  },
+  disableSending: () => {
+    set((prev: ManageableJoinRequests) => {
+      const sendingDisabledRequests = prev.requests.map(request => {
+        request.isSendable = false
+        return request
+      })
+      return { requests: [...sendingDisabledRequests] }
     })
   },
   clear: () => set({ requests: new Array<ManageableJoinRequest>() }),

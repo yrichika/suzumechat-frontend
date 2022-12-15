@@ -38,7 +38,7 @@ describe('useManageableJoinRequestsStore', () => {
     expect(result.current.requests).toEqual([manageableJoinRequest])
   })
 
-  test('update should update isAuthenticated', () => {
+  test('update should update isAuthenticated and set isSendable false', () => {
     const { result } = renderHook(() => useManageableJoinRequestsStore())
     const request = createManageableJoinRequest()
     const clonedRequest = { ...request } // or Object.assign({}, request)
@@ -54,6 +54,7 @@ describe('useManageableJoinRequestsStore', () => {
       result.current.update(clonedRequest)
     })
     expect(result.current.requests[0].isAuthenticated).toBe(expected)
+    expect(result.current.requests[0].isSendable).toBe(false)
   })
 
   test("update should not update request's isAuthenticated that does not match visitor id", () => {
@@ -76,6 +77,32 @@ describe('useManageableJoinRequestsStore', () => {
     expect(result.current.requests[0].isAuthenticated).toBeNull()
   })
 
+  test('disableSending should set all requests isSendable false', () => {
+    const { result } = renderHook(() => useManageableJoinRequestsStore())
+    const howMany = randomInt(1, 5)
+    let requests: ManageableJoinRequest[] = []
+    for (let i = 0; i < howMany; i++) {
+      requests.push(createManageableJoinRequest())
+    }
+
+    act(() => {
+      requests.forEach(request => {
+        result.current.add(request)
+      })
+    })
+    result.current.requests.forEach(request => {
+      expect(request.isSendable).toBe(true)
+    })
+
+    act(() => {
+      result.current.disableSending()
+    })
+
+    result.current.requests.forEach(request => {
+      expect(request.isSendable).toBe(false)
+    })
+  })
+
   function createManageableJoinRequest(
     isAuthenticated: boolean | null = null
   ): ManageableJoinRequest {
@@ -85,6 +112,7 @@ describe('useManageableJoinRequestsStore', () => {
       passphrase: randomString(),
       publicKey: new Uint8Array(),
       isAuthenticated,
+      isSendable: true,
     }
   }
 })
