@@ -61,6 +61,7 @@ function Top() {
               <div className="text-center mt-5">
                 <button
                   type="submit"
+                  id="submitChannelNameButton"
                   className="btn btn-blue"
                   data-lang="create-button"
                 ></button>

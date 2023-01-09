@@ -1,6 +1,6 @@
 export const ja = new Map([
   [
-    'guest-request-url',
+    'join-request-url',
     '下のURLをチャットする相手に教えてあげて下さい(SMS、メール、なんでもOKです。別のチャットソフトでもOKです!) URLからチャットに参加するための認証情報を送信できます。',
   ],
   ['send-button', '送信'],

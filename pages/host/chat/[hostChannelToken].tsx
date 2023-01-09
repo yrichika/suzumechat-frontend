@@ -67,17 +67,17 @@ function HostChannel() {
           <h1 className="text-4xl m-3">{channelName}</h1>
           <div>
             <div>
-              <span className="block mx-2" data-lang="guest-request-url"></span>
+              <span className="block mx-2" data-lang="join-request-url"></span>
               <div className="flex mt-4 mx-2">
                 <button
                   className="py-1 px-2 rounded-l text-sm btn-blue"
-                  onClick={() => copyToClipboard('guest-request-url')}
+                  onClick={() => copyToClipboard('joinRequestUrl')}
                 >
                   copy
                 </button>
                 <input
                   type="text"
-                  id="guest-request-url"
+                  id="joinRequestUrl"
                   className="w-full text-gray-600 bg-gray-200 rounded-r px-3"
                   value={`${absoluteUrl}${joinRequestUrl}${joinChannelToken}`}
                   readOnly

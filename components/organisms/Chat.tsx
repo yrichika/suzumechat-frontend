@@ -35,9 +35,9 @@ function Chat({
           </span>
         </p>
         <textarea
+          name="message_input"
+          id="messageInput"
           className="shadow border border-blue-600 rounded w-full px-2"
-          name="message-input"
-          id="message-input"
           value={messageInput}
           onChange={event => setMessageInput(event.target.value)}
           onKeyDown={sendShortcut}
@@ -45,6 +45,7 @@ function Chat({
         <ul className="mt-4">
           <li className="flex justify-center">
             <button
+              id="sendChatMessageButton"
               className="lang-send-button btn btn-blue"
               onClick={() => handleMessage()}
               data-lang="send-button"

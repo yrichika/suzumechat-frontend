@@ -1,6 +1,6 @@
 export const en = new Map([
   [
-    'guest-request-url',
+    'join-request-url',
     'Please tell your chat members the URL below. Email, SMS, anything is fine. (Even fine with other chat apps!) From this URL, your chat members can send his/her authentication info to join this chat.',
   ],
   ['send-button', 'send'],
