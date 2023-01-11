@@ -2,7 +2,7 @@ import { Client, frameCallbackType, IFrame, StompConfig } from '@stomp/stompjs'
 import { Dispatch, SetStateAction } from 'react'
 import SockJS from 'sockjs-client'
 
-const WS_ENDPOINT_URL = `${process.env.NEXT_PUBLIC_BACK_PREFIX}/${process.env.NEXT_PUBLIC_WS_ENDPOINT}`
+const WS_ENDPOINT_URL = `${process.env.NEXT_PUBLIC_BACK_PREFIX}${process.env.NEXT_PUBLIC_WS_ENDPOINT}`
 const sockJsProtocols = ['xhr-streaming', 'xhr-polling']
 
 export function connect(
