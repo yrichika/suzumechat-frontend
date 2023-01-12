@@ -1,4 +1,4 @@
-import useGuestChatMessagesStore from '@stores/useGuestChatMessagesStore'
+import useGuestChatMessagesStore from '@stores/guest/useGuestChatMessagesStore'
 import useVisitorGuestSharedStompClientStore from '@stores/useVisitorGuestSharedStompClientStore'
 import { useEffect } from 'react'
 import { useChatMessageHandler } from '../../messagehandlers/useChatMessageHandler'

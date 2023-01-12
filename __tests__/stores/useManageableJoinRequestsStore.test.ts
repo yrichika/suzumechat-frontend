@@ -1,4 +1,4 @@
-import useManageableJoinRequestsStore from '@stores/useManageableJoinRequestsStore'
+import useManageableJoinRequestsStore from '@stores/host/useManageableJoinRequestsStore'
 import { act, renderHook } from '@testing-library/react'
 import { randomBoolean, randomInt, randomString } from '@utils/UnsafeRandom'
 import ManageableJoinRequest from 'types/messages/ManageableJoinRequest'

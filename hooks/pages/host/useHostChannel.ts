@@ -1,5 +1,5 @@
-import endChannelService from '@services/endChannelService'
-import useHostStore from '@stores/useHostStore'
+import endChannelService from '@services/host/endChannelService'
+import useHostStore from '@stores/host/useHostStore'
 import { isAnyOfEmpty } from '@utils/Util'
 import { useRouter } from 'next/router'
 import { useState } from 'react'

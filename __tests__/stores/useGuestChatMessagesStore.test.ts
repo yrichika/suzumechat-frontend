@@ -1,4 +1,4 @@
-import useGuestChatMessagesStore from '@stores/useGuestChatMessagesStore'
+import useGuestChatMessagesStore from '@stores/guest/useGuestChatMessagesStore'
 import { act, renderHook } from '@testing-library/react'
 import { randomInt, randomString } from '@utils/UnsafeRandom'
 import { timeStamp } from 'console'

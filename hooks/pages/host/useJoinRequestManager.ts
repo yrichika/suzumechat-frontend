@@ -1,4 +1,4 @@
-import useJoinRequestAvailabilityStore from '@stores/useJoinRequestAvailabilityStore'
+import useJoinRequestAvailabilityStore from '@stores/host/useJoinRequestAvailabilityStore'
 import { useEffect } from 'react'
 
 export default function useJoinRequestManager(

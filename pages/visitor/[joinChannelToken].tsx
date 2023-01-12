@@ -1,12 +1,9 @@
-import Restricted from '@components/templates/Restricted'
-import React, { useEffect } from 'react'
-import { langMap } from '@lang/visitor/langMap'
 import VisitorsJoinRequest from '@components/organisms/visitor/VisitorsJoinRequest'
-import { useRouter } from 'next/router'
-import getChannelStatusByJoinTokenService from '@services/getChannelStatusByJoinTokenService'
+import Restricted from '@components/templates/Restricted'
+import { langMap } from '@lang/visitor/langMap'
 import csrfTokenService from '@services/csrfTokenService'
-import useGuestStore from '@stores/useGuestStore'
-import { decode as decodeBase64 } from '@stablelib/base64'
+import getChannelStatusByJoinTokenService from '@services/visitor/getChannelStatusByJoinTokenService'
+import { useEffect } from 'react'
 
 // originally client/request/view
 export async function getServerSideProps(context: any) {

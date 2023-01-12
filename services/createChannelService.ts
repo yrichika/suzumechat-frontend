@@ -1,7 +1,4 @@
-import useHostStore from '@stores/useHostStore'
-import { getCookie, csrfTokenSendKey, csrfTokenSaveKey } from '@utils/Cookie'
 import axios from 'axios'
-import { NextRouter } from 'next/router'
 import HostChannel from 'types/HostChannel'
 
 export default async function createChannelService(

@@ -1,4 +1,4 @@
-import useHostStore from '@stores/useHostStore'
+import useHostStore from '@stores/host/useHostStore'
 import { randomInt, randomString } from '@utils/UnsafeRandom'
 import { renderHook, act } from '@testing-library/react'
 

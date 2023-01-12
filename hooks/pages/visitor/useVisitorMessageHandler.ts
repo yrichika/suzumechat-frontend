@@ -1,5 +1,5 @@
 import useVisitorSender from '@hooks/senders/useVisitorSender'
-import useGuestStore from '@stores/useGuestStore'
+import useGuestStore from '@stores/guest/useGuestStore'
 import useVisitorGuestSharedStompClientStore from '@stores/useVisitorGuestSharedStompClientStore'
 import { useEffect } from 'react'
 import useVisitorReceiver from '../../receivers/useVisitorReceiver'

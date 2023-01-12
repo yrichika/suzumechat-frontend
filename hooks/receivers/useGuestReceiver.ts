@@ -1,4 +1,4 @@
-import endChatService from '@services/endChatService'
+import endChatService from '@services/guest/endChatService'
 import { Client, IFrame, IMessage } from '@stomp/stompjs'
 import {
   isChatMessageCapsule,

@@ -1,5 +1,5 @@
-import setGuestSessionService from '@services/setGuestSessionService'
-import useGuestStore from '@stores/useGuestStore'
+import setGuestSessionService from '@services/visitor/setGuestSessionService'
+import useGuestStore from '@stores/guest/useGuestStore'
 import { pickLangMessage } from '@utils/LanguageSwitch'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'

@@ -1,5 +1,5 @@
-import endChatService from '@services/endChatService'
-import useGuestStore from '@stores/useGuestStore'
+import endChatService from '@services/guest/endChatService'
+import useGuestStore from '@stores/guest/useGuestStore'
 import { isAnyOfEmpty } from '@utils/Util'
 import { useRouter } from 'next/router'
 import { useState } from 'react'

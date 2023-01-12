@@ -1,6 +1,6 @@
 import createChannelService from '@services/createChannelService'
 import csrfTokenService from '@services/csrfTokenService'
-import useHostStore from '@stores/useHostStore'
+import useHostStore from '@stores/host/useHostStore'
 import { useRouter } from 'next/router'
 import { FormEvent, useEffect, useState } from 'react'
 import HostChannel from 'types/HostChannel'
