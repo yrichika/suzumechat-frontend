@@ -13,7 +13,6 @@ export default function useVisitorsJoinRequest(
 ) {
   const router = useRouter()
   const guestId = useGuestStore(state => state.guestId)
-  const clearGuestStore = useGuestStore(state => state.clear)
   const initPublicKeyEncKeyPair = useGuestStore(
     store => store.initPublicKeyEncKeyPair
   )

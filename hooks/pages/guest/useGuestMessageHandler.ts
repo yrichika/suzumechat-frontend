@@ -1,9 +1,9 @@
 import useGuestChatMessagesStore from '@stores/useGuestChatMessagesStore'
-import { useEffect } from 'react'
-import useGuestReceiver from '../../receivers/useGuestReceiver'
-import { connect, isInactive } from '../../stomp/config'
-import { useChatMessageHandler } from '../../messagehandlers/useChatMessageHandler'
 import useVisitorGuestSharedStompClientStore from '@stores/useVisitorGuestSharedStompClientStore'
+import { useEffect } from 'react'
+import { useChatMessageHandler } from '../../messagehandlers/useChatMessageHandler'
+import useGuestReceiver from '../../receivers/useGuestReceiver'
+import { connect } from '../../stomp/config'
 
 export default function useGuestMessageHandler(
   guestChannelToken: string,
@@ -40,7 +40,6 @@ export default function useGuestMessageHandler(
 
   const { onConnect } = useGuestReceiver(
     guestChannelToken,
-    stompClient,
     receiveChatMessage,
     disconnect
   )

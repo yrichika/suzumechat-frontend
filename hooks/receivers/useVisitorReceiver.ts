@@ -1,5 +1,4 @@
 import { Client, IFrame, IMessage } from '@stomp/stompjs'
-import useGuestStore from '@stores/useGuestStore'
 import {
   isAuthenticationStatus,
   isJoinRequestClosed,
@@ -12,15 +11,15 @@ import AuthenticationStatus from 'types/messages/AuthenticationStatus'
 // this function is to separate functions from the functions using Client object.
 export default function useVisitorReceiver(
   stompClient: Client,
-  joinChannelToken: string
+  joinChannelToken: string,
+  setGuestId: (guestId: string) => void,
+  setChannelName: (channelName: string) => void,
+  setSecretKey: (secretKey: string) => void
 ) {
   const [isClosed, setIsClosed] = useState(false)
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null)
   const [guestChannelToken, setGuestChannelToken] = useState('')
   const [visitorId, setVisitorId] = useState('')
-  const setGuestId = useGuestStore(state => state.setGuestId)
-  const setChannelName = useGuestStore(store => store.setChannelName)
-  const setSecretKey = useGuestStore(store => store.setSecretKey)
 
   function wsReceiveUrl(visitorId: string) {
     return `${process.env.NEXT_PUBLIC_WS_BROADCASTED_PREFIX}/visitor/${joinChannelToken}/${visitorId}`

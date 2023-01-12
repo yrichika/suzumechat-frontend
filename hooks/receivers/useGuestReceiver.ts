@@ -10,7 +10,6 @@ import Terminate from 'types/messages/Terminate'
 
 export default function useGuestReceiver(
   guestChannelToken: string,
-  stompClient: Client,
   receiveChatMessage: (messageBody: any) => void,
   disconnect: () => Promise<void>
 ) {
