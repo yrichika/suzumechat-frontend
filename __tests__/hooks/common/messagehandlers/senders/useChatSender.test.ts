@@ -1,6 +1,5 @@
-import useChatSender from '@hooks/senders/useChatSender'
-import { Client } from '@stomp/stompjs'
-import { randomString, randomInt } from '@utils/UnsafeRandom'
+import useChatSender from '@hooks/common/messagehandlers/senders/useChatSender'
+import { randomInt, randomString } from '@utils/UnsafeRandom'
 import ChatUserAppearance from 'types/ChatUserAppearance'
 
 describe('useChatSender', () => {

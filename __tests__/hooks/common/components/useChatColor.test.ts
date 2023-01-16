@@ -1,4 +1,4 @@
-import useChatColor from '@hooks/useChatColor'
+import useChatColor from '@hooks/common/components/useChatColor'
 import { randomInt, randomString } from '@utils/UnsafeRandom'
 import { renderHook, act } from '@testing-library/react'
 

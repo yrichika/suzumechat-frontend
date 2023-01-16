@@ -1,5 +1,5 @@
-import useHostReceiver from '@hooks/receivers/useHostReceiver'
-import { randomBoolean, randomInt, randomString } from '@utils/UnsafeRandom'
+import useHostReceiver from '@hooks/host/messagehandlers/receivers/useHostReceiver'
+import { randomString } from '@utils/UnsafeRandom'
 import ChatMessageCapsule from 'types/messages/ChatMessageCapsule'
 import JoinRequest from 'types/messages/JoinRequest'
 

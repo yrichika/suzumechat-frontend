@@ -1,9 +1,8 @@
+import useChatReceiver from '@hooks/common/messagehandlers/receivers/useChatReceiver'
+import useChatSender from '@hooks/common/messagehandlers/senders/useChatSender'
 import { Client } from '@stomp/stompjs'
-import { StoreApi, UseBoundStore } from 'zustand'
-import useChatReceiver from '@hooks/receivers/useChatReceiver'
-import useChatSender from '@hooks/senders/useChatSender'
-import ChatUserAppearance from 'types/ChatUserAppearance'
 import ChatMessage from 'types/ChatMessage'
+import ChatUserAppearance from 'types/ChatUserAppearance'
 
 export function useChatMessageHandler(
   stompClient: Client,

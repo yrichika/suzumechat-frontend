@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
-import useGuestMessageHandler from '@hooks/pages/guest/useGuestMessageHandler'
+import useGuestMessageHandler from '@hooks/guest/components/useGuestMessageHandler'
 import Chat from '@components/organisms/Chat'
-import useChatColor from '@hooks/useChatColor'
+import useChatColor from '@hooks/common/components/useChatColor'
 
 interface Props {
   guestChannelToken: string

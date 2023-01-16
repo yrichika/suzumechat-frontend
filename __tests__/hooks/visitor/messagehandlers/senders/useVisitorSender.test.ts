@@ -1,6 +1,6 @@
-import useVisitorSender from '@hooks/senders/useVisitorSender'
 import { generateKeyPair } from '@hooks/utils/PublicKeyEncryption'
-import { randomInt, randomString } from '@utils/UnsafeRandom'
+import useVisitorSender from '@hooks/visitor/messagehandlers/senders/useVisitorSender'
+import { randomString } from '@utils/UnsafeRandom'
 import { BoxKeyPair } from 'tweetnacl'
 
 describe('useVisitorSender', () => {

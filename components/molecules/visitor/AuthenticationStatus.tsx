@@ -1,5 +1,5 @@
 import React from 'react'
-import useAuthenticationStatus from '@hooks/pages/visitor/useAuthenticationStatus'
+import useAuthenticationStatus from '@hooks/visitor/components/useAuthenticationStatus'
 
 interface Props {
   isWaitingForAuthentication: boolean

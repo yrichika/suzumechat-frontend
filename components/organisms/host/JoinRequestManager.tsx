@@ -1,6 +1,6 @@
 import React from 'react'
 import ManageableJoinRequest from 'types/messages/ManageableJoinRequest'
-import useJoinRequestManager from '@hooks/pages/host/useJoinRequestManager'
+import useJoinRequestManager from '@hooks/host/components/useJoinRequestManager'
 
 interface Props {
   hostChannelToken: string

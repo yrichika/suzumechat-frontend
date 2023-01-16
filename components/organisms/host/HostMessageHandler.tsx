@@ -1,9 +1,8 @@
-import { useEffect, useState, useRef, KeyboardEvent } from 'react'
-import useHostMessageHandler from '@hooks/pages/host/useHostMessageHandler'
-import JoinRequestManager from './JoinRequestManager'
 import Chat from '@components/organisms/Chat'
-
-import useChatColor from '@hooks/useChatColor'
+import useChatColor from '@hooks/common/components/useChatColor'
+import useHostMessageHandler from '@hooks/host/components/useHostMessageHandler'
+import { useEffect } from 'react'
+import JoinRequestManager from './JoinRequestManager'
 
 interface Props {
   hostChannelToken: string

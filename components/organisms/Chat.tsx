@@ -2,7 +2,7 @@ import React, { useRef } from 'react'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
 import ChatMessage from 'types/ChatMessage'
 import { breakLines } from '@utils/Util'
-import useChat from '@hooks/useChat'
+import useChat from '@hooks/common/components/useChat'
 
 type Props = {
   codename: string

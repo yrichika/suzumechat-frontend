@@ -1,4 +1,4 @@
-import useJoinRequestReceiver from '@hooks/receivers/useJoinRequestReceiver'
+import useJoinRequestReceiver from '@hooks/host/messagehandlers/receivers/useJoinRequestReceiver'
 import { encrypt, generateKeyPair } from '@hooks/utils/PublicKeyEncryption'
 import { randomInt, randomString } from '@utils/UnsafeRandom'
 import { BoxKeyPair, box } from 'tweetnacl'

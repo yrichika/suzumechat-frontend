@@ -3,7 +3,7 @@ import { langMap } from '@lang/index/langMap'
 import Image from 'next/image'
 import AppFeatureList from '@components/organisms/AppFeatureList'
 import TermOfService from '@components/organisms/TermOfService'
-import useChannelCreation from '@hooks/pages/index/useChannelCreation'
+import useChannelCreation from '@hooks/index/pages/useChannelCreation'
 
 function Top() {
   const { postChannelName, channelNameInput, setChannelNameInput } =

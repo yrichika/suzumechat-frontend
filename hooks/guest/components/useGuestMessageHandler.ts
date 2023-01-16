@@ -1,8 +1,8 @@
 import useGuestChatMessagesStore from '@stores/guest/useGuestChatMessagesStore'
 import useVisitorGuestSharedStompClientStore from '@stores/useVisitorGuestSharedStompClientStore'
 import { useEffect } from 'react'
-import { useChatMessageHandler } from '../../messagehandlers/useChatMessageHandler'
-import useGuestReceiver from '../../receivers/useGuestReceiver'
+import { useChatMessageHandler } from '../../common/messagehandlers/useChatMessageHandler'
+import useGuestReceiver from '../messagehandlers/receivers/useGuestReceiver'
 import { connect } from '../../stomp/config'
 
 export default function useGuestMessageHandler(

@@ -1,4 +1,4 @@
-import useChatReceiver from '@hooks/receivers/useChatReceiver'
+import useChatReceiver from '@hooks/common/messagehandlers/receivers/useChatReceiver'
 import { encrypt } from '@hooks/utils/ChatMessageCrypter'
 import { randomString, randomInt } from '@utils/UnsafeRandom'
 import ChatMessage from 'types/ChatMessage'

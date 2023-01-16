@@ -1,5 +1,5 @@
-import useJoinRequestReceiver from '@hooks/receivers/useJoinRequestReceiver'
-import useApprovalSender from '@hooks/senders/useApprovalSender'
+import useJoinRequestReceiver from '@hooks/host/messagehandlers/receivers/useJoinRequestReceiver'
+import useApprovalSender from '@hooks/host/messagehandlers/senders/useApprovalSender'
 import { Client } from '@stomp/stompjs'
 import CloseJoinRequest from 'types/messages/CloseJoinRequest'
 import ManageableJoinRequest from 'types/messages/ManageableJoinRequest'
