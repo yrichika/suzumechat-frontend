@@ -1,5 +1,5 @@
-import VisitorsJoinRequest from '@components/organisms/visitor/VisitorsJoinRequest'
-import Restricted from '@components/templates/Restricted'
+import VisitorsJoinRequest from '@components/visitor/organisms/VisitorsJoinRequest'
+import Restricted from '@components/common/templates/Restricted'
 import { langMap } from '@lang/visitor/langMap'
 import csrfTokenService from '@services/csrfTokenService'
 import getChannelStatusByJoinTokenService from '@services/visitor/getChannelStatusByJoinTokenService'

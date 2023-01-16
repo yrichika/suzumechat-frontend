@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react'
 import { initLanguage } from '@utils/LanguageSwitch'
-import RestrictedHead from '@components/organisms/RestrictedHead'
-import Footer from '@components/organisms/Footer'
-import Header from '@components/organisms/Header'
+import RestrictedHead from '@components/common/organisms/RestrictedHead'
+import Footer from '@components/common/organisms/Footer'
+import Header from '@components/common/organisms/Header'
 
 interface Props {
   children: any

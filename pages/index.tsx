@@ -1,8 +1,8 @@
-import Public from '@components/templates/Public'
+import Public from '@components/common/templates/Public'
 import { langMap } from '@lang/index/langMap'
 import Image from 'next/image'
-import AppFeatureList from '@components/organisms/AppFeatureList'
-import TermOfService from '@components/organisms/TermOfService'
+import AppFeatureList from '@components/common/organisms/AppFeatureList'
+import TermOfService from '@components/common/organisms/TermOfService'
 import useChannelCreation from '@hooks/index/pages/useChannelCreation'
 
 function Top() {

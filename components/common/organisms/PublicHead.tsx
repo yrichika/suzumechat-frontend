@@ -1,5 +1,5 @@
 import React from 'react'
-import BasicHead from '@components/molecules/BasicHead'
+import BasicHead from '@components/common/molecules/BasicHead'
 
 interface Props {
   title: string

@@ -1,4 +1,4 @@
-import Chat from '@components/organisms/Chat'
+import Chat from '@components/common/organisms/Chat'
 import useChatColor from '@hooks/common/components/useChatColor'
 import useHostMessageHandler from '@hooks/host/components/useHostMessageHandler'
 import { useEffect } from 'react'

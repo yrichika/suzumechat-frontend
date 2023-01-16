@@ -1,5 +1,5 @@
 import React from 'react'
-import AuthenticationStatus from '@components/molecules/visitor/AuthenticationStatus'
+import AuthenticationStatus from '@components/visitor/molecules/AuthenticationStatus'
 import useVisitorsJoinRequest from '@hooks/visitor/components/useVisitorsJoinRequest'
 
 interface Props {

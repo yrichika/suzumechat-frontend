@@ -1,5 +1,5 @@
-import GitHubLink from '@components/molecules/GitHubLink'
-import LangSwitch from '@components/molecules/LangSwitch'
+import GitHubLink from '@components/common/molecules/GitHubLink'
+import LangSwitch from '@components/common/molecules/LangSwitch'
 import React from 'react'
 
 interface Props {

@@ -1,5 +1,5 @@
-import Header from '@components/organisms/Header'
-import PrivateHead from '@components/organisms/PrivateHead'
+import Header from '@components/common/organisms/Header'
+import PrivateHead from '@components/common/organisms/PrivateHead'
 import { initLanguage } from '@utils/LanguageSwitch'
 import React, { useEffect } from 'react'
 

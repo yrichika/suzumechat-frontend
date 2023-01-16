@@ -1,4 +1,4 @@
-import BasicHead from '@components/molecules/BasicHead'
+import BasicHead from '@components/common/molecules/BasicHead'
 import React from 'react'
 
 interface Props {
