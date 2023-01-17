@@ -16,17 +16,17 @@
     "incremental": true,
     "baseUrl": "./",
     "paths": {
-      "@testhelpers/*": ["_testhelpers/*"],
-      "@components/*": ["components/*"],
-      "@hooks/*": ["hooks/*"],
-      "@lang/*": ["lang/*"],
-      "@pages/*": ["pages/*"],
-      "@services/*": ["services/*"],
-      "@stores/*": ["stores/*"],
-      "@styles/*": ["styles/*"],
-      "@utils/*": ["utils/*"]
+      "@testhelpers/*": ["../_testhelpers/*"],
+      "@components/*": ["../components/*"],
+      "@hooks/*": ["../hooks/*"],
+      "@lang/*": ["../lang/*"],
+      "@pages/*": ["../pages/*"],
+      "@services/*": ["../services/*"],
+      "@stores/*": ["../stores/*"],
+      "@styles/*": ["../styles/*"],
+      "@utils/*": ["../utils/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules", "cypress"]
+  "exclude": ["node_modules"]
 }

@@ -1,3 +1,4 @@
+import { handleWithMatchedHandler } from '@hooks/utils/Messaging'
 import { Client, IFrame, IMessage } from '@stomp/stompjs'
 import {
   isChatMessageCapsule,
@@ -12,6 +13,20 @@ export default function useHostReceiver(
   receiveChatMessage: (messageBody: ChatMessageCapsule) => void,
   receiveJoinRequest: (messageBody: JoinRequest) => void
 ) {
+  const messageHandlers = new Map<
+    (message: any) => boolean,
+    (message: any) => void
+  >([
+    [isChatMessageCapsule, receiveChatMessage],
+    [isJoinRequest, receiveJoinRequest],
+    [
+      isErrorMessage,
+      message => {
+        // TODO: display error notification on screen
+      },
+    ],
+  ])
+
   function onConnect(stompClient: Client) {
     return (frame: IFrame) => {
       stompClient.subscribe(wsReceiveUrl, receive)
@@ -20,15 +35,7 @@ export default function useHostReceiver(
 
   function receive(message: IMessage) {
     const messageBody = JSON.parse(message.body)
-    if (isChatMessageCapsule(messageBody)) {
-      receiveChatMessage(messageBody)
-    } else if (isJoinRequest(messageBody)) {
-      receiveJoinRequest(messageBody)
-    } else if (isErrorMessage(messageBody)) {
-      // TODO: display error notification on screen
-    } else {
-      // TODO: display error notification on screen
-    }
+    handleWithMatchedHandler(messageBody, messageHandlers)
   }
 
   return {

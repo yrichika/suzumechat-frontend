@@ -1,3 +1,4 @@
+import { handleWithMatchedHandler } from '@hooks/utils/Messaging'
 import endChatService from '@services/guest/endChatService'
 import { Client, IFrame, IMessage } from '@stomp/stompjs'
 import {
@@ -17,6 +18,20 @@ export default function useGuestReceiver(
 
   const router = useRouter()
 
+  const messageHandlers = new Map<
+    (message: any) => boolean,
+    (message: any) => void
+  >([
+    [isChatMessageCapsule, receiveChatMessage],
+    [isTerminate, handleTerminate],
+    [
+      isErrorMessage,
+      message => {
+        // TODO: display error notification on screen
+      },
+    ],
+  ])
+
   function onConnect(stompClient: Client) {
     return (frame: IFrame) => {
       console.log('guest chat ws connected')
@@ -26,15 +41,7 @@ export default function useGuestReceiver(
 
   function receive(message: IMessage) {
     const messageBody = JSON.parse(message.body)
-    if (isChatMessageCapsule(messageBody)) {
-      receiveChatMessage(messageBody)
-    } else if (isTerminate(messageBody)) {
-      handleTerminate(messageBody)
-    } else if (isErrorMessage(messageBody)) {
-      // TODO: display error notification on screen
-    } else {
-      // TODO: display error notification on screen
-    }
+    handleWithMatchedHandler(messageBody, messageHandlers)
   }
 
   function handleTerminate(terminate: Terminate) {

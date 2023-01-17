@@ -1,3 +1,4 @@
+import { handleWithMatchedHandler } from '@hooks/utils/Messaging'
 import { Client, IFrame, IMessage } from '@stomp/stompjs'
 import {
   isAuthenticationStatus,
@@ -21,6 +22,20 @@ export default function useVisitorReceiver(
   const [guestChannelToken, setGuestChannelToken] = useState('')
   const [visitorId, setVisitorId] = useState('')
 
+  const messageHandlers = new Map<
+    (message: any) => boolean,
+    (message: any) => void
+  >([
+    [isJoinRequestClosed, handleJoinRequestClosed],
+    [isAuthenticationStatus, handleAuthenticationStatusMessage],
+    [
+      isErrorMessage,
+      message => {
+        // TODO: display error notification on screen
+      },
+    ],
+  ])
+
   function wsReceiveUrl(visitorId: string) {
     return `${process.env.NEXT_PUBLIC_WS_BROADCASTED_PREFIX}/visitor/${joinChannelToken}/${visitorId}`
   }
@@ -35,13 +50,7 @@ export default function useVisitorReceiver(
 
   function receive(message: IMessage) {
     const messageBody = JSON.parse(message.body)
-    if (isJoinRequestClosed(messageBody)) {
-      handleJoinRequestClosed()
-    } else if (isAuthenticationStatus(messageBody)) {
-      handleAuthenticationStatusMessage(messageBody)
-    } else if (isErrorMessage(messageBody)) {
-      // TODO: handle error
-    }
+    handleWithMatchedHandler(messageBody, messageHandlers)
   }
 
   function handleAuthenticationStatusMessage(authStatus: AuthenticationStatus) {
