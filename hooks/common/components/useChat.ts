@@ -17,8 +17,7 @@ export default function useChat(
   function sendShortcut(event: KeyboardEvent<HTMLTextAreaElement>): void {
     if (event.shiftKey && event.key == 'Enter') {
       event.preventDefault() // prevents extra line break in textarea
-      sendChatMessage(messageInput)
-      setMessageInput('')
+      handleMessage()
     }
   }
   return {

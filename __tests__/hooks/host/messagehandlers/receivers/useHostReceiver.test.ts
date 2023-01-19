@@ -2,16 +2,15 @@ import useHostReceiver from '@hooks/host/messagehandlers/receivers/useHostReceiv
 import { randomString } from '@utils/UnsafeRandom'
 import ChatMessageCapsule from 'types/messages/ChatMessageCapsule'
 import JoinRequest from 'types/messages/JoinRequest'
+import { expect } from '@jest/globals'
 
 describe('useHostReceiver', () => {
   let receiveUrl: string
-  let receiveChatMessage: (messageBody: any) => void
-  let receiveJoinRequest: (messageBody: any) => void
+  const receiveChatMessage: (messageBody: any) => void = jest.fn()
+  const receiveJoinRequest: (messageBody: any) => void = jest.fn()
 
   beforeEach(() => {
     receiveUrl = randomString()
-    receiveChatMessage = jest.fn()
-    receiveJoinRequest = jest.fn()
   })
   afterEach(() => {
     jest.clearAllMocks()
