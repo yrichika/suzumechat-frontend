@@ -31,7 +31,7 @@ function Top() {
                     <label
                       htmlFor="channelName"
                       className="block"
-                      data-lang="lang-input-label-channelName"
+                      data-lang="input-label-channelName"
                     ></label>
                     <input
                       type="text"
