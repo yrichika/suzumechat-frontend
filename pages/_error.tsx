@@ -3,10 +3,12 @@ import { langMap } from '@lang/error/langMap'
 function Error({ statusCode }: any) {
   return (
     <Public langMap={langMap}>
-      <p className="text-center">
-        <span data-lang="error-message"></span>
-        <span>{statusCode ?? 'client error'}</span>
-      </p>
+      <div className="h-96">
+        <p className="text-center">
+          <span data-lang="error-message"></span>
+          <span>{statusCode ?? 'client error'}</span>
+        </p>
+      </div>
     </Public>
   )
 }

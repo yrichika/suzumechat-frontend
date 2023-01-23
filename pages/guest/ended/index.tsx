@@ -9,7 +9,7 @@ function ChannelEnded() {
 
   return (
     <Public langMap={langMap}>
-      <main className="container mx-auto px-5">
+      <main className="container mx-auto px-5 h-96">
         <p
           className={'text-center bold' + (isEndedByHost ? '' : ' hidden')}
           data-lang="ended-by-host"

@@ -6,7 +6,7 @@ function ChannelEnded() {
 
   return (
     <Public langMap={langMap}>
-      <main className="container mx-auto px-5">
+      <main className="container mx-auto px-5 h-96">
         <p data-lang="appreciation"></p>
         <p className="text-center">
           <a
