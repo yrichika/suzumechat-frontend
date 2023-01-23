@@ -49,11 +49,11 @@ export default function useGuestReceiver(
     endChatService(guestChannelToken!)
       .then(response => {
         sessionStorage.clear()
-        router.push('/guest/ended')
+        router.push('/guest/ended?byWho=host')
       })
       .catch(error => {
         sessionStorage.clear()
-        router.push('/guest/ended')
+        router.push('/guest/ended?byWho=host')
       })
   }
 
