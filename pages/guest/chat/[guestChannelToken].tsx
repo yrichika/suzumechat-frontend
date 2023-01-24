@@ -27,7 +27,7 @@ function GuestChannel() {
         <div className="container mx-auto">
           <div className="flex justify-end">
             <button
-              onClick={event => toggleVisibilityBySelector(event, '.scc-tip')}
+              onClick={event => toggleVisibilityBySelector(event, '.sc-tip')}
             >
               <span
                 className="rounded-full text-white bg-blue-500 p-1"

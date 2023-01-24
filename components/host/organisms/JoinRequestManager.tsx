@@ -43,7 +43,7 @@ function JoinRequestManager({
         ></button>
       </div>
       <div className="flex justify-center mx-5 mt-2">
-        <p className="text-xs opacity-50 scc-tip">
+        <p className="text-xs opacity-50 sc-tip">
           <span className="font-bold" data-lang="stop-visitors-requests"></span>
           <span data-lang="stop-visitors-requests-tip"></span>
         </p>

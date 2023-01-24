@@ -53,7 +53,7 @@ function Chat({
           </li>
           <li className="flex justify-center">
             <div
-              className="text-sm text-gray-400 scc-tip"
+              className="text-sm text-gray-400 sc-tip"
               data-lang="send-button-message"
             ></div>
           </li>

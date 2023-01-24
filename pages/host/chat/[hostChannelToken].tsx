@@ -40,7 +40,7 @@ function HostChannel() {
         <div className="container mx-auto">
           <div className="flex justify-end">
             <button
-              onClick={event => toggleVisibilityBySelector(event, '.scc-tip')}
+              onClick={event => toggleVisibilityBySelector(event, '.sc-tip')}
             >
               <span
                 className="rounded-full text-white bg-blue-500 p-1"
@@ -57,7 +57,7 @@ function HostChannel() {
                 onClick={endChannel}
               ></button>
               <span
-                className="scc-tip text-xs opacity-50"
+                className="sc-tip text-xs opacity-50"
                 data-lang="dont-forget"
               ></span>
             </div>

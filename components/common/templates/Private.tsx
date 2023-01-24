@@ -1,6 +1,7 @@
 import Header from '@components/common/organisms/Header'
 import PrivateHead from '@components/common/organisms/PrivateHead'
 import { initLanguage } from '@utils/LanguageSwitch'
+import { hideTips } from '@utils/Util'
 import React, { useEffect } from 'react'
 
 interface Props {
@@ -12,6 +13,7 @@ interface Props {
 function Private({ children, langMap, channelName }: Props) {
   useEffect(() => {
     initLanguage(langMap)
+    hideTips('.sc-tip')
   }, [])
   return (
     <>

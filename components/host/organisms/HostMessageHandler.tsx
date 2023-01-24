@@ -52,6 +52,7 @@ function HostMessageHandler({
           sendChatMessage={sendChatMessage}
         />
       </div>
+      <hr />
       <div className="mt-5">
         <JoinRequestManager
           hostChannelToken={hostChannelToken}
