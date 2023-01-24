@@ -1,4 +1,5 @@
 export const en = new Map<string, string>([
+  ['channel-closed', 'Sorry, this channel is already closed.'],
   ['input-label-codename', 'Codename'],
   ['input-label-passphrase', 'Passphrase'],
   ['try-joining-to', 'The chat channel you are trying to join is: '],

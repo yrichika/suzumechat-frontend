@@ -1,4 +1,5 @@
 export const ja = new Map<string, string>([
+  ['channel-closed', 'このチャンネルへの参加受付はすでに終了しました'],
   ['input-label-codename', 'コードネーム'],
   ['input-label-passphrase', '合言葉'],
   ['try-joining-to', '参加しようとしているチャットチャンネルは: '],

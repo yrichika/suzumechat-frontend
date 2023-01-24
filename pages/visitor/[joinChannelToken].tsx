@@ -53,17 +53,31 @@ function Visitor({
   }, [])
 
   if (false) {
-    // TODO: もしguestとしてすでに認証されていれば、ここは表示させないようにする
+    // TODO: if approved as a guest, this page should not be displayed? should redirect to the guest chat page?
+    return <div>already approved as a guest</div>
   }
+
   if (!isAccepting || !hostPublicKey) {
-    // TODO: チャンネルの受付が終わっていることの表示をするコンポーネントにする
-    return <div>Sorry, this channel is closed.</div>
+    return (
+      <Restricted langMap={langMap}>
+        <div className="h-96">
+          <p className="text-center">
+            <span data-lang="channel-closed"></span>
+          </p>
+        </div>
+      </Restricted>
+    )
   }
 
   if (!channelName) {
-    // TODO: ちゃんとしたエラーメッセージにする。エラー用のコンポーネント(もしくはページ)を作って、それを表示させる
-    // なので、コンポーネントを返すか、ページへのリダイレクト処理を入れる
-    return <div>Sorry, unexpected error</div>
+    return (
+      <Restricted langMap={langMap}>
+        <div className="h-96">
+          {/* TODO: redirect to error page */}
+          <p>Sorry, unexpected error</p>
+        </div>
+      </Restricted>
+    )
   }
 
   return (
