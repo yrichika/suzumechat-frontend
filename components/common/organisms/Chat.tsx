@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { createRef } from 'react'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
 import ChatMessage from 'types/ChatMessage'
 import { breakLines } from '@utils/Util'
@@ -19,7 +19,6 @@ function Chat({
   color,
   sendChatMessage,
 }: Props) {
-  const nodeRef = useRef(null) // this is for avoiding CSSTransition warning
   const { messageInput, setMessageInput, handleMessage, sendShortcut } =
     useChat(sendChatMessage)
 
@@ -67,48 +66,53 @@ function Chat({
         <hr className="my-2 border-2" />
 
         <TransitionGroup component="div">
-          {chatMessages.map(message => (
-            <CSSTransition
-              nodeRef={nodeRef}
-              key={message.timestamp}
-              timeout={500}
-              classNames="fade-chat-message"
-            >
-              {message.name === codename ? (
-                <p ref={nodeRef} className="flex justify-start mb-2">
-                  <span
-                    className={`rounded-full px-2 self-start bg-${color} ${nameTextColor}`}
-                  >
-                    {message.name}
-                  </span>
-                  <span className={`mr-2 self-start text-${color}"`}>&gt;</span>
-                  <span
-                    className={`rounded border shadow px-2 border-${color}`}
-                    dangerouslySetInnerHTML={{
-                      __html: breakLines(message.message),
-                    }}
-                  ></span>
-                </p>
-              ) : (
-                <p ref={nodeRef} className="flex justify-end mb-2">
-                  <span
-                    className={`rounded border shadow px-2 border-${message.color}`}
-                    dangerouslySetInnerHTML={{
-                      __html: breakLines(message.message),
-                    }}
-                  ></span>
-                  <span className={`ml-2 self-end text-${message.color}`}>
-                    &lt;
-                  </span>
-                  <span
-                    className={`rounded-full px-2 self-end bg-${message.color} ${nameTextColor}`}
-                  >
-                    {message.name}
-                  </span>
-                </p>
-              )}
-            </CSSTransition>
-          ))}
+          {chatMessages.map(message => {
+            const nodeRef = createRef() as any // this is necessary for CSSTransition to work
+            return (
+              <CSSTransition
+                nodeRef={nodeRef}
+                key={message.timestamp}
+                timeout={500}
+                classNames="fade-chat-message"
+              >
+                {message.name === codename ? (
+                  <p ref={nodeRef} className="flex justify-start mb-2">
+                    <span
+                      className={`rounded-full px-2 self-start bg-${color} ${nameTextColor}`}
+                    >
+                      {message.name}
+                    </span>
+                    <span className={`mr-2 self-start text-${color}"`}>
+                      &gt;
+                    </span>
+                    <span
+                      className={`rounded border shadow px-2 border-${color}`}
+                      dangerouslySetInnerHTML={{
+                        __html: breakLines(message.message),
+                      }}
+                    ></span>
+                  </p>
+                ) : (
+                  <p ref={nodeRef} className="flex justify-end mb-2">
+                    <span
+                      className={`rounded border shadow px-2 border-${message.color}`}
+                      dangerouslySetInnerHTML={{
+                        __html: breakLines(message.message),
+                      }}
+                    ></span>
+                    <span className={`ml-2 self-end text-${message.color}`}>
+                      &lt;
+                    </span>
+                    <span
+                      className={`rounded-full px-2 self-end bg-${message.color} ${nameTextColor}`}
+                    >
+                      {message.name}
+                    </span>
+                  </p>
+                )}
+              </CSSTransition>
+            )
+          })}
         </TransitionGroup>
       </div>
     </div>

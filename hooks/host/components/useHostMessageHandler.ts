@@ -22,9 +22,15 @@ export default function useHostMessageHandler(
   const WS_SEND_URL = `${process.env.NEXT_PUBLIC_WS_SEND_PREFIX}/host/${hostChannelToken}`
   // FIXME: useHostReceiver の中に移す
   const WS_RECEIVE_URL = `${process.env.NEXT_PUBLIC_WS_BROADCASTED_PREFIX}/host/${hostChannelToken}`
-
+  const CHAT_MESSAGE_WATCH_INTERVAL = process.env
+    .NEXT_PUBLIC_CHAT_MESSAGE_WATCH_INTERVAL
+    ? +process.env.NEXT_PUBLIC_CHAT_MESSAGE_WATCH_INTERVAL
+    : 3000
   const chatMessages = useHostChatMessagesStore(store => store.messages)
   const addChatMessage = useHostChatMessagesStore(store => store.addMessage)
+  const shiftChatMessageIfOld = useHostChatMessagesStore(
+    store => store.shiftChatMessageIfOld
+  )
   const chatMessageIndex = useHostChatMessagesStore(store => store.index)
 
   const manageableJoinRequests = useManageableJoinRequestsStore(
@@ -80,6 +86,9 @@ export default function useHostMessageHandler(
 
   useEffect(() => {
     connect(stompClient, onConnect)
+    setInterval(() => {
+      shiftChatMessageIfOld()
+    }, CHAT_MESSAGE_WATCH_INTERVAL)
   }, [])
 
   return {

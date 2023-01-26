@@ -4,4 +4,5 @@ export default interface ChatMessage {
   message: string
   color: string
   timestamp: number
+  timeMarkerToDelete?: number
 }

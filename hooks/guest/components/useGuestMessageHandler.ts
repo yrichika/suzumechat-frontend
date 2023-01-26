@@ -16,10 +16,16 @@ export default function useGuestMessageHandler(
   )
 
   const WS_SEND_URL = `${process.env.NEXT_PUBLIC_WS_SEND_PREFIX}/guest/${guestChannelToken}`
-
+  const CHAT_MESSAGE_WATCH_INTERVAL = process.env
+    .NEXT_PUBLIC_CHAT_MESSAGE_WATCH_INTERVAL
+    ? +process.env.NEXT_PUBLIC_CHAT_MESSAGE_WATCH_INTERVAL
+    : 3000
   const chatMessages = useGuestChatMessagesStore(store => store.messages)
   const addChatMessage = useGuestChatMessagesStore(store => store.addMessage)
   const chatMessageIndex = useGuestChatMessagesStore(store => store.index)
+  const shiftChatMessageIfOld = useGuestChatMessagesStore(
+    store => store.shiftChatMessageIfOld
+  )
 
   const userAppearance = { codename, color }
   const { sendChatMessage, receiveChatMessage } = useChatMessageHandler(
@@ -46,6 +52,9 @@ export default function useGuestMessageHandler(
 
   useEffect(() => {
     connect(stompClient, onConnect)
+    setInterval(() => {
+      shiftChatMessageIfOld()
+    }, CHAT_MESSAGE_WATCH_INTERVAL)
   }, [])
 
   return {
