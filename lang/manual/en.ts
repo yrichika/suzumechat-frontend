@@ -1,0 +1,17 @@
+export const en = new Map<string, string>([
+  ['back-to-top-link', 'Back to the Top Page'],
+  ['title', 'How To Use'],
+  ['initial', ''],
+  ['top-page', ''],
+  ['host-page', ''],
+  ['host-page-visitor-url', '/visitor/random_text'],
+  ['guest-page-indicator', ''],
+  ['visitor-page-before-send', ''],
+  ['visitor-page-before-send-note-1', ''],
+  ['visitor-page-before-send-note-2', ''],
+  ['visitor-page-before-send-note-3', ''],
+  ['visitor-page-after-send', ''],
+  ['host-page-accept-button', ''],
+  ['guest-page', ''],
+  ['host-page-end-chat-button', ''],
+])

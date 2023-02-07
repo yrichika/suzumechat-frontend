@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('manual.css');
 
 .is-active a {
   @apply bg-blue-300 text-white rounded;
@@ -38,12 +39,14 @@
 body {
   @apply bg-gray-50;
 }
-/* TODO: 後で名前を変える: sc-bg-brown */
-.scc-bg-brown {
+
+.sc-bg-brown {
   background-color: #F2CEB8;
 }
 
-/* For transitions */
+
+
+/* For transitions TODO: move to another css file*/
 
 .fade-chat-message-enter {
   opacity: 0;
