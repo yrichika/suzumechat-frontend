@@ -1,5 +1,4 @@
 export const ja = new Map<string, string>([
-  ['back-to-top-link', 'Topページへ戻る'],
   ['title', 'マニュアル'],
   [
     'initial',

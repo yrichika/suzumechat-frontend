@@ -10,7 +10,6 @@ function Manual() {
   const url = process.env.NEXT_PUBLIC_FRONT_URL
   return (
     <Public langMap={langMap}>
-      <BackToTopLink dataLang="back-to-top-link" />
       <main className="container mx-auto px-5 py-5">
         <h1
           className="text-3xl text-gray-800 text-center"
@@ -152,7 +151,6 @@ function Manual() {
           </div>
         </div>
       </main>
-      <BackToTopLink dataLang="back-to-top-link" />
     </Public>
   )
 }

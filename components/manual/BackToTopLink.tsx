@@ -4,7 +4,7 @@ import React from 'react'
 interface Props {
   dataLang: string
 }
-
+// DELETE: NOT USED
 function BackToTopLink({ dataLang }: Props) {
   return (
     <nav className="container mx-auto px-5 py-2">
