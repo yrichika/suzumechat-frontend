@@ -19,11 +19,10 @@ export default function useChatSender(
       return
     }
     const timestamp = Date.now()
-    const sanitizedMessage = sanitizeText(messageInput)
     const chatMessage: ChatMessage = {
       id: chatMessageIndex,
       name: userAppearance.codename,
-      message: sanitizedMessage,
+      message: messageInput,
       color: userAppearance.color,
       timestamp: timestamp,
     }

@@ -24,3 +24,30 @@ export function randomBoolean(percentOfGettingTrue: number = 0.5): boolean {
   }
   return Boolean(Math.random() < percentOfGettingTrue)
 }
+
+// TEST:
+/**
+ * Get random property key value set from an object
+ */
+export function randomProperty(object: any): any {
+  const randomKey = randomPropertyKey(object)
+  const randomValue = object[randomKey]
+  return { [randomKey]: randomValue }
+}
+
+// TEST:
+/**
+ * Get random property value from an object
+ */
+export function randomPropertyValue(object: any): any {
+  return object[randomPropertyKey(object)]
+}
+
+// TEST:
+/**
+ * Get random property key from an object
+ */
+export function randomPropertyKey(object: any): any {
+  const keys = Object.keys(object)
+  return keys[(keys.length * Math.random()) << 0]
+}

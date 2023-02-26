@@ -1,4 +1,5 @@
 import { MouseEvent } from 'react'
+import { hanToZenKatakanaMap, zenToHanEisuMap } from './LangSupport'
 
 export function isEmpty(value: any): boolean {
   if (Array.isArray(value)) {
@@ -37,6 +38,10 @@ export function breakLines(message: string): string {
   return message.replace(/(?:\r\n|\r|\n)/g, '<br>')
 }
 
+/**
+ * Usually it's fine just to use `{ }` to avoid script injection.
+ * Use this function at `dangerouslySetInnerHTML` or if `{ }` don't work out.
+ */
 export function sanitizeText(text: string): string {
   return text
     .replace(/&/g, '&amp;')
@@ -85,4 +90,16 @@ export function getClearTextColorForBg(bgColor: string): string {
     return 'text-white'
   }
   return 'text-black'
+}
+
+export function convertInvalidCharsToUtf8(str: string): string {
+  const utf8CharMap = Object.assign(hanToZenKatakanaMap, zenToHanEisuMap)
+
+  let result = ''
+  for (let i = 0; i < str.length; i++) {
+    const originalChar = str.charAt(i)
+    const utf8Char = utf8CharMap[originalChar]
+    result += utf8Char || originalChar
+  }
+  return result
 }

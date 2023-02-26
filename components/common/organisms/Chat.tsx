@@ -1,7 +1,7 @@
 import React, { createRef } from 'react'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
 import ChatMessage from 'types/ChatMessage'
-import { breakLines } from '@utils/Util'
+import { breakLines, sanitizeText } from '@utils/Util'
 import useChat from '@hooks/common/components/useChat'
 
 type Props = {
@@ -88,7 +88,7 @@ function Chat({
                     <span
                       className={`rounded border shadow px-2 border-${color}`}
                       dangerouslySetInnerHTML={{
-                        __html: breakLines(message.message),
+                        __html: breakLines(sanitizeText(message.message)),
                       }}
                     ></span>
                   </p>
@@ -97,7 +97,7 @@ function Chat({
                     <span
                       className={`rounded border shadow px-2 border-${message.color}`}
                       dangerouslySetInnerHTML={{
-                        __html: breakLines(message.message),
+                        __html: breakLines(sanitizeText(message.message)),
                       }}
                     ></span>
                     <span className={`ml-2 self-end text-${message.color}`}>

@@ -8,8 +8,11 @@ import {
   isEmpty,
   toggleVisibilityBySelector,
   getClearTextColorForBg,
+  convertInvalidCharsToUtf8,
 } from '@utils/Util'
-import { randomInt, randomString } from '@utils/UnsafeRandom'
+import { randomInt, randomProperty, randomString } from '@utils/UnsafeRandom'
+import { expect } from '@jest/globals'
+import { hanToZenKatakanaMap, zenToHanEisuMap } from '@utils/LangSupport'
 
 describe('Utils', () => {
   let docBaseElement: HTMLDivElement
@@ -228,5 +231,27 @@ describe('Utils', () => {
 
     const result = getClearTextColorForBg(color)
     expect(result).toBe('text-black')
+  })
+
+  test('convertInvalidCharsToUtf8 should convert invalid chars like han-katakana to valid utf8 chars', () => {
+    const kanaEisuMap = Object.assign(hanToZenKatakanaMap, zenToHanEisuMap)
+
+    let randomKanaEisu = {}
+    for (let i = 0; i < randomInt(3, 10); i++) {
+      randomKanaEisu = { ...randomKanaEisu, ...randomProperty(kanaEisuMap) }
+    }
+    const randomInvalidChars = Object.keys(randomKanaEisu).join('')
+    const expected = Object.values(randomKanaEisu).join('')
+
+    const result = convertInvalidCharsToUtf8(randomInvalidChars)
+
+    expect(result).toBe(expected)
+  })
+
+  test('convertInvalidCharsToUtf8 should not convert valid utf8 chars and just output as input', () => {
+    const randomUtf8String = randomString(randomInt(3, 10))
+    const result = convertInvalidCharsToUtf8(randomUtf8String)
+
+    expect(result).toBe(randomUtf8String)
   })
 })
