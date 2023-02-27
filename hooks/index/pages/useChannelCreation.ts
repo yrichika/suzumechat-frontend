@@ -29,13 +29,14 @@ export default function useChannelCreation() {
   function postChannelName(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     const publicKeyString = encodeBase64(publicKey)
-    createChannelService(channelNameInput, publicKeyString).then(
+    const truncatedChannelName = channelNameInput.substring(0, 100)
+    createChannelService(truncatedChannelName, publicKeyString).then(
       (hostChannel: HostChannel | null) => {
         if (!hostChannel) {
           // just ignoring is fine for now. Usually it's validation error from backend
           return
         }
-        setChannelName(channelNameInput)
+        setChannelName(truncatedChannelName)
         setJoinChannelToken(hostChannel.joinChannelToken)
         setSecretKey(hostChannel.secretKey)
 

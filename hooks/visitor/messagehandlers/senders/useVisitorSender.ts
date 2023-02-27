@@ -15,11 +15,15 @@ export default function useVisitorSender(
   hostPublicKey: Uint8Array,
   setCodename: (codename: string) => void
 ) {
+  const maxCharCodename = 100
+  const maxCharPassphrase = 400
   function sendJoinRequest(codename: string, passphrase: string): void {
+    const truncatedCodename = codename.substring(0, maxCharCodename)
+    const truncatedPassphrase = passphrase.substring(0, maxCharPassphrase)
     // Some Japanese chars (hankaku-kana and zenkaku-eisu) will fail with encryption
     // this is converting those chars to the same symbolic chars in utf8
-    const validUtf8Codename = convertInvalidCharsToUtf8(codename)
-    const validUtf8Passphrase = convertInvalidCharsToUtf8(passphrase)
+    const validUtf8Codename = convertInvalidCharsToUtf8(truncatedCodename)
+    const validUtf8Passphrase = convertInvalidCharsToUtf8(truncatedPassphrase)
 
     setCodename(validUtf8Codename)
     const visitorSendingKey = box.before(

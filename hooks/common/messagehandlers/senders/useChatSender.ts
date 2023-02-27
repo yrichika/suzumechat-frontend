@@ -15,6 +15,7 @@ export default function useChatSender(
   secretKey: string
 ) {
   function sendChatMessage(messageInput: string): void {
+    const truncatedMessage = messageInput.substring(0, 1000)
     if (isInactive(stompClient)) {
       return
     }
@@ -22,7 +23,7 @@ export default function useChatSender(
     const chatMessage: ChatMessage = {
       id: chatMessageIndex,
       name: userAppearance.codename,
-      message: messageInput,
+      message: truncatedMessage,
       color: userAppearance.color,
       timestamp: timestamp,
     }
