@@ -48,8 +48,6 @@ function Visitor({
 }: Prop) {
   useEffect(() => {
     sessionStorage.clear()
-
-    csrfTokenService() // DELETE: necessary?
   }, [])
 
   if (false) {
