@@ -1,41 +1,39 @@
 import VisitorsJoinRequest from '@components/visitor/organisms/VisitorsJoinRequest'
 import Restricted from '@components/common/templates/Restricted'
 import { langMap } from '@lang/visitor/langMap'
-import csrfTokenService from '@services/csrfTokenService'
 import getChannelStatusByJoinTokenService from '@services/visitor/getChannelStatusByJoinTokenService'
 import { useEffect } from 'react'
+import { decode as decodeBase64 } from '@stablelib/base64'
+import useVisitor from '@hooks/visitor/pages/useVisitor'
 
 // originally client/request/view
 export async function getServerSideProps(context: any) {
   const { joinChannelToken } = context.query
   if (!joinChannelToken) {
-    return {
-      props: {
-        joinChannelToken: null,
-        channelName: null,
-        hostPublicKey: null,
-        isAccepting: false,
-      },
-    }
+    return { notFound: true }
   }
 
   const channelStatus = await getChannelStatusByJoinTokenService(
     joinChannelToken
   )
 
+  if (!channelStatus) {
+    return { notFound: true }
+  }
+
   return {
     props: {
       joinChannelToken,
-      channelName: channelStatus?.channelName,
-      hostPublicKey: channelStatus?.hostPublicKey,
-      isAccepting: channelStatus?.isAccepting,
+      channelName: channelStatus.channelName,
+      hostPublicKey: channelStatus.hostPublicKey,
+      isAccepting: channelStatus.isAccepting,
     },
   }
 }
 
 interface Prop {
   joinChannelToken: string
-  channelName: string | null
+  channelName: string
   hostPublicKey: string | null
   isAccepting: boolean
 }
@@ -46,8 +44,22 @@ function Visitor({
   hostPublicKey,
   isAccepting,
 }: Prop) {
+  const {
+    guestId,
+    initPublicKeyEncKeyPair,
+    setHostPublicKey,
+    clearGuestStore,
+  } = useVisitor()
+
   useEffect(() => {
+    clearGuestStore()
     sessionStorage.clear()
+
+    if (isAccepting && hostPublicKey) {
+      initPublicKeyEncKeyPair()
+      const hostPublicKeyUnit8Array = decodeBase64(hostPublicKey!)
+      setHostPublicKey(hostPublicKeyUnit8Array)
+    }
   }, [])
 
   if (false) {
@@ -85,7 +97,7 @@ function Visitor({
         <h1 className="text-4xl m-3">{channelName}</h1>
         <VisitorsJoinRequest
           joinChannelToken={joinChannelToken}
-          hostPublicKey={hostPublicKey}
+          guestId={guestId}
           langMap={langMap}
         />
       </main>

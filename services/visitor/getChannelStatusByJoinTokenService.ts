@@ -10,15 +10,13 @@ export default async function getChannelStatusByJoinTokenService(
   joinChannelToken: string
 ): Promise<ChannelStatus | null> {
   const url = `${process.env.NEXT_PUBLIC_BACK_URL}/visitor/channelName/${joinChannelToken}`
-  console.log(url)
   return await axios
     .get(url)
     .then(response => {
       return response.data as ChannelStatus
     })
     .catch(error => {
-      // TODO:
-      console.log(error)
+      console.warn(error)
       return null
     })
 }

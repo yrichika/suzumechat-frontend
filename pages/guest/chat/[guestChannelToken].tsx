@@ -16,10 +16,10 @@ function GuestChannel() {
     endChannel,
   } = useGuestChannel()
 
-  // FIXME: does not work here!: Error: "Hydration failed because the initial UI does not match what was rendered on the server"
-  // if (isPageNotReady()) {
-  //   return <div>sorry</div> // TODO: sorryページ表示
-  // }
+  // FIXME: Error: "Hydration failed because the initial UI does not match what was rendered on the server"
+  if (isPageNotReady()) {
+    return <div>Loading...</div>
+  }
 
   return (
     <>

@@ -20,18 +20,13 @@ function HostChannel() {
   } = useHostChannel()
 
   if (isPageNotReady()) {
-    // FIXME: 最初にこのページに来た瞬間は、上の変数のどれかが無いので、一瞬ここが実行されてしまう
-    //        そのため、個々の処理はリダイレクトさせるには、setTimeoutとか必要
-    //        もしくはエラー表示でもいい。ただしエラー表示の場合は、一瞬表示されてしまう
-    //        wait表示を用意して、10秒たっても何も起きなければtopにリダイレクトでもいいかもしれない
-    // router.push('/')
-    return <div>sorry</div>
+    return <div>Loading...</div>
   }
 
   if (false) {
-    // TODO: 別のガード節
-    // バックエンドにアクセスして、このhostChannelTokenがDB存在するか確認
-    // 存在しなければ、エラーページにリダイレクト
+    // TODO: another guard clause (But still not sure if this is necessary).
+    // access backend and check if this hostChannelToken exists in db.
+    // if not, redirect to 404 error page.
   }
 
   return (

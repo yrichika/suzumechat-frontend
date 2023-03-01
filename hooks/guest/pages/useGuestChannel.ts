@@ -9,23 +9,26 @@ export default function useGuestChannel() {
   const guestChannelToken = router.query.guestChannelToken as string | undefined
 
   const channelName = useGuestStore(store => store.channelName)
-  // const guestId = useGuestStore(store => store.guestId)
+  const guestId = useGuestStore(store => store.guestId)
   const codename = useGuestStore(store => store.codename)
   const secretKey = useGuestStore(store => store.secretKey)
+  const clearGuestStore = useGuestStore(store => store.clear)
   const [isChatEnded, setIsChatEnded] = useState(false)
 
   function isPageNotReady(): boolean {
-    return isAnyOfEmpty(channelName, codename, secretKey)
+    return isAnyOfEmpty(guestId, channelName, codename, secretKey)
   }
 
   function endChannel() {
     setIsChatEnded(true)
     endChatService(guestChannelToken!)
       .then(response => {
+        clearGuestStore()
         sessionStorage.clear()
         router.push('/guest/ended')
       })
       .catch(error => {
+        clearGuestStore()
         sessionStorage.clear()
         router.push('/guest/ended')
       })

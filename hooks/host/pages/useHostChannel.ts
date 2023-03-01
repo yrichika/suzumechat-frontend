@@ -15,16 +15,19 @@ export default function useHostChannel() {
   const publicKeyEncSecretKey = useHostStore(
     store => store.publicKeyEncKeyPair
   ).secretKey
+  const clearHostStore = useHostStore(store => store.clear)
   const [isChannelEnded, setIsChannelEnded] = useState(false)
 
   function endChannel() {
     setIsChannelEnded(true)
     endChannelService(hostChannelToken!)
       .then(response => {
+        clearHostStore()
         sessionStorage.clear()
         router.push('/host/channelEnded')
       })
       .catch(error => {
+        clearHostStore()
         sessionStorage.clear()
         router.push('/host/channelEnded')
       })
