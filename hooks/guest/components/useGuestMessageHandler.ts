@@ -9,7 +9,8 @@ export default function useGuestMessageHandler(
   guestChannelToken: string,
   codename: string,
   secretKey: string,
-  color: string
+  color: string,
+  clearGuestStore: () => void
 ) {
   const stompClient = useVisitorGuestSharedStompClientStore(
     store => store.stompClient
@@ -47,6 +48,7 @@ export default function useGuestMessageHandler(
   const { onConnect } = useGuestReceiver(
     guestChannelToken,
     receiveChatMessage,
+    clearGuestStore,
     disconnect
   )
 

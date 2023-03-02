@@ -1,25 +1,52 @@
 import React from 'react'
 import AuthenticationStatus from '@components/visitor/molecules/AuthenticationStatus'
 import useVisitorsJoinRequest from '@hooks/visitor/components/useVisitorsJoinRequest'
+import { BoxKeyPair } from 'tweetnacl'
 
 interface Props {
-  joinChannelToken: string
   guestId: string
+  joinChannelToken: string
+  hostPublicKey: Uint8Array
+  publicKeyEncKeyPair: BoxKeyPair
+  setChannelName: (channelName: string) => void
+  setGuestId: (guestId: string) => void
+  setCodename: (codename: string) => void
+  setSecretKey: (secretKey: string) => void
   langMap: Map<string, Map<string, string>>
 }
 
-function VisitorsJoinRequest({ joinChannelToken, guestId, langMap }: Props) {
+function VisitorsJoinRequest({
+  guestId,
+  joinChannelToken,
+  hostPublicKey,
+  publicKeyEncKeyPair,
+  setChannelName,
+  setGuestId,
+  setCodename,
+  setSecretKey,
+  langMap,
+}: Props) {
   const {
     isClosed,
     errorChatClosedMessage,
-    codename,
-    setCodename,
+    codenameInput,
+    setCodenameInput,
     isWaitingForAuthentication,
     passphrase,
     setPassphrase,
     send,
     isAuthenticated,
-  } = useVisitorsJoinRequest(joinChannelToken, guestId, langMap)
+  } = useVisitorsJoinRequest(
+    guestId,
+    joinChannelToken,
+    hostPublicKey,
+    publicKeyEncKeyPair,
+    setChannelName,
+    setGuestId,
+    setCodename,
+    setSecretKey,
+    langMap
+  )
 
   return (
     <div>
@@ -43,8 +70,8 @@ function VisitorsJoinRequest({ joinChannelToken, guestId, langMap }: Props) {
                     id="codename"
                     className="wp-text-input px-2 w-auto sm:w-72 disabled:opacity-50"
                     required
-                    value={codename}
-                    onChange={event => setCodename(event.target.value)}
+                    value={codenameInput}
+                    onChange={event => setCodenameInput(event.target.value)}
                     disabled={isWaitingForAuthentication}
                   />
                 </div>

@@ -12,6 +12,7 @@ import Terminate from 'types/messages/Terminate'
 export default function useGuestReceiver(
   guestChannelToken: string,
   receiveChatMessage: (messageBody: any) => void,
+  clearGuestStore: () => void,
   disconnect: () => Promise<void>
 ) {
   const WS_RECEIVE_URL = `${process.env.NEXT_PUBLIC_WS_BROADCASTED_PREFIX}/guest/${guestChannelToken}`
@@ -48,10 +49,12 @@ export default function useGuestReceiver(
     disconnect()
     endChatService(guestChannelToken!)
       .then(response => {
+        clearGuestStore()
         sessionStorage.clear()
         router.push('/guest/ended?byWho=host')
       })
       .catch(error => {
+        clearGuestStore()
         sessionStorage.clear()
         router.push('/guest/ended?byWho=host')
       })

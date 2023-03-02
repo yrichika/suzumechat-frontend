@@ -8,6 +8,7 @@ interface Props {
   codename: string
   secretKey: string
   isChatEnded: boolean
+  clearGuestStore: () => void
 }
 
 function GuestChat({
@@ -15,6 +16,7 @@ function GuestChat({
   codename,
   secretKey,
   isChatEnded,
+  clearGuestStore,
 }: Props) {
   const { color, nameTextColor } = useChatColor()
 
@@ -22,7 +24,8 @@ function GuestChat({
     guestChannelToken,
     codename,
     secretKey,
-    color
+    color,
+    clearGuestStore
   )
 
   useEffect(() => {

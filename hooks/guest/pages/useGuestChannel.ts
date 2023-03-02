@@ -40,6 +40,7 @@ export default function useGuestChannel() {
     codename,
     secretKey,
     isChatEnded,
+    clearGuestStore,
     isPageNotReady,
     endChannel,
   }

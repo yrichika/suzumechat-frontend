@@ -1,20 +1,22 @@
-import useGuestStore from '@stores/guest/useGuestStore'
 import useVisitorGuestSharedStompClientStore from '@stores/useVisitorGuestSharedStompClientStore'
 import { useEffect } from 'react'
+import { BoxKeyPair } from 'tweetnacl'
 import { connect, isInactive } from '../../stomp/config'
 import useVisitorReceiver from './receivers/useVisitorReceiver'
 import useVisitorSender from './senders/useVisitorSender'
 
-export default function useVisitorMessageHandler(joinChannelToken: string) {
+export default function useVisitorMessageHandler(
+  joinChannelToken: string,
+  hostPublicKey: Uint8Array,
+  publicKeyEncKeyPair: BoxKeyPair,
+  setChannelName: (channelName: string) => void,
+  setGuestId: (guestId: string) => void,
+  setCodename: (codename: string) => void,
+  setSecretKey: (secretKey: string) => void
+) {
   const stompClient = useVisitorGuestSharedStompClientStore(
     store => store.stompClient
   )
-  const setGuestId = useGuestStore(state => state.setGuestId)
-  const setChannelName = useGuestStore(store => store.setChannelName)
-  const setSecretKey = useGuestStore(store => store.setSecretKey)
-  const hostPublicKey = useGuestStore(store => store.hostPublicKey)
-  const publicKeyEncKeyPair = useGuestStore(store => store.publicKeyEncKeyPair)
-  const setCodename = useGuestStore(store => store.setCodename)
 
   const WS_SEND_URL = `${process.env.NEXT_PUBLIC_WS_SEND_PREFIX}/visitor/${joinChannelToken}`
 
