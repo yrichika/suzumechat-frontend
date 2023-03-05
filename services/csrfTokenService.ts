@@ -12,5 +12,8 @@ export default function csrfTokenService(): Promise<void> {
       const csrfTokenData = response.data as SpringBootCsrfTokenResponseBody
       setCookie(csrfTokenData.headerName, csrfTokenData.token)
     })
-    .catch(error => console.warn(error))
+    .catch(error => {
+      console.error(error)
+      throw error
+    })
 }

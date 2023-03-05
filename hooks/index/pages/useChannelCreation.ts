@@ -22,7 +22,9 @@ export default function useChannelCreation() {
     sessionStorage.clear()
 
     // setting necessary data for host
-    csrfTokenService()
+    csrfTokenService().catch(error => {
+      // TODO: show error modal or redirect to error page
+    })
     initPublicKeyEncKeyPair()
   }, [])
 
