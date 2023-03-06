@@ -1,34 +1,42 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# SuzumeChat Frontend
 
-## Getting Started
+**The documentation is still in progress!**
+## Basic Usages
 
-First, run the development server:
+Before you start this frontend server, you need to start the SuzumeChat backend server.
 
 ```bash
-npm run dev
-# or
+# run the development server
 yarn dev
+
+# run unit tests
+yarn test
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Key Exchange
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+Codename and passphrase are encrypted by public key encryption.
+Chat messages are encrypted by secret key encryption.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+Here is how they are exchanged in SuzumeChat.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```mermaid
+sequenceDiagram
+  autonumber
+  actor Host
+  participant Backend
+  actor Visitor
+  Host ->> Host: Generate Host Pub/Pri Keys
+  Host ->> Backend: Host Public Key
+  Backend ->> Backend: Save the Host Public Key
+  Backend ->> Backend: Generate a Chat Secret Key (Common Key)
+  Backend ->> Host: Chat Secret Key
+  Visitor ->> Backend: Access Vistior Page
+  Backend ->> Visitor: the Host Public Key
+  Visitor ->> Visitor: Generate Visitor Pub/Pri Keys
+  Visitor ->> Visitor: Encrypt [codename] and [passphrase] with<br>(1)the Host Public Key <br>and (2)the Visitor Secret Key
+  Visitor ->> Host: (1)the Visitor Public Key,<br>(2)Encrypted data<br>Not saved or cached at the backend
+  Host ->> Host: Decrypt with (1) the Host Private Key<br>and (2) the Visitor Public Key
+  Host ->> Backend: Tells the backend the host<br> is accepting visitor's request
+  Backend ->> Visitor: Chat Secret Key
+```
