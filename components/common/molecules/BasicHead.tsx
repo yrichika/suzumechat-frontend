@@ -19,7 +19,6 @@ function BasicHead({ children, title }: Props) {
       <link rel="shortcut icon" type="image/png" href="/icon.svg" />
       <link rel="icon" href="/icon.svg" />
       <link rel="apple-touch-icon" href="/icon.svg" />
-      {/* <link rel="apple-mobile-web-app-title" content="SuzumeChat"/> */}
 
       {children}
 
