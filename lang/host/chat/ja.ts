@@ -9,9 +9,9 @@ export const ja = new Map([
   ['logout-button', 'チャットを終了'],
   ['dont-forget', '<- チャットが終わったら忘れずにクリックしてください!'],
   ['clients-list-title', 'チャットへの参加依頼一覧'],
-  ['stop-visitors-requests', '新規参加を停止する'],
+  ['stop-visitor-requests', '新規参加を停止する'],
   [
-    'stop-visitors-requests-tip',
+    'stop-visitor-requests-tip',
     'ボタンをクリックすると、チャットの参加リクエストを停止します。さらに、サーバー上の暗号鍵を削除するため、このチャットでの文章の復号は、チャット参加者の利用中のブラウザでのみ可能になります',
   ],
   ['tip-label', '使い方ヒント!'],

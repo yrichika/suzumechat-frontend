@@ -52,7 +52,7 @@ function HostChannel() {
                 onClick={endChannel}
               ></button>
               <span
-                className="sc-tip text-xs opacity-50"
+                className="sc-tip text-xs opacity-50 ml-2"
                 data-lang="dont-forget"
               ></span>
             </div>

@@ -2,7 +2,7 @@ import Public from '@components/common/templates/Public'
 import { langMap } from '@lang/index/langMap'
 import Image from 'next/image'
 import AppFeatureList from '@components/common/organisms/AppFeatureList'
-import TermOfService from '@components/common/organisms/TermOfService'
+import TermsOfService from '@components/common/organisms/TermsOfService'
 import useChannelCreation from '@hooks/index/pages/useChannelCreation'
 
 function Top() {
@@ -73,7 +73,7 @@ function Top() {
         <hr className="my-3 mx-2" />
         <AppFeatureList />
         <hr className="my-3 mx-2" />
-        <TermOfService />
+        <TermsOfService />
       </main>
     </Public>
   )

@@ -37,15 +37,15 @@ function JoinRequestManager({
         <button
           id="close-request-button"
           className="rounded text-white px-2 text-sm mx-2 bg-blue-500 hover:bg-blue-700 disabled:opacity-50"
-          data-lang="stop-visitors-requests"
+          data-lang="stop-visitor-requests"
           onClick={() => closeJoinRequest()}
           disabled={requestClosed}
         ></button>
       </div>
       <div className="flex justify-center mx-5 mt-2">
         <p className="text-xs opacity-50 sc-tip">
-          <span className="font-bold" data-lang="stop-visitors-requests"></span>
-          <span data-lang="stop-visitors-requests-tip"></span>
+          [<span className="font-bold" data-lang="stop-visitor-requests"></span>
+          ] <span data-lang="stop-visitor-requests-tip"></span>
         </p>
       </div>
       <div className="flex justify-center mt-5">

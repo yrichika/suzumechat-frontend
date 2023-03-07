@@ -9,9 +9,9 @@ export const en = new Map([
   ['logout-button', 'End Chat Channel'],
   ['dont-forget', "<- Don't forget to click when you are done!"],
   ['clients-list-title', 'Chat Guest List'],
-  ['stop-visitors-requests', "No more new guest's requests"],
+  ['stop-visitor-requests', 'No more new guest requests'],
   [
-    'stop-visitors-requests-tip',
+    'stop-visitor-requests-tip',
     "When you click this button, new clients won't be able to request to join this chat. Also this will delete your secret key on the server. This means that only you and your chat members can decrypt the messages.",
   ],
   ['tip-label', 'How Tos!'],

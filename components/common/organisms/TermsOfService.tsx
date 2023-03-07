@@ -1,6 +1,6 @@
 import React from 'react'
 
-function TermOfService() {
+function TermsOfService() {
   return (
     <section className="ml-2 mb-10 border border-gray-400">
       <h1
@@ -154,4 +154,4 @@ function TermOfService() {
   )
 }
 
-export default TermOfService
+export default TermsOfService
