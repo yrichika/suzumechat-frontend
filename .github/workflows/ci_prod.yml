@@ -16,13 +16,13 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Create env file
-      env:
-        ENV_FILE_NAME: ".env.production"
-        ENV_FILE_DATA: ${{ secrets.ENV_PROD }}
-      run: |
-        touch "$ENV_FILE_NAME"
-        echo "$ENV_FILE_DATA" >> "${ENV_FILE_NAME}"
+    # - name: Create env file
+    #   env:
+    #     ENV_FILE_NAME: ".env.production"
+    #     ENV_FILE_DATA: ${{ secrets.ENV_PROD }}
+    #   run: |
+    #     touch "$ENV_FILE_NAME"
+    #     echo "$ENV_FILE_DATA" >> "${ENV_FILE_NAME}"
 
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
