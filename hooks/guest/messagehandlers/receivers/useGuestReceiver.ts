@@ -35,7 +35,6 @@ export default function useGuestReceiver(
 
   function onConnect(stompClient: Client) {
     return (frame: IFrame) => {
-      console.log('guest chat ws connected')
       stompClient.subscribe(WS_RECEIVE_URL, receive)
     }
   }
