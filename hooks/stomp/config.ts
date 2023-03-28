@@ -1,5 +1,4 @@
 import { Client, frameCallbackType, IFrame, StompConfig } from '@stomp/stompjs'
-import { Dispatch, SetStateAction } from 'react'
 import SockJS from 'sockjs-client'
 
 const WS_ENDPOINT_URL = `${process.env.NEXT_PUBLIC_BACK_PREFIX}${process.env.NEXT_PUBLIC_WS_ENDPOINT}`
@@ -52,19 +51,21 @@ function debug(message: string) {
     console.log(message)
   }
 }
+
 function onStompError(frame: IFrame) {
-  // TODO:
+  // TODO: show popup on browser
   console.warn('Stomp Error', frame)
 }
+
 function onDisconnect(frame: IFrame) {
-  // TODO:
-  console.log('Stomp Disconnected', frame)
+  console.log('Stomp Disconnected')
 }
+
 function onWebSocketClose(frame: IFrame) {
-  // TODO:
-  console.log('Stomp WebSocket Closed', frame)
+  console.log('Stomp WebSocket Closed')
 }
+
 function onWebSocketError(frame: IFrame) {
-  // TODO:
+  // TODO: show popup on browser
   console.warn('Stomp WebSocket Error', frame)
 }
