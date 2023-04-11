@@ -3,7 +3,10 @@
 **The documentation is still in progress!**
 ## Basic Usages
 
-Before you start this frontend server, you need to start the SuzumeChat backend server.
+This is a simple Next.js project with few additions (only Cypress has been added, but it shouldn't affect the basic Next.js project).
+
+But before you start developing locally, please start [the backend for this project](https://github.com/yrichika/suzumechat-backend); otherwise, this app will not be functional."
+
 
 ```bash
 # run the development server
@@ -15,10 +18,9 @@ yarn test
 
 ## Key Exchange
 
-Codename and passphrase are encrypted by public key encryption.
-Chat messages are encrypted by secret key encryption.
+Codename and passphrase are encrypted using public key encryption. Chat messages are encrypted using secret key encryption.
 
-Here is how they are exchanged in SuzumeChat.
+Here is how they are exchanged in SuzumeChat:
 
 ```mermaid
 sequenceDiagram
@@ -31,7 +33,7 @@ sequenceDiagram
   Backend ->> Backend: Save the Host Public Key
   Backend ->> Backend: Generate a Chat Secret Key (Common Key)
   Backend ->> Host: Chat Secret Key
-  Visitor ->> Backend: Access Vistior Page
+  Visitor ->> Backend: Access Visitor Page
   Backend ->> Visitor: the Host Public Key
   Visitor ->> Visitor: Generate Visitor Pub/Pri Keys
   Visitor ->> Visitor: Encrypt [codename] and [passphrase] with<br>(1)the Host Public Key <br>and (2)the Visitor Secret Key
@@ -40,3 +42,6 @@ sequenceDiagram
   Host ->> Backend: Tells the backend the host<br> is accepting visitor's request
   Backend ->> Visitor: Chat Secret Key
 ```
+
+Although chat secret keys are encrypted using SSL/TLS (which only provides encryption for HTTPS), I am considering encrypting them with the Host/Visitor public key as well. Please share your thoughts via GitHub Issues or [Twitter](https://twitter.com/SangoIsland).
+
