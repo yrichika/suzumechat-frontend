@@ -1,6 +1,7 @@
 import useChatColor from '@hooks/common/components/useChatColor'
 import { randomInt, randomString } from '@utils/UnsafeRandom'
 import { renderHook, act } from '@testing-library/react'
+import { expect } from '@jest/globals'
 
 describe('useChatColor', () => {
   test('color should be selected from tailwind colors in the color constant', () => {
