@@ -1,8 +1,13 @@
 import useChatReceiver from '@hooks/common/messagehandlers/receivers/useChatReceiver'
 import { encrypt } from '@hooks/utils/ChatMessageCrypter'
-import { randomString, randomInt } from '@utils/UnsafeRandom'
+import {
+  randomString,
+  randomInt,
+  randomTailwindColor,
+} from '@utils/UnsafeRandom'
 import ChatMessage from 'types/ChatMessage'
 import ChatMessageCapsule from 'types/messages/ChatMessageCapsule'
+import { expect } from '@jest/globals'
 
 describe('useChatReceiver', () => {
   let chatMessage: ChatMessage
@@ -11,7 +16,7 @@ describe('useChatReceiver', () => {
       id: randomInt(),
       name: randomString(),
       message: randomString(),
-      color: randomString(),
+      color: randomTailwindColor(),
       timestamp: randomInt(),
     }
   })

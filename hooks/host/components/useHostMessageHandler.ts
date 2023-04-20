@@ -8,13 +8,14 @@ import useJoinRequestMessageHandler from '../messagehandlers/useJoinRequestMessa
 import useHostReceiver from '../messagehandlers/receivers/useHostReceiver'
 import useHostSender from '../messagehandlers/senders/useHostSender'
 import { connect } from '../../stomp/config'
+import { TailwindColor } from 'types/TailwindColor'
 
 export default function useHostMessageHandler(
   hostChannelToken: string,
   codename: string,
   secretKey: string,
   publicKeyEncSecretKey: Uint8Array,
-  color: string
+  color: TailwindColor
 ) {
   // common
   const [stompClient] = useState<Client>(new Client())

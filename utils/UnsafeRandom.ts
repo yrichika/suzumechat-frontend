@@ -1,3 +1,6 @@
+import { TailwindColor } from 'types/TailwindColor'
+import { colors } from './colors'
+
 // TEST:
 export function randomInt(min: number = 0, max: number = 1000000): number {
   return Math.floor(Math.random() * (max - min)) + min
@@ -50,4 +53,9 @@ export function randomPropertyValue(object: any): any {
 export function randomPropertyKey(object: any): any {
   const keys = Object.keys(object)
   return keys[(keys.length * Math.random()) << 0]
+}
+
+// TEST:
+export function randomTailwindColor(): TailwindColor {
+  return colors[randomInt(0, colors.length - 1)]
 }

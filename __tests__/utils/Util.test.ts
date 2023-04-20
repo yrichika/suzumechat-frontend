@@ -13,6 +13,7 @@ import {
 import { randomInt, randomProperty, randomString } from '@utils/UnsafeRandom'
 import { expect } from '@jest/globals'
 import { hanToZenKatakanaMap, zenToHanEisuMap } from '@utils/LangSupport'
+import { TailwindColor } from 'types/TailwindColor'
 
 describe('Utils', () => {
   let docBaseElement: HTMLDivElement
@@ -220,14 +221,18 @@ describe('Utils', () => {
   })
 
   test('getClearTextColorForBg should return text-white if given background color is dark', () => {
-    const color = randomString() + randomInt(5, 9).toString() + '00'
+    const color = (randomString() +
+      randomInt(5, 9).toString() +
+      '00') as TailwindColor
 
     const result = getClearTextColorForBg(color)
     expect(result).toBe('text-white')
   })
 
   test('getClearTextColorForBg should return text-black if given background color is light', () => {
-    const color = randomString() + randomInt(2, 4).toString() + '00'
+    const color = (randomString() +
+      randomInt(2, 4).toString() +
+      '00') as TailwindColor
 
     const result = getClearTextColorForBg(color)
     expect(result).toBe('text-black')
