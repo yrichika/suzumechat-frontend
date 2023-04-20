@@ -1,7 +1,6 @@
-// DELETE: not used. replaced by zustand
 /**
  * example:
- * const sessionStorageMock = new storageMock()
+ * const sessionStorageMock = new StorageMock()
  * Object.defineProperty(window, 'sessionStorage', {
  *   value: sessionStorageMock
  * });
