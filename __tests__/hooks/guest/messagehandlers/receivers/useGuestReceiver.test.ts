@@ -99,7 +99,7 @@ describe('useGuestReceiver', () => {
     endChat()
 
     expect(clearGuestStore).toHaveBeenCalledTimes(1)
-    expect(sessionStorageMock.clear).toHaveBeenCalled()
+    expect(sessionStorageMock.clear).toHaveBeenCalledTimes(1)
     expect(routerPushMock).toHaveBeenNthCalledWith(1, REDIRECT_TO)
   })
 })
