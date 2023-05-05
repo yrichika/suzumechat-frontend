@@ -6,6 +6,7 @@ import {
 import { expect } from '@jest/globals'
 import useGuestMessageHandler from '@hooks/guest/components/useGuestMessageHandler'
 import React from 'react'
+import { Client } from '@stomp/stompjs'
 
 // Not directory used in useGuestMessageHandler
 jest.mock('next/router', () => ({
@@ -27,7 +28,8 @@ jest.mock(
 
 const connectMock = jest.fn()
 jest.mock('@hooks/stomp/config', () => ({
-  connect: () => connectMock(),
+  connect: (stompClient: Client, onConnect: (stompClient: Client) => any) =>
+    connectMock(stompClient, onConnect),
 }))
 
 const stompClientDeactivateMock = jest.fn(() => new Promise(() => {}))
@@ -46,6 +48,8 @@ describe('useGuestMessageHandler', () => {
   const secretKey = randomString()
   const color = randomTailwindColor()
 
+  jest.spyOn(React, 'useEffect').mockImplementation(f => f())
+
   beforeEach(() => {
     jest.useFakeTimers()
   })
@@ -55,7 +59,6 @@ describe('useGuestMessageHandler', () => {
   })
 
   test('disconnect should call stomp client deactivate if active', () => {
-    jest.spyOn(React, 'useEffect').mockImplementation(f => f())
     // this is just to make clear that it returns true
     stompClientActive.mockReturnValueOnce(true) // or mockImplementation(() => true)
 
@@ -73,7 +76,6 @@ describe('useGuestMessageHandler', () => {
   })
 
   test('disconnect should not call stomp client deactivate if not active', () => {
-    jest.spyOn(React, 'useEffect').mockImplementation(f => f())
     stompClientActive.mockReturnValueOnce(false) // or mockImplementation(() => false)
 
     const { disconnect } = useGuestMessageHandler(
@@ -89,9 +91,7 @@ describe('useGuestMessageHandler', () => {
     expect(stompClientDeactivateMock).not.toHaveBeenCalled()
   })
 
-  test('useEffect should call connect and setInterval', () => {
-    jest.spyOn(React, 'useEffect').mockImplementation(f => f())
-
+  test('useEffect should call connect and setInterval in useEffect', () => {
     useGuestMessageHandler(
       guestChannelToken,
       codename,

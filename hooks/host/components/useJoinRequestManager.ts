@@ -41,7 +41,7 @@ export default function useJoinRequestManager(
 
   function closeJoinRequest() {
     sendCloseJoinRequest()
-    setRequestClosed(true)
+    setRequestClosed(true) // TEST: it's not tested right yet
     disableSendingManageableJoinRequest()
   }
 
