@@ -17,13 +17,11 @@ jest.mock('next/router', () => ({
   },
 }))
 
-const shiftChatMessageIfOldMock = jest.fn()
+const useGuestChatMessagesStorePropertyMock = jest.fn()
 jest.mock(
   '@stores/guest/useGuestChatMessagesStore',
-  () => (store: any) =>
-    jest.fn(() => ({
-      shiftChatMessageIfOld: shiftChatMessageIfOldMock(),
-    }))
+  () => (stateCallback: (state: any) => any) =>
+    useGuestChatMessagesStorePropertyMock
 )
 
 const connectMock = jest.fn()
@@ -36,7 +34,7 @@ const stompClientDeactivateMock = jest.fn(() => new Promise(() => {}))
 const stompClientActive = jest.fn().mockReturnValue(true)
 jest.mock(
   '@stores/useVisitorGuestSharedStompClientStore',
-  () => (store: any) => ({
+  () => (stateCallback: (state: any) => any) => ({
     active: stompClientActive(),
     deactivate: () => stompClientDeactivateMock(),
   })
@@ -92,6 +90,10 @@ describe('useGuestMessageHandler', () => {
   })
 
   test('useEffect should call connect and setInterval in useEffect', () => {
+    const shiftChatMessageIfOldMock = jest.fn()
+    useGuestChatMessagesStorePropertyMock.mockImplementation(
+      shiftChatMessageIfOldMock
+    )
     useGuestMessageHandler(
       guestChannelToken,
       codename,

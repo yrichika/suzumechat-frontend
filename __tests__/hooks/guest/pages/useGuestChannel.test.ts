@@ -25,13 +25,10 @@ jest.mock(
   () => (guestChannelToken: string) => endChatService(guestChannelToken)
 )
 
-const clearGuestStoreMock = jest.fn()
+const useGuestStorePropertyMock = jest.fn()
 jest.mock(
   '@stores/guest/useGuestStore',
-  () => (store: any) =>
-    jest.fn(() => ({
-      clear: clearGuestStoreMock(),
-    }))
+  () => (stateCallback: (state: any) => any) => useGuestStorePropertyMock
 )
 
 describe('useGuestChannel', () => {
@@ -64,6 +61,8 @@ describe('useGuestChannel', () => {
   })
 
   test('endChat should clear storage and redirect to chat ended page', () => {
+    const clearGuestStoreMock = jest.fn()
+    useGuestStorePropertyMock.mockImplementation(clearGuestStoreMock)
     const { endChat } = useGuestChannel()
 
     endChat()

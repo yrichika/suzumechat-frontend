@@ -3,15 +3,11 @@ import { expect } from '@jest/globals'
 import useJoinRequestManager from '@hooks/host/components/useJoinRequestManager'
 import React from 'react'
 
-const setIsClosedMock = jest.fn((isClosed: boolean) => {})
-const clearJoinRequestAvailabilityMock = jest.fn()
+const useJoinRequestAvailabilityStorePropertyMock = jest.fn()
 jest.mock(
   '@stores/host/useJoinRequestAvailabilityStore',
-  () => (store: any) =>
-    jest.fn(() => ({
-      clear: clearJoinRequestAvailabilityMock(),
-      setIsClosed: setIsClosedMock(true), // FIXME: not right way to mock: `true` should be an argument
-    }))
+  () => (stateCallback: (state: any) => any) =>
+    useJoinRequestAvailabilityStorePropertyMock
 )
 
 describe('useJoinRequestManager', () => {
@@ -97,6 +93,11 @@ describe('useJoinRequestManager', () => {
   test('closeJoinRequest should call functions to close join requests', () => {
     const sendCloseJoinRequestMock = jest.fn()
     const disableSendingManageableJoinRequestMock = jest.fn()
+    const setIsClosedMock = jest.fn((isClosed: boolean) => {})
+    useJoinRequestAvailabilityStorePropertyMock.mockImplementation(
+      setIsClosedMock
+    )
+
     const { closeJoinRequest } = useJoinRequestManager(
       hostChannelToken,
       false,
@@ -108,16 +109,26 @@ describe('useJoinRequestManager', () => {
 
     expect(sendCloseJoinRequestMock).toHaveBeenCalledTimes(1)
     expect(disableSendingManageableJoinRequestMock).toHaveBeenCalledTimes(1)
-    expect(setIsClosedMock).toHaveBeenNthCalledWith(1, true) // FIXME: not right way to mock: `true` should be an argument
+    expect(setIsClosedMock).toHaveBeenNthCalledWith(1, true)
   })
 
   test('useEffect should call clearJoinRequestAvailability if isChannelEnded is true', () => {
+    const clearJoinRequestAvailabilityMock = jest.fn()
+    useJoinRequestAvailabilityStorePropertyMock.mockImplementation(
+      clearJoinRequestAvailabilityMock
+    )
+
     useJoinRequestManager(hostChannelToken, true, jest.fn(), jest.fn())
 
     expect(clearJoinRequestAvailabilityMock).toHaveBeenCalledTimes(1)
   })
 
   test('useEffect should not call clearJoinRequestAvailability if isChannelEnded is false', () => {
+    const clearJoinRequestAvailabilityMock = jest.fn()
+    useJoinRequestAvailabilityStorePropertyMock.mockImplementation(
+      clearJoinRequestAvailabilityMock
+    )
+
     useJoinRequestManager(hostChannelToken, false, jest.fn(), jest.fn())
 
     expect(clearJoinRequestAvailabilityMock).not.toHaveBeenCalled()

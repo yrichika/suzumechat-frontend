@@ -9,23 +9,16 @@ import React from 'react'
 import { Client } from '@stomp/stompjs'
 import StorageMock from '@testhelpers/doubles/StorageMock'
 
-const shiftChatMessageIfOldMock = jest.fn()
+const useHostChatMessagesStorePropertyMock = jest.fn()
 jest.mock(
   '@stores/host/useHostChatMessagesStore',
-  () => (store: any) =>
-    jest.fn(() => ({
-      shiftChatMessageIfOld: shiftChatMessageIfOldMock(),
-    }))
+  () => (stateCallback: (state: any) => any) =>
+    useHostChatMessagesStorePropertyMock
 )
 
 jest.mock(
   '@stores/host/useManageableJoinRequestsStore',
-  () => (store: any) =>
-    jest.fn(() => ({
-      add: jest.fn(),
-      update: jest.fn(),
-      disableSending: jest.fn(),
-    }))
+  () => (stateCallback: (state: any) => any) => jest.fn()
 )
 
 const sendTerminateMessageMock = jest.fn()
@@ -111,6 +104,10 @@ describe('useHostMessageHandler', () => {
   })
 
   test('useEffect should call connect and setInterval in useEffect', () => {
+    const shiftChatMessageIfOldMock = jest.fn()
+    useHostChatMessagesStorePropertyMock.mockImplementation(
+      shiftChatMessageIfOldMock
+    )
     useHostMessageHandler(
       hostChannelToken,
       codename,
