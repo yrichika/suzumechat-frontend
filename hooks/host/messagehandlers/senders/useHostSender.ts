@@ -4,14 +4,16 @@ import Terminate from 'types/messages/Terminate'
 
 export default function useHostSender(stompClient: Client, wsSendUrl: string) {
   function sendTerminateMessage() {
-    // TODO: handle this message on guest side
-    const CHANNEL_ENDED_MESSAGE = '__channel_ended__'
+    if (!stompClient.active) {
+      return
+    }
+    // TODO: handle this message on visitor side
     const terminateMessage: Terminate = {
       terminatedBy: 'host',
       message: CHANNEL_ENDED_MESSAGE,
       data: null,
     }
-    stompClient?.publish({
+    stompClient.publish({
       destination: wsSendUrl,
       body: JSON.stringify(terminateMessage),
     })
@@ -19,3 +21,5 @@ export default function useHostSender(stompClient: Client, wsSendUrl: string) {
 
   return { sendTerminateMessage }
 }
+
+export const CHANNEL_ENDED_MESSAGE = '__channel_ended__'

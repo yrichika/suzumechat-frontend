@@ -12,7 +12,7 @@ export default function useApprovalSender(
     request: ManageableJoinRequest,
     isAuthenticated: boolean
   ) {
-    if (isInactive(stompClient)) {
+    if (!stompClient.active) {
       return
     }
     const auth: VisitorsAuthStatus = {
