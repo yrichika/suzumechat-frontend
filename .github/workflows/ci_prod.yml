@@ -5,8 +5,6 @@ name: SuzumeChat Front Prod CI
 on:
   push:
     branches: ["main"]
-  pull_request:
-    branches: ["main"]
 
 env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
