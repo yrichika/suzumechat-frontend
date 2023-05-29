@@ -19,18 +19,20 @@ export default function useGuestChannel() {
     return isAnyOfEmpty(guestId, channelName, codename, secretKey)
   }
 
+  function endChat() {
+    clearGuestStore()
+    sessionStorage.clear()
+    router.push('/guest/ended')
+  }
+
   function endChannel() {
     setIsChatEnded(true)
     endChatService(guestChannelToken!)
       .then(response => {
-        clearGuestStore()
-        sessionStorage.clear()
-        router.push('/guest/ended')
+        endChat()
       })
       .catch(error => {
-        clearGuestStore()
-        sessionStorage.clear()
-        router.push('/guest/ended')
+        endChat()
       })
   }
 
@@ -43,5 +45,6 @@ export default function useGuestChannel() {
     clearGuestStore,
     isPageNotReady,
     endChannel,
+    endChat,
   }
 }

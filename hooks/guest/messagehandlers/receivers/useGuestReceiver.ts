@@ -44,22 +44,27 @@ export default function useGuestReceiver(
     handleWithMatchedHandler(messageBody, messageHandlers)
   }
 
+  function endChat() {
+    clearGuestStore()
+    sessionStorage.clear()
+    router.push('/guest/ended?byWho=host')
+  }
+
   function handleTerminate(terminate: Terminate) {
     disconnect()
-    endChatService(guestChannelToken!)
+    return endChatService(guestChannelToken!)
       .then(response => {
-        clearGuestStore()
-        sessionStorage.clear()
-        router.push('/guest/ended?byWho=host')
+        endChat()
       })
       .catch(error => {
-        clearGuestStore()
-        sessionStorage.clear()
-        router.push('/guest/ended?byWho=host')
+        endChat()
       })
   }
 
   return {
     onConnect,
+    receive,
+    endChat,
+    handleTerminate,
   }
 }

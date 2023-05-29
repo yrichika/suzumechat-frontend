@@ -1,6 +1,11 @@
 import useChatSender from '@hooks/common/messagehandlers/senders/useChatSender'
-import { randomInt, randomString } from '@utils/UnsafeRandom'
+import {
+  randomInt,
+  randomString,
+  randomTailwindColor,
+} from '@utils/UnsafeRandom'
 import ChatUserAppearance from 'types/ChatUserAppearance'
+import { expect } from '@jest/globals'
 
 describe('useChatSender', () => {
   let client: any
@@ -12,14 +17,14 @@ describe('useChatSender', () => {
     }
     appearance = {
       codename: randomString(),
-      color: randomString(),
+      color: randomTailwindColor(),
     }
   })
   afterEach(() => {
     jest.clearAllMocks()
   })
 
-  test('sendChatMessage should', () => {
+  test('sendChatMessage should send message by stomp client', () => {
     const url = randomString()
     const index = randomInt()
     const secretKey = randomString()

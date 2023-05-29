@@ -3,12 +3,13 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group'
 import ChatMessage from 'types/ChatMessage'
 import { breakLines, sanitizeText } from '@utils/Util'
 import useChat from '@hooks/common/components/useChat'
+import { TailwindColor } from 'types/TailwindColor'
 
 type Props = {
   codename: string
   chatMessages: ChatMessage[]
   nameTextColor: string
-  color: string
+  color: TailwindColor
   sendChatMessage: (messageInput: string) => void
 }
 

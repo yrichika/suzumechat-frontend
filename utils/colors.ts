@@ -1,5 +1,7 @@
+import { TailwindColor } from 'types/TailwindColor'
+
 // tailwind colors. index: 0 - 34
-export const colors: string[] = [
+export const colors: TailwindColor[] = [
   'green-200',
   'green-300',
   'green-400',

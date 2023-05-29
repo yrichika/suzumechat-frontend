@@ -58,11 +58,15 @@ function onStompError(frame: IFrame) {
 }
 
 function onDisconnect(frame: IFrame) {
-  console.log('Stomp Disconnected')
+  if (process.env.NODE_ENV === 'development') {
+    console.log('Stomp Disconnected')
+  }
 }
 
 function onWebSocketClose(frame: IFrame) {
-  console.log('Stomp WebSocket Closed')
+  if (process.env.NODE_ENV === 'development') {
+    console.log('Stomp WebSocket Closed')
+  }
 }
 
 function onWebSocketError(frame: IFrame) {

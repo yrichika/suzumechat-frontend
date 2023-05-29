@@ -1,5 +1,6 @@
 import { MouseEvent } from 'react'
 import { hanToZenKatakanaMap, zenToHanEisuMap } from './LangSupport'
+import { TailwindColor } from 'types/TailwindColor'
 
 export function isEmpty(value: any): boolean {
   if (Array.isArray(value)) {
@@ -85,7 +86,7 @@ export function toggleVisibilityBySelector(
 /**
  * text-white, text-black are Tailwind's classes
  */
-export function getClearTextColorForBg(bgColor: string): string {
+export function getClearTextColorForBg(bgColor: TailwindColor): string {
   if (bgColor.match(/[5|6|7|8|9]00/)) {
     return 'text-white'
   }

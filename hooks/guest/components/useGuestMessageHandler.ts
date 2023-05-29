@@ -4,12 +4,13 @@ import { useEffect } from 'react'
 import { useChatMessageHandler } from '../../common/messagehandlers/useChatMessageHandler'
 import useGuestReceiver from '../messagehandlers/receivers/useGuestReceiver'
 import { connect } from '../../stomp/config'
+import { TailwindColor } from 'types/TailwindColor'
 
 export default function useGuestMessageHandler(
   guestChannelToken: string,
   codename: string,
   secretKey: string,
-  color: string,
+  color: TailwindColor,
   clearGuestStore: () => void
 ) {
   const stompClient = useVisitorGuestSharedStompClientStore(

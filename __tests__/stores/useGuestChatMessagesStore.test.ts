@@ -1,9 +1,14 @@
 import useGuestChatMessagesStore from '@stores/guest/useGuestChatMessagesStore'
 import { act, renderHook } from '@testing-library/react'
-import { randomInt, randomString } from '@utils/UnsafeRandom'
+import {
+  randomInt,
+  randomString,
+  randomTailwindColor,
+} from '@utils/UnsafeRandom'
 import { timeStamp } from 'console'
 import ChatMessage from 'types/ChatMessage'
 import { maxChatMessages } from '@stores/mutators/chatMessages'
+import { expect } from '@jest/globals'
 
 describe('useGuestChatMessagesStore', () => {
   beforeEach(() => {
@@ -72,7 +77,7 @@ describe('useGuestChatMessagesStore', () => {
       id: randomInt(),
       name: randomString(),
       message: randomString(),
-      color: randomString(),
+      color: randomTailwindColor(),
       timestamp: randomInt(),
     }
   }
