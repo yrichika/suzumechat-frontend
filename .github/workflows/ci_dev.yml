@@ -1,35 +1,35 @@
-name: SuzumeChat Front Dev CI
+# name: SuzumeChat Front Dev CI
 
-on:
-  push:
-    branches: ["develop"]
-  pull_request:
-    branches: ["develop"]
+# on:
+#   push:
+#     branches: ["develop"]
+#   pull_request:
+#     branches: ["develop"]
   
-jobs:
-  build:
-    runs-on: ubuntu-latest
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [ 18 ]
-    steps:
-    - uses: actions/checkout@v3
+#     strategy:
+#       matrix:
+#         node-version: [ 18 ]
+#     steps:
+#     - uses: actions/checkout@v3
 
-    # - name: Create env file
-    #   env:
-    #     ENV_FILE_NAME: ".env.production"
-    #     ENV_FILE_DATA: ${{ secrets.ENV_PROD }}
-    #   run: |
-    #     touch "$ENV_FILE_NAME"
-    #     echo "$ENV_FILE_DATA" >> "${ENV_FILE_NAME}"
+#     # - name: Create env file
+#     #   env:
+#     #     ENV_FILE_NAME: ".env.production"
+#     #     ENV_FILE_DATA: ${{ secrets.ENV_PROD }}
+#     #   run: |
+#     #     touch "$ENV_FILE_NAME"
+#     #     echo "$ENV_FILE_DATA" >> "${ENV_FILE_NAME}"
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: Build
-      run: |
-        npm install -g yarn
-        yarn install --frozen-lockfile
-        yarn build
+#     - name: Use Node.js ${{ matrix.node-version }}
+#       uses: actions/setup-node@v3
+#       with:
+#         node-version: ${{ matrix.node-version }}
+#     - name: Build
+#       run: |
+#         npm install -g yarn
+#         yarn install --frozen-lockfile
+#         yarn build

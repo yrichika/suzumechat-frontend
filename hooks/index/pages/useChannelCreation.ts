@@ -1,10 +1,10 @@
 import createChannelService from '@services/createChannelService'
 import csrfTokenService from '@services/csrfTokenService'
+import { encode as encodeBase64 } from '@stablelib/base64'
 import useHostStore from '@stores/host/useHostStore'
 import { useRouter } from 'next/router'
 import { FormEvent, useEffect, useState } from 'react'
 import HostChannel from 'types/HostChannel'
-import { encode as encodeBase64 } from '@stablelib/base64'
 
 export default function useChannelCreation() {
   const [channelNameInput, setChannelNameInput] = useState('')
