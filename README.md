@@ -1,6 +1,6 @@
-# SuzumeChat Frontend
+# SuzumeChat Frontend (NO LONGER MAINTAINED)
 
-**The documentation is still in progress!**
+
 ## Basic Usages
 
 This is a simple Next.js project with few additions (only Cypress has been added, but it shouldn't affect the basic Next.js project).
@@ -43,5 +43,5 @@ sequenceDiagram
   Backend ->> Visitor: Chat Secret Key
 ```
 
-Although chat secret keys are encrypted using SSL/TLS (which only provides encryption for HTTPS), I am considering encrypting them with the Host/Visitor public key as well. Please share your thoughts via GitHub Issues or [Twitter](https://twitter.com/SangoIsland).
+Although chat secret keys are encrypted using SSL/TLS (which only provides encryption for HTTPS), I am considering encrypting them with the Host/Visitor public key as well. Please share your thoughts via GitHub Issues or ~~Twitter~~.
 
